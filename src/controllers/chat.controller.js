@@ -1,5 +1,9 @@
 import { Chat } from "../models/chat.js";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import admin from 'firebase-admin';
 import serviceAccount from '../api_firestore_data.json' assert { type: 'json' };
 
@@ -10,11 +14,13 @@ admin.initializeApp({
 const db = admin.firestore();
 
 export const chatView = (req, res) => {
+    const url_chat = process.env.URL_APP+":"+process.env.PUERTO_SOCKET;
     const js = [
-        'http://localhost:5000/socket.io/socket.io.js',
-        'http://localhost:5000/js/chat.js'
+        url_chat+'/socket.io/socket.io.js',
+        url_chat+'/js/chat.js'
     ];
-    res.render('chat/index', { layout: 'partials/main', js });
+
+    res.render('chat/index', { layout: 'partials/main', js, urlchat: url_chat });
 }
 
 export const addMessage = async (req, res) => {

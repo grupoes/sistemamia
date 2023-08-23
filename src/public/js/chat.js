@@ -1,4 +1,6 @@
-var socket = io('http://localhost:5000');
+const urlchat = document.getElementById('chaturl');
+
+var socket = io(urlchat.value);
 
 const form_envio = document.getElementById('chat-form');
 
