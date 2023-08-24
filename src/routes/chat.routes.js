@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje } from "../controllers/chat.controller.js";
 
+import corsMiddleware from "../middlewares/cors.js";
+
 const router = Router();
+
+router.use(corsMiddleware);
 
 router.get('/chat', chatView);
 router.post('/addMessageChat', addMessage);
