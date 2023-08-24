@@ -12,6 +12,7 @@ import cargo from './routes/cargo.routes.js';
 import carrera from './routes/carrera.routes.js';
 import chat from './routes/chat.routes.js';
 import potencialCliente from './routes/potencialCliente.routes.js';
+import chatEstados from './routes/chatEstados.routes.js';
 
 const app = express();
 
@@ -37,5 +38,6 @@ app.use(cargo);
 app.use(carrera);
 app.use(chat);
 app.use(potencialCliente);
+app.use(chatEstados);
 
 export default app;

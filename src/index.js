@@ -18,6 +18,7 @@ import './models/tipoTrabajo.js';
 import './models/carrera.js';
 import './models/ubigeo.js';
 import './models/chat.js';
+import './models/estadosConversacion.js';
 
 async function main() {
     try {
