@@ -23,7 +23,7 @@ export const Chat = sequelize.define('chat', {
         type: DataTypes.STRING
     },
     timestamp: {
-        type: DataTypes.DATE
+        type: DataTypes.STRING
     },
     typeMessage: {
         type: DataTypes.STRING

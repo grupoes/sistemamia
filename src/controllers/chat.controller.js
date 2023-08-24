@@ -103,7 +103,7 @@ export const addMessageFirestore = async(req, res) => {
             receipt: receipt,
             timestamp: timestamp,
             typeMessage: type,
-            estadoMessage: "",
+            estadoMessage: "sent",
             documentId: documentId
         });
 
