@@ -1,3 +1,4 @@
+import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 
@@ -124,10 +125,10 @@ export const numerosWhatsapp = async(req, res) => {
         //SELECT chat.from FROM chat WHERE chat.from != '51927982544' GROUP BY chat.from;  
         
         const results = await Chat.findAll({
-            attributes: ['from', [Sequelize.fn('MAX', Sequelize.col('timestamp')), 'max_timestamp']],
+            attributes: ['from', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
             group: ['from'],
             order: [
-              [Sequelize.literal('"max_timestamp" DESC')]
+              [sequelize.literal('"max_timestamp" DESC')]
             ],
         });
 
@@ -138,14 +139,14 @@ export const numerosWhatsapp = async(req, res) => {
 
             if (from != '51927982544') {
                 const resu = await Chat.findOne({
-                    attributes: ['receipt', [Sequelize.fn('MAX', Sequelize.col('timestamp')), 'max_timestamp']],
+                    attributes: ['receipt', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
                     where: {
                         from: '51927982544',
                         receipt: from
                     },
                     group: ['receipt'],
                     order: [
-                        [Sequelize.literal('"max_timestamp" DESC')]
+                        [sequelize.literal('"max_timestamp" DESC')]
                     ],
                 });
 
@@ -181,7 +182,7 @@ export const numerosWhatsapp = async(req, res) => {
             }
         }
 
-        return res.json(arrayContactos);
+        return res.json(arrayContactos);    
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
