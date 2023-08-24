@@ -1,4 +1,5 @@
 import { Chat } from "../models/chat.js";
+import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 
 import dotenv from "dotenv";
 
@@ -115,29 +116,72 @@ export const addMessageFirestore = async(req, res) => {
 
 export const numerosWhatsapp = async(req, res) => {
     try {
-        let collectionRef = db.collection('whatsapp');
+        //SELECT * FROM chat WHERE chat.from='51922502947' OR chat.receipt='51922502947' 
+        //ORDER BY chat.timestamp DESC LIMIT 1;
 
-        const snapshot = await collectionRef.get();
+        //SELECT COUNT(*) FROM chat WHERE chat.from='51922502947' AND estadoMessage='sent';
 
-        let documents = [];
-
-        if (snapshot.empty) {
-            console.log('No se encontraron documentos en la colección.');
-            return res.json(documents);
-        }
-
+        //SELECT chat.from FROM chat WHERE chat.from != '51927982544' GROUP BY chat.from;  
         
-        snapshot.forEach(doc => {
-            // Puedes combinar el ID del documento con sus datos si es necesario
-            let documentData = {
-                id: doc.id,
-                ...doc.data()
-            };
-            documents.push(documentData);
+        const results = await Chat.findAll({
+            attributes: ['from', [Sequelize.fn('MAX', Sequelize.col('timestamp')), 'max_timestamp']],
+            group: ['from'],
+            order: [
+              [Sequelize.literal('"max_timestamp" DESC')]
+            ],
         });
 
-        
-        return res.json(documents);
+        let arrayContactos = [];
+
+        for (const result of results) {
+            const { from, max_timestamp } = result;
+
+            if (from != '51927982544') {
+                const resu = await Chat.findOne({
+                    attributes: ['receipt', [Sequelize.fn('MAX', Sequelize.col('timestamp')), 'max_timestamp']],
+                    where: {
+                        from: '51927982544',
+                        receipt: from
+                    },
+                    group: ['receipt'],
+                    order: [
+                        [Sequelize.literal('"max_timestamp" DESC')]
+                    ],
+                });
+
+                const timestamp1 = resu.max_timestamp;
+
+                let time = "";
+
+                if (max_timestamp > timestamp1) {
+                    time = max_timestamp;
+                } else {
+                    time = timestamp1;
+                }
+
+                const mensa = await Chat.findOne({
+                    where: {
+                        timestamp: time
+                    }
+                });
+
+                const name = await NumeroWhatsapp.findOne({
+                    where: {
+                        from: from
+                    }
+                });
+
+                let array = {
+                    numero: from,
+                    contacto: name.nameContact,
+                    mensaje: mensa.message
+                }
+
+                arrayContactos.push(array)
+            }
+        }
+
+        return res.json(arrayContactos);
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
