@@ -166,6 +166,13 @@ export const numerosWhatsapp = async(req, res) => {
                     }
                 });
 
+                const chatCount = await Chat.count({
+                    where: {
+                        from: from,
+                        estadoMessage: "sent"
+                    }
+                });
+
                 const name = await NumeroWhatsapp.findOne({
                     where: {
                         from: from
@@ -175,7 +182,10 @@ export const numerosWhatsapp = async(req, res) => {
                 let array = {
                     numero: from,
                     contact: name.nameContact,
-                    mensaje: mensa.message
+                    mensaje: mensa.message,
+                    estado: mensa.estadoMessage,
+                    time: time,
+                    cantidad: chatCount
                 }
 
                 arrayContactos.push(array)

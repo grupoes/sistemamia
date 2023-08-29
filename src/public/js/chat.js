@@ -345,32 +345,44 @@ function convertTimestampToDate(timestamp) {
 }
 
 socket.on("messageContacts", data => {
+    viewContact(data);
+});
+
+function loadContact() {
+    fetch("/numeroWhatsapp")
+    .then(res => res.json())
+    .then(data => {
+        viewContact(data);
+    })
+}
+
+function viewContact(data) {
     let html = "";
     data.forEach(contact => {
 
-
         html += `
-            <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.numero}, '')">
-                <div class="d-flex align-items-start p-2">
-                    <div class="position-relative">
-                        <span class="user-status"></span>
-                        <img src="assets/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="48"
-                            alt="Brandon Smith" />
-                    </div>
-                    <div class="w-100 overflow-hidden">
-                        <h5 class="mt-0 mb-0 fs-14">
-                            <!--<span class="float-end text-muted fs-12">5:30am</span>-->
-                            ${contact.contact}
-                        </h5>
-                        <p class="mt-1 mb-0 text-muted fs-14">
-                            <!--<span class="float-end badge bg-danger text-white">3</span>-->
-                            <span class="w-75 text-dark">${contact.mensaje}</span>
-                        </p>
-                    </div>
+        <a href="javascript:void(0);" class="text-body">
+            <div class="d-flex align-items-start p-2">
+                <div class="position-relative">
+                    <span class="user-status"></span>
+                    <img src="assets/images/users/avatar-6.jpg" class="me-2 rounded-circle" height="48" alt="Michael H" />
                 </div>
-            </a>
-            `;
+                <div class="w-100 overflow-hidden">
+                    <h5 class="mt-0 mb-0 fs-14">
+                        <span class="float-end text-muted fs-12">Tue</span>
+                        ${contact.contact}
+                    </h5>
+                    <p class="mt-1 mb-0 text-muted fs-14">
+                        <span class="float-end badge bg-danger text-white">${contact.cantidad}</span>
+                        <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${contact.mensaje}</span>
+                    </p>
+                </div>
+            </div>
+        </a>
+        `;
     });
 
     contactos.innerHTML = html;
-});
+}
+
+loadContact();
