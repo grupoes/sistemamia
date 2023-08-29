@@ -116,13 +116,7 @@ export const addMessageFirestore = async(req, res) => {
 }
 
 export const numerosWhatsapp = async(req, res) => {
-    try {
-        //SELECT * FROM chat WHERE chat.from='51922502947' OR chat.receipt='51922502947' 
-        //ORDER BY chat.timestamp DESC LIMIT 1;
-
-        //SELECT COUNT(*) FROM chat WHERE chat.from='51922502947' AND estadoMessage='sent';
-
-        //SELECT chat.from FROM chat WHERE chat.from != '51927982544' GROUP BY chat.from;  
+    try { 
         
         const results = await Chat.findAll({
             attributes: ['from', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
@@ -135,9 +129,11 @@ export const numerosWhatsapp = async(req, res) => {
         let arrayContactos = [];
 
         for (const result of results) {
-            const { from, max_timestamp } = result;
+            const { from } = result;
+            const max_timestamp = result.get('max_timestamp');
 
             if (from != '51927982544') {
+                console.log(from);
                 const resu = await Chat.findOne({
                     attributes: ['receipt', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
                     where: {
@@ -146,18 +142,22 @@ export const numerosWhatsapp = async(req, res) => {
                     },
                     group: ['receipt'],
                     order: [
-                        [sequelize.literal('"max_timestamp" DESC')]
-                    ],
+                        [sequelize.literal('max_timestamp DESC')]
+                    ]
                 });
-
-                const timestamp1 = resu.max_timestamp;
 
                 let time = "";
 
-                if (max_timestamp > timestamp1) {
-                    time = max_timestamp;
+                if (resu) {
+                    let timestamp1 = resu.get('max_timestamp');
+
+                    if (max_timestamp > timestamp1) {
+                        time = max_timestamp;
+                    } else {
+                        time = timestamp1;
+                    }
                 } else {
-                    time = timestamp1;
+                    time = max_timestamp;
                 }
 
                 const mensa = await Chat.findOne({
@@ -174,7 +174,7 @@ export const numerosWhatsapp = async(req, res) => {
 
                 let array = {
                     numero: from,
-                    contacto: name.nameContact,
+                    contact: name.nameContact,
                     mensaje: mensa.message
                 }
 

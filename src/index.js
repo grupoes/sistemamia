@@ -2,7 +2,7 @@ import app from "./app.js";
 
 import { sequelize } from "./database/database.js";
 
-import './models/tipoDocumento.js';
+/*import './models/tipoDocumento.js';
 import './models/area.js';
 import './models/cargos.js';
 import './models/plataforma.js';
@@ -19,11 +19,11 @@ import './models/carrera.js';
 import './models/ubigeo.js';
 import './models/chat.js';
 import './models/estadosConversacion.js';
-import './models/numerosWhatsapp.js';
+import './models/numerosWhatsapp.js';*/
 
 async function main() {
     try {
-        await sequelize.sync({alter: true});
+        //await sequelize.sync({alter: true});
 
         app.listen(4000);
         console.log('Server listening on port', 4000);

@@ -5,6 +5,10 @@ import {fileURLToPath} from 'url';
 
 import dotenv from "dotenv";
 
+import axios from "axios";
+
+import PgPubSub from 'pg-pubsub';
+
 dotenv.config();
 
 import { Server } from 'socket.io';
@@ -30,9 +34,23 @@ const io = new Server(server, {
     }
 });
 
+const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/sistemamia');
+
 io.on('connection', (socket) => {
     console.log('a user connected');
+
 });
+
+pubsub.addChannel('new_contact', async(data) => {
+    console.log('New contact added:', data);
+
+    const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP+"/numeroWhatsapp");
+    const datos = response.data;
+
+    io.emit('messageContacts', datos);
+});
+
+
 
 server.listen(process.env.PUERTO_SOCKET, () => {
     console.log('listening on *:'+process.env.PUERTO_SOCKET);

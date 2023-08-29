@@ -4,7 +4,7 @@ var socket = io(urlchat.value);
 
 const form_envio = document.getElementById('chat-form');
 
-const contentMensaje = document.getElementById('contentMensaje'); 
+const contentMensaje = document.getElementById('contentMensaje');
 const conversation = document.getElementById('conversation-list');
 const contactos = document.getElementById('contactos-whatsapp');
 const whatsappNumber = document.getElementById('whatsappNumber');
@@ -50,25 +50,25 @@ form_envio.addEventListener('submit', (e) => {
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
-            "text": contentMensaje.value,
-            "messageId": result.messages[0].id,
-            "numberWhatsapp": whatsappNumber.value
+                "text": contentMensaje.value,
+                "messageId": result.messages[0].id,
+                "numberWhatsapp": whatsappNumber.value
             });
 
             var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
             };
 
             fetch("http://localhost:4000/addMessageChat", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
 
             listConversation(contentMensaje.value);
-            
+
         })
         .catch(error => console.log('error', error))
         .finally(() => {
@@ -115,13 +115,13 @@ function listConversation(mensaje) {
 
 function getAllContactos() {
     fetch('/all-clientes-potenciales')
-    .then(res => res.json())
-    .then(data => {
-        const datos = data.data;
-        let html = "";
+        .then(res => res.json())
+        .then(data => {
+            const datos = data.data;
+            let html = "";
 
-        datos.forEach(contact => {
-            html += `
+            datos.forEach(contact => {
+                html += `
             <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.numero_whatsapp}, '${contact.nombres} ${contact.apellidos}')">
                 <div class="d-flex align-items-start p-2">
                     <div class="position-relative">
@@ -142,10 +142,10 @@ function getAllContactos() {
                 </div>
             </a>
             `;
-        });
+            });
 
-        contactos.innerHTML = html;
-    })
+            contactos.innerHTML = html;
+        })
 }
 
 function chatContacto(whatsapp, nameContacto) {
@@ -161,22 +161,22 @@ function chatContacto(whatsapp, nameContacto) {
 }
 
 function mostrar_chat(numero) {
-    fetch('/messageNumber/'+numero)
-    .then(res => res.json())
-    .then(data => {
-        let html = "";
-        console.log(data);
+    fetch('/messageNumber/' + numero)
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+            console.log(data);
 
-        if (!Array.isArray(data)) {
-            conversation.innerHTML = html;
-        }
+            if (!Array.isArray(data)) {
+                conversation.innerHTML = html;
+            }
 
-        data.forEach(msj => {
-            let fecha_y_hora = convertTimestampToDate(msj.timestamp);
+            data.forEach(msj => {
+                let fecha_y_hora = convertTimestampToDate(msj.timestamp);
 
-            if (msj.from != '51927982544') {
-                if (msj.post_body) {
-                    html += `
+                if (msj.from != '51927982544') {
+                    if (msj.post_body) {
+                        html += `
                     <li class="clearfix">
                         <div class="conversation-text ms-0">
                             <div class="d-flex">
@@ -216,8 +216,8 @@ function mostrar_chat(numero) {
                         </div>
                     </li>
                     `;
-                } else {
-                    html += `
+                    } else {
+                        html += `
                 <li class="clearfix">
                     <div class="conversation-text ms-0">
                         <div class="d-flex">
@@ -245,13 +245,13 @@ function mostrar_chat(numero) {
                         <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
                     </div>                                                            
                 </li>
-                `;                    
-                }
+                `;
+                    }
 
-                
-            } else {
 
-                html += `
+                } else {
+
+                    html += `
                     <li class="clearfix odd">
                         <div class="conversation-text ms-0">
                             <div class="d-flex justify-content-end">
@@ -281,22 +281,22 @@ function mostrar_chat(numero) {
                     </li>
                     `;
 
-            }
-        });
+                }
+            });
 
-        conversation.innerHTML = html;
-    })
+            conversation.innerHTML = html;
+        })
 }
 
 function loadNumber() {
     fetch('/numeroWhatsapp')
-    .then(res => res.json())
-    .then(data => {
-        let html = "";
-        data.forEach(contact => {
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+            data.forEach(contact => {
 
 
-            html += `
+                html += `
             <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.from}, '')">
                 <div class="d-flex align-items-start p-2">
                     <div class="position-relative">
@@ -317,17 +317,15 @@ function loadNumber() {
                 </div>
             </a>
             `;
-        });
+            });
 
-        contactos.innerHTML = html;
-    })
+            contactos.innerHTML = html;
+        })
 }
 
-setInterval(() => {
-    loadNumber();
-}, 500);
 
-document.querySelector("#fileWhatsapp").addEventListener("click", function() {
+
+document.querySelector("#fileWhatsapp").addEventListener("click", function () {
     document.getElementById("fileInput").click();
 });
 
@@ -345,3 +343,34 @@ function convertTimestampToDate(timestamp) {
 
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 }
+
+socket.on("messageContacts", data => {
+    let html = "";
+    data.forEach(contact => {
+
+
+        html += `
+            <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.numero}, '')">
+                <div class="d-flex align-items-start p-2">
+                    <div class="position-relative">
+                        <span class="user-status"></span>
+                        <img src="assets/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="48"
+                            alt="Brandon Smith" />
+                    </div>
+                    <div class="w-100 overflow-hidden">
+                        <h5 class="mt-0 mb-0 fs-14">
+                            <!--<span class="float-end text-muted fs-12">5:30am</span>-->
+                            ${contact.contact}
+                        </h5>
+                        <p class="mt-1 mb-0 text-muted fs-14">
+                            <!--<span class="float-end badge bg-danger text-white">3</span>-->
+                            <span class="w-75 text-dark">${contact.mensaje}</span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+            `;
+    });
+
+    contactos.innerHTML = html;
+});
