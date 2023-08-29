@@ -9,9 +9,11 @@ const conversation = document.getElementById('conversation-list');
 const contactos = document.getElementById('contactos-whatsapp');
 const whatsappNumber = document.getElementById('whatsappNumber');
 
+const cardBody = document.querySelector("#cardBody");
+
 //getAllContactos();
 
-form_envio.addEventListener('submit', (e) => {
+/*form_envio.addEventListener('submit', (e) => {
     e.preventDefault();
 
     if (contentMensaje.value == "") {
@@ -74,7 +76,7 @@ form_envio.addEventListener('submit', (e) => {
         .finally(() => {
             contentMensaje.value = "";
         });
-})
+})*/
 
 
 function listConversation(mensaje) {
@@ -325,9 +327,9 @@ function loadNumber() {
 
 
 
-document.querySelector("#fileWhatsapp").addEventListener("click", function () {
+/*document.querySelector("#fileWhatsapp").addEventListener("click", function () {
     document.getElementById("fileInput").click();
-});
+});*/
 
 
 function convertTimestampToDate(timestamp) {
@@ -418,3 +420,11 @@ function formatDate(timestamp) {
 }
 
 // #e7e4e4
+
+function chatPrincipalView() {
+    cardBody.innerHTML = `<div class="d-flex align-items-center justify-content-center" style="height: 580px;">
+        <img src="/img/logos/logo_color.png" alt="example image" style="width: 40%;">
+    </div>`;
+}
+
+chatPrincipalView();
