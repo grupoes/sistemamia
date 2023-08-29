@@ -359,6 +359,13 @@ function loadContact() {
 function viewContact(data) {
     let html = "";
     data.forEach(contact => {
+        let hourMessage = formatDate(contact.time);
+
+        let countMessage = "";
+
+        if(contact.cantidad > 0) {
+            countMessage = `<span class="float-end badge bg-danger text-white">${contact.cantidad}</span>`;
+        }
 
         html += `
         <a href="javascript:void(0);" class="text-body">
@@ -369,11 +376,11 @@ function viewContact(data) {
                 </div>
                 <div class="w-100 overflow-hidden">
                     <h5 class="mt-0 mb-0 fs-14">
-                        <span class="float-end text-muted fs-12">Tue</span>
+                        <span class="float-end text-muted fs-12">${hourMessage}</span>
                         ${contact.contact}
                     </h5>
                     <p class="mt-1 mb-0 text-muted fs-14">
-                        <span class="float-end badge bg-danger text-white">${contact.cantidad}</span>
+                        ${countMessage}
                         <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${contact.mensaje}</span>
                     </p>
                 </div>
@@ -386,3 +393,28 @@ function viewContact(data) {
 }
 
 loadContact();
+
+function formatDate(timestamp) {
+    var now = new Date();
+    var date = new Date(timestamp * 1000); // Convierte el timestamp a milisegundos
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+  
+    if (now.getDate() === day && now.getMonth() + 1 === month && now.getFullYear() === year) {
+        return strTime;
+    } else if (now.getDate() - 1 === day && now.getMonth() + 1 === month && now.getFullYear() === year) {
+        return "ayer";
+    } else {
+        return day + '/' + month + '/' + year;
+    }
+}
+
+// #e7e4e4

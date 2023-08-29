@@ -1,3 +1,32 @@
+<style>
+    /* Estilo general del scrollbar */
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Estilo del botón (flechas arriba y abajo) del scrollbar */
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Estilo de la 'track' (trayectoria) del scrollbar */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Estilo de la 'handle' (barra móvil) del scrollbar */
+::-webkit-scrollbar-thumb {
+    background: #b6b4b4;
+    border-radius: 4px;
+}
+
+/* Estilo de la 'handle' al pasar el ratón */
+::-webkit-scrollbar-thumb:hover {
+    background: #818181;
+}
+
+</style>
+
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -67,7 +96,7 @@
                 <!-- End searchbar -->
 
                 <!-- start contact list -->
-                <div class="pe-2" data-simplebar style="max-height: 450px; min-height: 450px" id="contactos-whatsapp">
+                <div class="pe-2" data-simplebar style="max-height: 450px; min-height: 450px; overflow-y: scroll;" id="contactos-whatsapp">
 
                 </div>
                 <!-- End contact list -->
