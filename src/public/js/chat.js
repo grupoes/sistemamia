@@ -168,7 +168,7 @@ function mostrar_chat(numero) {
         .then(data => {
             let html = "";
 
-            const conversation = document.getElementById('conversation-'+numero);
+            const conversation = document.getElementById('conversation-' + numero);
 
             if (!Array.isArray(data)) {
                 conversation.innerHTML = html;
@@ -221,7 +221,7 @@ function mostrar_chat(numero) {
                     `;
                     } else {
                         html += `
-                <li class="clearfix">
+                    <li class="clearfix">
                     <div class="conversation-text ms-0">
                         <div class="d-flex">
                             <div class="ctext-wrap">
@@ -353,10 +353,10 @@ socket.on("messageContacts", data => {
 
 function loadContact() {
     fetch("/numeroWhatsapp")
-    .then(res => res.json())
-    .then(data => {
-        viewContact(data);
-    })
+        .then(res => res.json())
+        .then(data => {
+            viewContact(data);
+        })
 }
 
 function viewContact(data) {
@@ -366,12 +366,12 @@ function viewContact(data) {
 
         let countMessage = "";
 
-        if(contact.cantidad > 0) {
+        if (contact.cantidad > 0) {
             countMessage = `<span class="float-end badge bg-danger text-white">${contact.cantidad}</span>`;
         }
 
         let nameContact = contact.contact;
-        nameContact = nameContact.replace("'","");
+        nameContact = nameContact.replace("'", "");
 
         html += `
         <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}')">
@@ -413,7 +413,7 @@ function formatDate(timestamp) {
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
-  
+
     if (now.getDate() === day && now.getMonth() + 1 === month && now.getFullYear() === year) {
         return strTime;
     } else if (now.getDate() - 1 === day && now.getMonth() + 1 === month && now.getFullYear() === year) {
@@ -520,14 +520,14 @@ function chatDetail(numero, name) {
 }
 
 function chatMessage(numero) {
-    fetch("/messageNumber/"+numero)
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-    })
+    fetch("/messageNumber/" + numero)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
 }
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
         chatPrincipalView();
     }
@@ -535,4 +535,37 @@ document.addEventListener('keydown', function(event) {
 
 socket.on("messageChat", data => {
     console.log(data);
+
+    html = `
+        <li class="clearfix odd">
+            <div class="conversation-text ms-0">
+                <div class="d-flex justify-content-end">
+                    <div class="conversation-actions dropdown dropstart">
+                        <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-star fs-18 me-2"></i>Starred
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-files fs-18 me-2"></i>Copy
+                            </a>                                                                            
+                        </div>
+                    </div>  
+                    <div class="ctext-wrap">
+                        <p>${msj.message}</p>
+                    </div>  
+                </div>                                                          
+                <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}<i class="bi bi-check2-all ms-1 text-success"></i></p>
+            </div>
+        </li>
+    `;
+
+    const lista = $("#conversation-"+data.from);
+    lista.append();
 });
