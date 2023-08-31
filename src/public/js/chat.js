@@ -536,6 +536,8 @@ document.addEventListener('keydown', function (event) {
 socket.on("messageChat", data => {
     console.log(data);
 
+    let fecha_y_hora = convertTimestampToDate(data.timestamp);
+
     html = `
         <li class="clearfix odd">
             <div class="conversation-text ms-0">
@@ -558,7 +560,7 @@ socket.on("messageChat", data => {
                         </div>
                     </div>  
                     <div class="ctext-wrap">
-                        <p>${msj.message}</p>
+                        <p>${data.message}</p>
                     </div>  
                 </div>                                                          
                 <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}<i class="bi bi-check2-all ms-1 text-success"></i></p>
