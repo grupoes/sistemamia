@@ -2,6 +2,8 @@ import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 
+import { Op } from 'sequelize';
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -59,32 +61,21 @@ export const mensajes_numero = async (req, res) => {
     const numero = req.params.id;
 
     try {
-        let mensajesRef = db.collection('conversation');
+        const mensajes = await Chat.findAll({
+            where: {
+                [Op.or]: [
+                  { from: numero },
+                  { receipt: numero },
+                ],
+              },
+            order: [
+                ['timestamp', 'ASC'],
+            ],
+        });
 
-        // Mensajes enviados por el número
-        let sentSnapshot = await mensajesRef.where('from', '==', numero).get();
-
-        // Mensajes recibidos por el número
-        let receivedSnapshot = await mensajesRef.where('receipt', '==', numero).get();
-
-        if (sentSnapshot.empty && receivedSnapshot.empty) {
-            return res.status(404).json({ message: "No se encontraron mensajes." });
+        if (mensajes.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron mensajes.' });
         }
-
-        let mensajes = [];
-
-        // Agregar mensajes enviados
-        sentSnapshot.forEach(doc => {
-            mensajes.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Agregar mensajes recibidos
-        receivedSnapshot.forEach(doc => {
-            mensajes.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Opcional: Podrías querer ordenar los mensajes por fecha (si tienes un campo de fecha/timestamp)
-        mensajes.sort((a, b) => a.timestamp - b.timestamp); // Asume que 'fecha' es un campo timestamp
 
         return res.json(mensajes);
 
