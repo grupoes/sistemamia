@@ -485,6 +485,7 @@ function chatDetail(numero, name) {
         </ul>
         <div class="mt-2 bg-light p-3 rounded">
             <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">
+                <input type="hidden" name="numberWhat" value="${numero}">
                 <div class="row">
                     <div class="col mb-2 mb-sm-0">
                         <input type="text" class="form-control border-0" name="mensaje_form"
@@ -525,3 +526,13 @@ function chatMessage(numero) {
         console.log(data);
     })
 }
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        chatPrincipalView();
+    }
+});
+
+socket.on("messageChat", data => {
+    console.log(data);
+});

@@ -48,6 +48,7 @@ pubsub.addChannel('new_contact', async(data) => {
     const datos = response.data;
 
     io.emit('messageContacts', datos);
+    io.emit("messageChat", data);
 });
 
 
