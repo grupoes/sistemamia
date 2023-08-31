@@ -569,5 +569,6 @@ socket.on("messageChat", data => {
     `;
 
     const lista = $("#conversation-"+data.from);
-    lista.append();
+    lista.append(html);
+
 });
