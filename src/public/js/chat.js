@@ -538,7 +538,7 @@ socket.on("messageChat", data => {
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
-    html += `
+    html = `
                     <li class="clearfix">
                     <div class="conversation-text ms-0">
                         <div class="d-flex">
