@@ -2,12 +2,7 @@ const urlchat = document.getElementById('chaturl');
 
 var socket = io(urlchat.value);
 
-const form_envio = document.getElementById('chat-form');
-
-const contentMensaje = document.getElementById('contentMensaje');
-
 const contactos = document.getElementById('contactos-whatsapp');
-const whatsappNumber = document.getElementById('whatsappNumber');
 
 const cardBody = document.querySelector("#cardBody");
 
@@ -79,7 +74,7 @@ const cardBody = document.querySelector("#cardBody");
 })*/
 
 
-function listConversation(mensaje) {
+function listConversation(mensaje, numero) {
     let html = `
     <li class="clearfix odd">
         <div class="conversation-text ms-0">
@@ -110,7 +105,7 @@ function listConversation(mensaje) {
     </li>
     `;
 
-    $("#conversation-list").append(html);
+    $("#conversation-"+numero).append(html);
 
 }
 
@@ -517,6 +512,8 @@ function chatDetail(numero, name) {
     cardBody.innerHTML = html;
 
     mostrar_chat(numero);
+
+    formMessage();
 }
 
 function chatMessage(numero) {
@@ -572,3 +569,74 @@ socket.on("messageChat", data => {
     lista.append(html);
 
 });
+
+function formMessage() {
+    const form_envio = document.getElementById('chat-form');
+    const contentMensaje = document.getElementById('contentMensaje');
+    const whatsappNumber = document.getElementById('whatsappNumber');
+
+    form_envio.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (contentMensaje.value == "") {
+            return false;
+        }
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", "Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE");
+
+        var raw = JSON.stringify({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": whatsappNumber.value,
+            "type": "text",
+            "text": {
+                "preview_url": false,
+                "body": contentMensaje.value
+            }
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("https://graph.facebook.com/v17.0/122094968330010315/messages", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                console.log(result.messages[0].id);
+
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+
+                var raw = JSON.stringify({
+                    "text": contentMensaje.value,
+                    "messageId": result.messages[0].id,
+                    "numberWhatsapp": whatsappNumber.value
+                });
+
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+
+                fetch("http://157.230.239.170:4000/addMessageChat", requestOptions)
+                    .then(response => response.text())
+                    .then(result => console.log(result))
+                    .catch(error => console.log('error', error));
+
+                listConversation(contentMensaje.value, whatsappNumber.value);
+
+            })
+            .catch(error => console.log('error', error))
+            .finally(() => {
+                contentMensaje.value = "";
+            });
+    })
+}
