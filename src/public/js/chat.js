@@ -457,12 +457,12 @@ function chatDetail(numero, name) {
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="javascript: void(0);" data-bs-toggle="modal"
                             data-bs-target="#viewProfile">
-                            <i class="bi bi-person-circle fs-18 me-2"></i>View Profile
+                            <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
                         </a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-music-note-list fs-18 me-2"></i>Media, Links and Docs</a>
+                                class="bi bi-music-note-list fs-18 me-2"></i>ventas</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-search fs-18 me-2"></i>Search</a>
+                                class="bi bi-search fs-18 me-2"></i>Buscar</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
                                 class="bi bi-image fs-18 me-2"></i>Wallpaper</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
