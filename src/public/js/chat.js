@@ -538,35 +538,35 @@ socket.on("messageChat", data => {
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
-    html = `
-        <li class="clearfix odd">
-            <div class="conversation-text ms-0">
-                <div class="d-flex justify-content-end">
-                    <div class="conversation-actions dropdown dropstart">
-                        <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-reply fs-18 me-2"></i>Reply
-                            </a>   
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-star fs-18 me-2"></i>Starred
-                            </a>   
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-trash fs-18 me-2"></i>Delete
-                            </a>   
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-files fs-18 me-2"></i>Copy
-                            </a>                                                                            
-                        </div>
-                    </div>  
-                    <div class="ctext-wrap">
-                        <p>${data.message}</p>
-                    </div>  
-                </div>                                                          
-                <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}<i class="bi bi-check2-all ms-1 text-success"></i></p>
-            </div>
-        </li>
-    `;
+    html += `
+                    <li class="clearfix">
+                    <div class="conversation-text ms-0">
+                        <div class="d-flex">
+                            <div class="ctext-wrap">
+                                <p>${data.message}</p>                                                                                                                                        
+                            </div>                                                                    
+                            <div class="conversation-actions dropdown dropend">
+                                <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                    </a>   
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-star fs-18 me-2"></i>Starred
+                                    </a>   
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                    </a>   
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-files fs-18 me-2"></i>Copy
+                                    </a>                                                                            
+                                </div>
+                            </div>
+                        </div>                                                                
+                        <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
+                    </div>                                                            
+                </li>
+                `;
 
     const lista = $("#conversation-"+data.from);
     lista.append(html);
