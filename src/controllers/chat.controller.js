@@ -2,11 +2,17 @@ import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
 import { Op } from 'sequelize';
 
 import axios from 'axios';
 
 import dotenv from "dotenv";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -128,6 +134,25 @@ export const addMessageFirestore = async(req, res) => {
                       'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
                     }
                 };
+
+                try {
+                    const resp = await axios.request(config);
+                    const filePath = path.join(__dirname, id_document+'.jpg');
+
+                    // Create a writable stream and save the file
+                    const writer = fs.createWriteStream(filePath);
+                    resp.data.pipe(writer);
+
+                    return new Promise((resolve, reject) => {
+                        writer.on('finish', () => {
+                            console.log(`Image saved to ${filePath}`);
+                            resolve(filePath);
+                        });
+                        writer.on('error', reject);
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
 
                 const resp = await axios.request(configu);
                 console.log(resp);
