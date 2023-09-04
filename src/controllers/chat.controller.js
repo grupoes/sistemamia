@@ -102,6 +102,39 @@ export const addMessageFirestore = async(req, res) => {
             filename: filename
         });
 
+        if (type == 'image') {
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity,
+                url: 'https://graph.facebook.com/v17.0/'+id_document,
+                headers: { 
+                  'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+                }
+            };
+
+            try {
+                const response = await axios.request(config);
+                const datos = response.data;
+
+                const urlMedia = datos.url;
+
+                let configu = {
+                    method: 'get',
+                    maxBodyLength: Infinity,
+                    url: urlMedia,
+                    headers: { 
+                      'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+                    }
+                };
+
+                const resp = await axios.request(configu);
+                console.log(resp);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         return res.json(newMessage);
     } catch (error) {
         return res.status(400).json({ message: error.message });
