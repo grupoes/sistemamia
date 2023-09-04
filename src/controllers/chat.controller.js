@@ -86,7 +86,7 @@ export const mensajes_numero = async (req, res) => {
 };
 
 export const addMessageFirestore = async(req, res) => {
-    const {from, id, message, nameContact, receipt, timestamp, type, documentId} = req.body;
+    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
         const newMessage = await Chat.create({
             codigo: id,
@@ -97,7 +97,9 @@ export const addMessageFirestore = async(req, res) => {
             timestamp: timestamp,
             typeMessage: type,
             estadoMessage: "sent",
-            documentId: documentId
+            documentId: documentId,
+            id_document: id_document,
+            filename: filename
         });
 
         return res.json(newMessage);
