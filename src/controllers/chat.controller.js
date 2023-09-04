@@ -167,10 +167,11 @@ export const addMessageFirestore = async(req, res) => {
                     console.log(`Image saved to ${filePath}`);
                 } catch (error) {
                     console.log(error);
+                    return res.json(error.message);
                 }
 
             } catch (error) {
-                console.log(error);
+                return res.json(error.message);
             }
         }
 
