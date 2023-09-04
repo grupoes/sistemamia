@@ -227,7 +227,6 @@ function mostrar_chat(numero) {
                                                         <img src="./public/img/archivos/${msj.id_document}.jpg" alt="" height="150">
                                                     </div>
                                                 </div>
-                                                <p style="margin-top: 10px; margin-bottom: 0">vi esto en facebook</p>
                                             </div>
                                         </div>
                                         <div class="conversation-actions dropdown dropend">
