@@ -2,12 +2,12 @@ import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
 import { Op } from 'sequelize';
 
 import axios from 'axios';
+import fs from 'fs/promises';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 import dotenv from "dotenv";
 
@@ -111,6 +111,7 @@ export const addMessageFirestore = async(req, res) => {
         });
 
         if (type == 'image') {
+            console.log("aca ")
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
@@ -136,26 +137,37 @@ export const addMessageFirestore = async(req, res) => {
                 };
 
                 try {
-                    const resp = await axios.request(config);
-                    const filePath = path.join(__dirname, id_document+'.jpg');
-
-                    // Create a writable stream and save the file
-                    const writer = fs.createWriteStream(filePath);
-                    resp.data.pipe(writer);
-
-                    return new Promise((resolve, reject) => {
-                        writer.on('finish', () => {
-                            console.log(`Image saved to ${filePath}`);
-                            resolve(filePath);
-                        });
-                        writer.on('error', reject);
+                    const resp = await axios.request(configu, {
+                        responseType: 'arraybuffer'
                     });
+
+                    const contentType = resp.headers['content-type'];
+
+                    let extension;
+
+                    switch (contentType) {
+                        case 'image/png':
+                            extension = '.png';
+                            break;
+                        case 'image/jpeg':
+                            extension = '.jpg';
+                            break;
+                        case 'application/pdf':
+                            extension = '.pdf';
+                            break;
+                        // ... puedes agregar otros casos según lo necesites
+                        default:
+                            extension = ''; // o puedes asignar una extensión predeterminada
+                            break;
+                    }
+
+                    const filePath = join(__dirname, `../public/img/archivos/${id_document}${extension}`);
+
+                    await fs.writeFile(filePath, resp.data);
+                    console.log(`Image saved to ${filePath}`);
                 } catch (error) {
                     console.log(error);
                 }
-
-                const resp = await axios.request(configu);
-                console.log(resp);
 
             } catch (error) {
                 console.log(error);

@@ -175,75 +175,116 @@ function mostrar_chat(numero) {
                 if (msj.from != '51927982544') {
                     if (msj.post_body) {
                         html += `
-                    <li class="clearfix">
-                        <div class="conversation-text ms-0">
-                            <div class="d-flex">
-                                <div class="card mb-1 shadow-none border text-start ctext-wrap">
-                                    <div class="p-2">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <img src="${msj.image_url}" alt="" height="150">
+                        <li class="clearfix">
+                            <div class="conversation-text ms-0">
+                                <div class="d-flex">
+                                    <div class="card mb-1 shadow-none border text-start ctext-wrap">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <img src="${msj.image_url}" alt="" height="150">
+                                                </div>
+                                                <div class="col ps-0">
+                                                    <p class="mb-0">${msj.post_body}</p>
+                                                </div>
                                             </div>
-                                            <div class="col ps-0">
-                                                <p class="mb-0">${msj.post_body}</p>
+                                            <p style="margin-top: 10px; margin-bottom: 0">vi esto en facebook</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-actions dropdown dropend">
+                                        <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                            aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-star fs-18 me-2"></i>Starred
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-files fs-18 me-2"></i>Copy
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
+                            </div>
+                        </li>
+                        `;
+                    } else {
+                        if (msj.typeMessage == 'image') {
+                            html += `
+                            <li class="clearfix">
+                                <div class="conversation-text ms-0">
+                                    <div class="d-flex">
+                                        <div class="card mb-1 shadow-none border text-start ctext-wrap">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <img src="./public/img/archivos/${msj.id_document}.jpg" alt="" height="150">
+                                                    </div>
+                                                </div>
+                                                <p style="margin-top: 10px; margin-bottom: 0">vi esto en facebook</p>
                                             </div>
                                         </div>
-                                        <p style="margin-top: 10px; margin-bottom: 0">vi esto en facebook</p>
+                                        <div class="conversation-actions dropdown dropend">
+                                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
                                 </div>
-                                <div class="conversation-actions dropdown dropend">
-                                    <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
-                                        aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-reply fs-18 me-2"></i>Reply
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-star fs-18 me-2"></i>Starred
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-trash fs-18 me-2"></i>Delete
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-files fs-18 me-2"></i>Copy
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
-                        </div>
-                    </li>
-                    `;
-                    } else {
-                        html += `
-                    <li class="clearfix">
-                    <div class="conversation-text ms-0">
-                        <div class="d-flex">
-                            <div class="ctext-wrap">
-                                <p>${msj.message}</p>                                                                                                                                        
-                            </div>                                                                    
-                            <div class="conversation-actions dropdown dropend">
-                                <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-reply fs-18 me-2"></i>Reply
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-star fs-18 me-2"></i>Starred
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-trash fs-18 me-2"></i>Delete
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-files fs-18 me-2"></i>Copy
-                                    </a>                                                                            
-                                </div>
-                            </div>
-                        </div>                                                                
-                        <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
-                    </div>                                                            
-                </li>
-                `;
+                            </li>
+                            `;
+                        } else {
+                            html += `
+                            <li class="clearfix">
+                                <div class="conversation-text ms-0">
+                                    <div class="d-flex">
+                                        <div class="ctext-wrap">
+                                            <p>${msj.message}</p>                                                                                                                                        
+                                        </div>                                                                    
+                                        <div class="conversation-actions dropdown dropend">
+                                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                                </a>   
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                                </a>   
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                                </a>   
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                                </a>                                                                            
+                                            </div>
+                                        </div>
+                                    </div>                                                                
+                                    <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
+                                </div>                                                            
+                            </li>
+                            `;
+                        }
+                        
                     }
 
 
