@@ -9,6 +9,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+import { Curl } from 'node-libcurl';
+
 import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -127,48 +129,35 @@ export const addMessageFirestore = async(req, res) => {
 
                 const urlMedia = datos.url;
 
-                let configu = {
-                    method: 'get',
-                    maxBodyLength: Infinity,
-                    url: urlMedia,
-                    headers: { 
-                      'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
-                    }
-                };
+                const curl = new Curl();
+                let fileData = [];
 
-                try {
-                    const resp = await axios.request(configu, {
-                        responseType: 'arraybuffer'
-                    });
+                const outputFile = join(__dirname, `../public/img/archivos/${id_document}.jpg`);
+                //const outputFile = "hola.jpg";
 
-                    const contentType = resp.headers['content-type'];
+                curl.setOpt(Curl.option.URL, urlMedia);
+                curl.setOpt(Curl.option.FOLLOWLOCATION, true);
+                curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+                curl.setOpt(Curl.option.SSL_VERIFYHOST, 0);
 
-                    let extension;
+                curl.setOpt(Curl.option.WRITEFUNCTION, (buff, nmemb, size) => {
+                    fileData.push(buff);
+                    return nmemb * size;
+                });
 
-                    switch (contentType) {
-                        case 'image/png':
-                            extension = '.png';
-                            break;
-                        case 'image/jpeg':
-                            extension = '.jpg';
-                            break;
-                        case 'application/pdf':
-                            extension = '.pdf';
-                            break;
-                        // ... puedes agregar otros casos según lo necesites
-                        default:
-                            extension = ''; // o puedes asignar una extensión predeterminada
-                            break;
-                    }
-
-                    const filePath = join(__dirname, `../public/img/archivos/${id_document}${extension}`);
-
-                    fs.writeFileSync(filePath, resp.data);
-                    console.log(`Image saved to ${filePath}`);
-                } catch (error) {
-                    console.log(error);
-                    return res.json(error.message);
-                }
+                curl.on('end', () => {
+                    const finalData = Buffer.concat(fileData);
+                    fs.writeFileSync(outputFile, finalData);
+                    console.log('Imagen guardada con éxito.');
+                    curl.close();
+                });
+            
+                curl.on('error', (err) => {
+                    console.error(`Error: ${err.message}`);
+                    curl.close();
+                });
+            
+                curl.perform();
 
             } catch (error) {
                 return res.json(error.message);
