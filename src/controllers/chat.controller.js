@@ -179,16 +179,10 @@ export const addMessageFirestore = async(req, res) => {
             }
         }
 
-        let opciones = {
-            method: 'post',
-            url: '/addWhatsapp',
-            data: {
-                from: from,
-                nameContact: nameContact
-            }
-        };
-
-        const resp = await axios.request(opciones);
+        const addN = await NumeroWhatsapp.create({
+            from,
+            nameContact
+        });
 
         return res.json(newMessage);
     } catch (error) {
