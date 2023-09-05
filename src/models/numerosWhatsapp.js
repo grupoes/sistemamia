@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-export const NumeroWhatsapp = sequelize.define('numerosWhatsapp', {
+export const NumeroWhatsapp = sequelize.define('numeros_whatsapp', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
