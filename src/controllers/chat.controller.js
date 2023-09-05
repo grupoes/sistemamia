@@ -9,8 +9,6 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-import { Curl } from 'node-libcurl';
-
 import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
