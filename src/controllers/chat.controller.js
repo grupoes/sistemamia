@@ -5,7 +5,7 @@ import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { Op } from 'sequelize';
 
 import axios from 'axios';
-import fs from 'fs/promises';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -163,7 +163,7 @@ export const addMessageFirestore = async(req, res) => {
 
                     const filePath = join(__dirname, `../public/img/archivos/${id_document}${extension}`);
 
-                    await fs.writeFile(filePath, resp.data);
+                    fs.writeFileSync(filePath, resp.data);
                     console.log(`Image saved to ${filePath}`);
                 } catch (error) {
                     console.log(error);
