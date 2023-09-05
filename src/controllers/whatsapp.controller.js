@@ -11,15 +11,15 @@ export const addWhatsapp = async(req, res) => {
         });
 
         if(whatsapp) {
-            const newWhatsapp = await NumeroWhatsapp.create({
-                from,
-                nameContact
-            });
-    
-            return res.json(newWhatsapp);
+            return res.json({message: "from ya existe"});
         }
 
-        return res.json({message: "from ya existe"});
+        const newWhatsapp = await NumeroWhatsapp.create({
+            from,
+            nameContact
+        });
+
+        return res.json(newWhatsapp);
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
