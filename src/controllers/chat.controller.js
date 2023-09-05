@@ -96,17 +96,7 @@ export const mensajes_numero = async (req, res) => {
 export const addMessageFirestore = async(req, res) => {
     const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
-        let opciones = {
-            method: 'post',
-            url: '/addWhatsapp',
-            data: {
-                from: from,
-                nameContact: nameContact
-            }
-        };
-
-        const resp = await axios.request(opciones);
-
+    
         const newMessage = await Chat.create({
             codigo: id,
             from: from,
@@ -188,6 +178,17 @@ export const addMessageFirestore = async(req, res) => {
                 return res.json(error.message);
             }
         }
+
+        let opciones = {
+            method: 'post',
+            url: '/addWhatsapp',
+            data: {
+                from: from,
+                nameContact: nameContact
+            }
+        };
+
+        const resp = await axios.request(opciones);
 
         return res.json(newMessage);
     } catch (error) {
