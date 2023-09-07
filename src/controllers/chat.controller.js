@@ -311,7 +311,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-export const uploadImage = (req, res, next) => {
+export const uploadImage = async (req, res, next) => {
     const uploadSingle = upload.single('imagen');
     uploadSingle(req, res, async (error) => {
         if (error) {
