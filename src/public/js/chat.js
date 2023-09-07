@@ -729,9 +729,12 @@ const enviarImagen = document.getElementById("enviarImagen");
 enviarImagen.addEventListener('click', (e) => {
     let file = fileInput.files[0];
 
+    const numero = document.getElementById("whatsappNumber");
+
     if(file) {
         let formData = new FormData();
         formData.append('imagen', file);
+        formData.append('numero', numero.value);
 
         fetch('subir_imagen', {
             method: 'POST',

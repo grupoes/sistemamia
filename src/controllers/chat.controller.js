@@ -312,8 +312,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 export const uploadImage = async (req, res, next) => {
+    
     const uploadSingle = upload.single('imagen');
     uploadSingle(req, res, async (error) => {
+        const { numero } = req.body;
         if (error) {
             // Handle error
             return res.status(500).send(error.message);
@@ -332,7 +334,7 @@ export const uploadImage = async (req, res, next) => {
             },
             data: {
                 messaging_product: "whatsapp",
-                to: "51922502947",
+                to: numero,
                 type: "image",
                 image: {
                     link: url_imagen
