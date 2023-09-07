@@ -344,7 +344,23 @@ export const uploadImage = async (req, res, next) => {
 
         try {
             const response = await axios(config);
-            console.log(response.data);
+            const datos = response.data;
+
+            const new_message = await Chat.create({
+                codigo: datos.messages[0].id,
+                from: "51927982544",
+                message: "",
+                nameContact: "",
+                receipt: numero,
+                timestamp: Math.floor(Date.now() / 10000),
+                typeMessage: "image",
+                estadoMessage: "sent",
+                documentId: "",
+                id_document: "",
+                filename: ""
+            });
+
+            res.json(new_message);
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
