@@ -367,6 +367,32 @@ function loadNumber() {
     document.getElementById("fileInput").click();
 });*/
 
+function fileWhatsapp() {
+    document.getElementById("fileInput").click();
+
+    fileInput.addEventListener('change', (event) => {
+        const $offcanvas = $('#myOffcanvas').offcanvas({
+            backdrop: false
+        });
+        $offcanvas.offcanvas('show');
+
+        let file = event.target.files[0];
+        
+        if (file) {
+            let reader = new FileReader();
+
+            reader.onload = function(event) {
+                // Mostrar la vista previa de la imagen dentro del div
+                $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;">');
+            }
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+}
+
 
 function convertTimestampToDate(timestamp) {
     const date = new Date(timestamp * 1000); // Multiplicamos por 1000 porque JavaScript usa milisegundos
@@ -495,12 +521,11 @@ function chatDetail(numero, name) {
                         <i class="bi bi-three-dots-vertical"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="javascript: void(0);" data-bs-toggle="modal"
-                            data-bs-target="#viewProfile">
+                        <a class="dropdown-item" href="javascript: void(0);" onclick="viewProfle()">
                             <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
                         </a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-music-note-list fs-18 me-2"></i>ventas</a>
+                                class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
                                 class="bi bi-search fs-18 me-2"></i>Buscar</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
@@ -512,7 +537,7 @@ function chatDetail(numero, name) {
             </ul>
         </div>
     </div>
-    <div class="mt-1">
+    <div class="mt-1" id="contentChat">
         <ul class="conversation-list px-0 h-100" data-simplebar
             style="min-height: 405px; max-height: 405px; overflow: hidden scroll;" id="conversation-${numero}">
 
@@ -533,19 +558,33 @@ function chatDetail(numero, name) {
                         <div class="btn-group">
                             <a href="#" class="btn btn-light"><i class="bi bi-emoji-smile fs-18"></i></a>
                             <input type="file" id="fileInput" style="display: none;" />
-                            <a href="#" class="btn btn-light" id="fileWhatsapp">
-                                <i class="bi bi-paperclip fs-18"></i>
-                            </a>
-                            <a href="#" class="btn btn-light"><i class="bi bi-mic-fill fs-18"></i></a>
-                            <div class="d-grid">
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="true">
+                                    <i class="uil uil-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-143px, 21px);">
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item" onclick="fileWhatsapp()">
+                                        <i class="uil uil-refresh me-2"></i>fotos y videos
+                                    </a>
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="uil uil-user-plus me-2"></i>Documento
+                                    </a>
+                                </div>
+                                <a href="#" class="btn btn-light"><i class="bi bi-mic-fill fs-18"></i></a>
+                                <div class="d-grid">
                                 <button type="submit" class="btn btn-success chat-send"><i
                                         class='uil uil-message'></i></button>
+                                </div>
                             </div>
-                        </div>
+                        
                     </div>
                 </div>
             </form>
         </div>
+
+        
     </div>
     `;
 
@@ -680,3 +719,27 @@ function formMessage() {
             });
     })
 }
+
+function viewProfle() {
+    $("#viewProfile").modal("show");
+}
+
+const enviarImagen = document.getElementById("enviarImagen");
+
+enviarImagen.addEventListener('click', (e) => {
+    let file = fileInput.files[0];
+
+    if(file) {
+        let formData = new FormData();
+        formData.append('imagen', file);
+
+        fetch('subir_imagen', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+    }
+});

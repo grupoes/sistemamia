@@ -111,3 +111,92 @@
         </div> <!-- End card -->
     </div> <!-- End col -->
 </div>
+
+
+
+
+<div class="modal fade" id="viewProfile" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class=" m-2">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="text-center mb-3">
+                    <img src="assets/images/users/avatar-5.jpg" class="rounded-circle avatar-lg" height="48"
+                        alt="Rhonda D" />
+                </div>
+                <div class="text-center mb-3">
+                    <h5 class="mt-0 mb-0 fs-18">Rhonda D</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="accordion custom-accordionwitharrow" id="accordionExample">
+                    <div class="card mb-1 shadow-none border-0">
+                        <a href="#" class="text-dark" data-bs-toggle="collapse" data-bs-target="#about"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            <div class="card-header border-0" id="headingOne">
+                                <h5 class="m-0 fs-16">About
+                                    <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="about" class="collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="card-body pt-0 text-muted">
+                                <div class="row align-items-center ms-1">
+                                    <div class="col-4 p-2"><i class="bi bi-telephone fs-18 me-2"></i>Numero</div>
+                                    <div class="col-8 p-2 border-bottom">51922502947</div>
+                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Email</div>
+                                    <div class="col-8 p-2 border-bottom">elvisbravo262@gmail.com</div>
+                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Universidad</div>
+                                    <div class="col-8 p-2 border-bottom">San Martin</div>
+                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Ciudad</div>
+                                    <div class="col-8 p-2 border-bottom">tarapoto</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="text-dark" data-bs-toggle="collapse" data-bs-target="#files"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            <div class="card-header border-0" id="headingOne">
+                                <h5 class="m-0 fs-16">Media, Links and Docs
+                                    <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="files" class="collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="card-body pt-0 text-muted">
+                                <div class="d-inline-block me-2">
+                                    <i class="bi bi-file-earmark-pdf h2"></i>
+                                </div>
+                                <div class="d-inline-block me-2">
+                                    <i class="bi bi-file-earmark-word h2"></i>
+                                </div>
+                                <div class="d-inline-block me-2">
+                                    <i class="bi bi-images h2"></i>
+                                </div>
+                                <div class="d-inline-block me-2">
+                                    <i class="bi bi-file-earmark-ppt h2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenido del Offcanvas -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="myOffcanvas" aria-labelledby="myOffcanvasLabel" id="myOffcanvas">
+            <div class="offcanvas-header">
+                <h5 id="myOffcanvasLabel">Enviar Imagen</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="offcanvas-body">
+                
+            </div>
+
+            <button class="btn btn-primary" id="enviarImagen">Enviar</button>
+        </div>

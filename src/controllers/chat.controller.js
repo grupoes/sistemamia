@@ -9,6 +9,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+import multer from 'multer';
+
 import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -296,3 +298,55 @@ export const traer_ultimo_mensaje = async(req, res) => {
         return res.status(400).json({ message: error.message });
     }
 }
+
+// Configura el almacenamiento de multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './src/public/img/archivos/') // directorio donde se guardarán los archivos
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`)
+    }
+});
+
+const upload = multer({ storage: storage });
+
+export const uploadImage = (req, res, next) => {
+    const uploadSingle = upload.single('imagen');
+    uploadSingle(req, res, async (error) => {
+        if (error) {
+            // Handle error
+            return res.status(500).send(error.message);
+        }
+        console.log(req.file); // contiene información sobre el archivo.
+        res.json({message: "archivo subido con exito"})
+
+        const url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://graph.facebook.com/v17.0/messages',
+            headers: { 
+              'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+            },
+            data: {
+                messaging_product: "whatsapp",
+                to: "51922502947",
+                type: "image",
+                image: {
+                    link: url_imagen
+                }
+            }
+        };
+
+        try {
+            const response = await axios(config);
+            console.log(response.data);
+        }
+          catch (error) {
+            console.error("Error in making request:", error.response.data || error.message);
+        }
+
+    });
+};
