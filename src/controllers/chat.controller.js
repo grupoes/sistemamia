@@ -5,7 +5,7 @@ import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { Op } from 'sequelize';
 
 import axios from 'axios';
-import fs from 'fs';
+import { createWriteStream, fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -132,6 +132,7 @@ export const addMessageFirestore = async(req, res) => {
 
                 let configu = {
                     method: 'get',
+                    responseType: 'stream',
                     maxBodyLength: Infinity,
                     url: urlMedia,
                     headers: { 
@@ -140,37 +141,24 @@ export const addMessageFirestore = async(req, res) => {
                 };
 
                 try {
-                    const resp = await axios.request(configu, {
-                        responseType: 'arraybuffer'
+                    const resp = await axios.request(configu);
+
+                    // Crea un write stream para guardar la respuesta en un archivo
+                    const writer = createWriteStream('elvis.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
+
+                    // Usa el stream de la respuesta para escribir en el archivo
+                    resp.data.pipe(writer);
+
+                    // Maneja los eventos del stream
+                    writer.on('finish', () => {
+                        console.log('Archivo guardado exitosamente.');
                     });
 
-                    const contentType = resp.headers['content-type'];
+                    writer.on('error', (error) => {
+                        console.error('Error al guardar el archivo:', error);
+                    });
 
-                    console.log(resp.headers);
-                    console.log(resp);
-
-                    let extension;
-
-                    switch (contentType) {
-                        case 'image/png':
-                            extension = '.png';
-                            break;
-                        case 'image/jpeg':
-                            extension = '.jpg';
-                            break;
-                        case 'application/pdf':
-                            extension = '.pdf';
-                            break;
-                        // ... puedes agregar otros casos según lo necesites
-                        default:
-                            extension = ''; // o puedes asignar una extensión predeterminada
-                            break;
-                    }
-
-                    const filePath = join(__dirname, `../public/img/archivos/${id_document}${extension}`);
-
-                    fs.writeFileSync(filePath, resp.data);
-                    console.log(`Image saved to ${filePath}`);
+                    
                 } catch (error) {
                     console.log(error);
                     return res.json(error.message + " fue aca");
@@ -321,7 +309,6 @@ export const uploadImage = async (req, res, next) => {
             return res.status(500).send(error.message);
         }
         console.log(req.file); // contiene información sobre el archivo.
-        res.json({message: "archivo subido con exito"})
 
         const url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
 
@@ -357,13 +344,14 @@ export const uploadImage = async (req, res, next) => {
                 estadoMessage: "sent",
                 documentId: "",
                 id_document: "",
-                filename: ""
+                filename: req.file.filename
             });
 
-            res.json(new_message);
+            return res.json(new_message);
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
+            return res.json({message: error.message});
         }
 
     });

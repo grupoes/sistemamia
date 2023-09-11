@@ -377,6 +377,7 @@ function fileWhatsapp() {
         $offcanvas.offcanvas('show');
 
         let file = event.target.files[0];
+        console.log(file);
         
         if (file) {
             let reader = new FileReader();
