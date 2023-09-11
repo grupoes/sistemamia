@@ -144,7 +144,7 @@ export const addMessageFirestore = async(req, res) => {
                     const resp = await axios.request(configu);
 
                     // Crea un write stream para guardar la respuesta en un archivo
-                    const writer = createWriteStream('elvis.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
+                    const writer = createWriteStream(id_document+'.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
 
                     // Usa el stream de la respuesta para escribir en el archivo
                     resp.data.pipe(writer);
