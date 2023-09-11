@@ -5,7 +5,7 @@ import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { Op } from 'sequelize';
 
 import axios from 'axios';
-import { createWriteStream, fs } from 'fs';
+import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
