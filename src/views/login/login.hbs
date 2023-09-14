@@ -46,14 +46,14 @@
                                             Ingrese su dirección de correo electrónico y contraseña para acceder al panel de administración.
                                         </p>
 
-                                        <form action="#" class="authentication-form">
+                                        <form action="#" class="authentication-form" id="authentication-form">
                                             <div class="mb-3">
                                                 <label class="form-label">Dirección de correo electrónico</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">
                                                         <i class="icon-dual" data-feather="mail"></i>
                                                     </span>
-                                                    <input type="email" class="form-control" id="email" placeholder="hello@ejemplo.com">
+                                                    <input type="email" class="form-control" id="email" name="email" placeholder="hello@ejemplo.com" required="">
                                                 </div>
                                             </div>
 
@@ -64,7 +64,7 @@
                                                     <span class="input-group-text">
                                                         <i class="icon-dual" data-feather="lock"></i>
                                                     </span>
-                                                    <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
+                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required="">
                                                 </div>
                                             </div>
 
@@ -101,6 +101,8 @@
 
         <!-- App js -->
         <script src="assets/js/app.min.js"></script>
+
+        <script src="js/login.js"></script>
         
     </body>
 

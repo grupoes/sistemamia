@@ -377,14 +377,21 @@ function fileWhatsapp() {
         $offcanvas.offcanvas('show');
 
         let file = event.target.files[0];
-        console.log(file);
+        console.log(file.type);
         
         if (file) {
             let reader = new FileReader();
 
             reader.onload = function(event) {
                 // Mostrar la vista previa de la imagen dentro del div
-                $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;">');
+                if(file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif' || file.type == 'image/webp' || file.type == 'image/svg+xml') {
+                    $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;">');
+                }
+
+                if (file.type == 'video/mp4') {
+                    $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="video/mp4">Your browser does not support the video tag.</video>');
+                }
+                
             }
 
             reader.readAsDataURL(file);
@@ -737,13 +744,19 @@ enviarImagen.addEventListener('click', (e) => {
         formData.append('imagen', file);
         formData.append('numero', numero.value);
 
+        console.log(file.type);
+
         fetch('subir_imagen', {
             method: 'POST',
             body: formData
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
+            if (data.message == 'ok') {
+                $('#myOffcanvas').offcanvas('hide');
+            } else {
+                alert(data.message);
+            }
         })
     }
 });

@@ -309,8 +309,16 @@ export const uploadImage = async (req, res, next) => {
             return res.status(500).send(error.message);
         }
         console.log(req.file); // contiene información sobre el archivo.
+        let url_imagen;
+        let typeFile;
 
-        const url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
+        if(req.file.mimetype == 'video/mp4') {
+            url_imagen = "http://157.230.239.170:4000/videos/archivos/"+req.file.filename;
+            typeFile = "video";
+        } else {
+            url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
+            typeFile = "image";
+        }
 
         let config = {
             method: 'post',
@@ -322,7 +330,7 @@ export const uploadImage = async (req, res, next) => {
             data: {
                 messaging_product: "whatsapp",
                 to: numero,
-                type: "image",
+                type: typeFile,
                 image: {
                     link: url_imagen
                 }
@@ -347,7 +355,7 @@ export const uploadImage = async (req, res, next) => {
                 filename: req.file.filename
             });
 
-            return res.json(new_message);
+            return res.json({message: 'ok', data: new_message});
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
