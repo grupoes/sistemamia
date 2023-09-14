@@ -290,7 +290,12 @@ export const traer_ultimo_mensaje = async(req, res) => {
 // Configura el almacenamiento de multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './src/public/img/archivos/') // directorio donde se guardarán los archivos
+        if(file.mimetype == 'video/mp4') {
+            cb(null, './src/public/videos/archivos/') // directorio donde se guardarán los archivos
+        } else {
+            cb(null, './src/public/img/archivos/') // directorio donde se guardarán los archivos
+        }
+        
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`)
