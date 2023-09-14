@@ -311,13 +311,32 @@ export const uploadImage = async (req, res, next) => {
         console.log(req.file); // contiene información sobre el archivo.
         let url_imagen;
         let typeFile;
+        let dataFile;
 
         if(req.file.mimetype == 'video/mp4') {
             url_imagen = "http://157.230.239.170:4000/videos/archivos/"+req.file.filename;
             typeFile = "video";
+
+            dataFile = {
+                messaging_product: "whatsapp",
+                to: numero,
+                type: typeFile,
+                video: {
+                    link: url_imagen
+                }
+            };
         } else {
             url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
             typeFile = "image";
+
+            dataFile = {
+                messaging_product: "whatsapp",
+                to: numero,
+                type: typeFile,
+                image: {
+                    link: url_imagen
+                }
+            };
         }
 
         let config = {
@@ -327,14 +346,7 @@ export const uploadImage = async (req, res, next) => {
             headers: { 
               'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
             },
-            data: {
-                messaging_product: "whatsapp",
-                to: numero,
-                type: typeFile,
-                image: {
-                    link: url_imagen
-                }
-            }
+            data: dataFile
         };
 
         try {
