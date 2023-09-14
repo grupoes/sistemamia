@@ -367,7 +367,7 @@ export const uploadImage = async (req, res, next) => {
                 filename: req.file.filename
             });
 
-            return res.json({message: 'ok', data: new_message});
+            return res.json({message: 'ok', data: new_message, datos: dataFile});
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
