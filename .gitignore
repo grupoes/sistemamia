@@ -66,3 +66,4 @@ node_modules/
 .env
 
 src/public/img/archivos/*
+src/public/videos/archivos/*
