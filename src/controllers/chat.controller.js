@@ -7,6 +7,7 @@ import { Op } from 'sequelize';
 import axios from 'axios';
 import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
+import path from 'path';
 import { dirname, join } from 'path';
 
 import multer from 'multer';
@@ -144,7 +145,8 @@ export const addMessageFirestore = async(req, res) => {
                     const resp = await axios.request(configu);
 
                     // Crea un write stream para guardar la respuesta en un archivo
-                    const writer = createWriteStream("http://157.230.239.170/img/archivos/"+id_document+'.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
+                    const targetFilePath = path.join(__dirname, '..', 'public', 'img', 'archivos', id_document+'.jpg');
+                    const writer = createWriteStream(id_document+'.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
 
                     // Usa el stream de la respuesta para escribir en el archivo
                     resp.data.pipe(writer);
