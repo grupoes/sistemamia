@@ -6,74 +6,6 @@ const contactos = document.getElementById('contactos-whatsapp');
 
 const cardBody = document.querySelector("#cardBody");
 
-//getAllContactos();
-
-/*form_envio.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    if (contentMensaje.value == "") {
-        return false;
-    }
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", "Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE");
-
-    var raw = JSON.stringify({
-        "messaging_product": "whatsapp",
-        "recipient_type": "individual",
-        "to": whatsappNumber.value,
-        "type": "text",
-        "text": {
-            "preview_url": false,
-            "body": contentMensaje.value
-        }
-    });
-
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-    };
-
-    fetch("https://graph.facebook.com/v17.0/122094968330010315/messages", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-            console.log(result.messages[0].id);
-
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-                "text": contentMensaje.value,
-                "messageId": result.messages[0].id,
-                "numberWhatsapp": whatsappNumber.value
-            });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-
-            fetch("http://localhost:4000/addMessageChat", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
-
-            listConversation(contentMensaje.value);
-
-        })
-        .catch(error => console.log('error', error))
-        .finally(() => {
-            contentMensaje.value = "";
-        });
-})*/
-
-
 function listConversation(mensaje, numero) {
     let html = `
     <li class="clearfix odd">
@@ -105,7 +37,7 @@ function listConversation(mensaje, numero) {
     </li>
     `;
 
-    $("#conversation-"+numero).append(html);
+    $("#conversation-" + numero).append(html);
 
 }
 
@@ -284,10 +216,10 @@ function mostrar_chat(numero) {
                                     </li>
                                     `;
                             } else {
-                                
+
                             }
                         }
-                        
+
                     }
 
 
@@ -382,20 +314,20 @@ function fileWhatsapp() {
 
         let file = event.target.files[0];
         console.log(file.type);
-        
+
         if (file) {
             let reader = new FileReader();
 
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 // Mostrar la vista previa de la imagen dentro del div
-                if(file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif' || file.type == 'image/webp' || file.type == 'image/svg+xml') {
+                if (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif' || file.type == 'image/webp' || file.type == 'image/svg+xml') {
                     $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;">');
                 }
 
                 if (file.type == 'video/mp4') {
                     $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="video/mp4">Your browser does not support the video tag.</video>');
                 }
-                
+
             }
 
             reader.readAsDataURL(file);
@@ -416,11 +348,11 @@ function documentoFile() {
 
         let file = event.target.files[0];
         console.log(file);
-        
+
         if (file) {
             let reader = new FileReader();
 
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 // Mostrar la vista previa de la imagen dentro del div
                 const vista = `
                 <div class="p357zi0d gndfcl4n o4u7okr9 cl7oiv0o fbgy3m38 l9g3jx6n oq31bsqd lyvj5e2u ej3x2ktq"><div class="p357zi0d ggj6brxn m0h2a7mj rjo8vgbg f8m0rgwh gndfcl4n"><span class="f8jlpxt4 tl2vja3b">${file.name}</span></div></div>
@@ -434,7 +366,7 @@ function documentoFile() {
                 `;
                 $("#offcanvas-body").html(vista);
 
-                
+
             }
 
             reader.readAsDataURL(file);
@@ -663,40 +595,104 @@ socket.on("messageChat", data => {
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
-    html = `
-                    <li class="clearfix">
-                    <div class="conversation-text ms-0">
-                        <div class="d-flex">
-                            <div class="ctext-wrap">
-                                <p>${data.message}</p>                                                                                                                                        
-                            </div>                                                                    
-                            <div class="conversation-actions dropdown dropend">
-                                <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-reply fs-18 me-2"></i>Reply
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-star fs-18 me-2"></i>Starred
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-trash fs-18 me-2"></i>Delete
-                                    </a>   
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-files fs-18 me-2"></i>Copy
-                                    </a>                                                                            
-                                </div>
-                            </div>
-                        </div>                                                                
-                        <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}</p>
-                    </div>                                                            
-                </li>
-                `;
+    if (data.from != '"51927982544"') {
+        switch (data.typeMessage) {
+            case "text":
+                viewFromText(data, fecha_y_hora);
+                break;
 
-    const lista = $("#conversation-"+data.from);
-    lista.append(html);
+            case "image":
+                viewFromImage(data, fecha_y_hora);
+                break;
+            case "video":
+                viewFromVideo(data, fecha_y_hora);
+                break;
+            case "audio":
+                viewFromAudio(data, fecha_y_hora);
+                break;
+            default:
+                break;
+        }
+    } else {
+
+    }
 
 });
+
+function viewFromText(data, hora) {
+    html = `
+        <li class="clearfix">
+            <div class="conversation-text ms-0">
+                <div class="d-flex">
+                    <div class="ctext-wrap">
+                        <p>${data.message}</p>                                                                                                                                        
+                    </div>                                                                    
+                    <div class="conversation-actions dropdown dropend">
+                        <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-star fs-18 me-2"></i>Starred
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-files fs-18 me-2"></i>Copy
+                            </a>                                                                            
+                        </div>
+                    </div>
+                </div>                                                                
+                <p class="text-muted fs-12 mb-0 mt-1">${hora}</p>
+            </div>                                                            
+        </li>`;
+
+    const lista = $("#conversation-" + data.from);
+    lista.append(html);
+}
+
+function viewFromImage(data, hora) {
+    html += `
+            <li class="clearfix">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex">
+                        <div class="card mb-1 shadow-none border text-start ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="conversation-actions dropdown dropend">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${hora}</p>
+                </div>
+            </li>`;
+
+        const lista = $("#conversation-" + data.from);
+        lista.append(html);
+}
 
 function formMessage() {
     const form_envio = document.getElementById('chat-form');
@@ -780,7 +776,7 @@ enviarImagen.addEventListener('click', (e) => {
 
     const numero = document.getElementById("whatsappNumber");
 
-    if(file) {
+    if (file) {
         let formData = new FormData();
         formData.append('imagen', file);
         formData.append('numero', numero.value);
@@ -791,14 +787,14 @@ enviarImagen.addEventListener('click', (e) => {
             method: 'POST',
             body: formData
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.message == 'ok') {
-                $('#myOffcanvas').offcanvas('hide');
-            } else {
-                alert(data.message);
-            }
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message == 'ok') {
+                    $('#myOffcanvas').offcanvas('hide');
+                } else {
+                    alert(data.message);
+                }
+            })
     }
 });
 
