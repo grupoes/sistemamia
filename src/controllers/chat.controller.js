@@ -290,10 +290,17 @@ export const traer_ultimo_mensaje = async(req, res) => {
 // Configura el almacenamiento de multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
+        console.log(file);
         if(file.mimetype == 'video/mp4') {
             cb(null, './src/public/videos/archivos/') // directorio donde se guardarán los archivos
-        } else {
-            cb(null, './src/public/img/archivos/') // directorio donde se guardarán los archivos
+        }
+
+        if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/gif' || file.mimetype == 'image/webp' || file.mimetype == 'image/svg+xml') {
+            cb(null, './src/public/img/archivos/')
+        }
+
+        if(file.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype == 'application/pdf' || file.mimetype == 'text/xml' || file.mimetype == 'application/x-zip-compressed' || file.mimetype == 'application/octet-stream') {
+            cb(null, './src/public/documentos/archivos/')
         }
         
     },
@@ -318,7 +325,9 @@ export const uploadImage = async (req, res, next) => {
         let typeFile;
         let dataFile;
 
-        if(req.file.mimetype == 'video/mp4') {
+        const ar = req.file;
+
+        if(ar.mimetype == 'video/mp4') {
             url_imagen = "http://157.230.239.170:4000/videos/archivos/"+req.file.filename;
             typeFile = "video";
 
@@ -330,7 +339,9 @@ export const uploadImage = async (req, res, next) => {
                     link: url_imagen
                 }
             };
-        } else {
+        }
+
+        if(ar.mimetype == 'image/jpeg' || ar.mimetype == 'image/png' || ar.mimetype == 'image/gif' || ar.mimetype == 'image/webp' || ar.mimetype == 'image/svg+xml') {
             url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
             typeFile = "image";
 
@@ -339,6 +350,20 @@ export const uploadImage = async (req, res, next) => {
                 to: numero,
                 type: typeFile,
                 image: {
+                    link: url_imagen
+                }
+            };
+        }
+
+        if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream') {
+            url_imagen = "http://157.230.239.170:4000/documentos/archivos/"+req.file.filename;
+            typeFile = "document";
+
+            dataFile = {
+                messaging_product: "whatsapp",
+                to: numero,
+                type: typeFile,
+                document: {
                     link: url_imagen
                 }
             };

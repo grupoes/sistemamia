@@ -401,6 +401,43 @@ function fileWhatsapp() {
 
 }
 
+function documentoFile() {
+    document.getElementById("fileInput").click();
+
+    fileInput.addEventListener('change', (event) => {
+        const $offcanvas = $('#myOffcanvas').offcanvas({
+            backdrop: false
+        });
+        $offcanvas.offcanvas('show');
+
+        let file = event.target.files[0];
+        console.log(file);
+        
+        if (file) {
+            let reader = new FileReader();
+
+            reader.onload = function(event) {
+                // Mostrar la vista previa de la imagen dentro del div
+                const vista = `
+                <div class="p357zi0d gndfcl4n o4u7okr9 cl7oiv0o fbgy3m38 l9g3jx6n oq31bsqd lyvj5e2u ej3x2ktq"><div class="p357zi0d ggj6brxn m0h2a7mj rjo8vgbg f8m0rgwh gndfcl4n"><span class="f8jlpxt4 tl2vja3b">${file.name}</span></div></div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body text-center">
+                    <svg viewBox="0 0 88 110" height="110" width="88" preserveAspectRatio="xMidYMid meet" class=""><defs><rect id="b" x="0" y="0" width="54" height="36" rx="2.37"></rect><path d="M3 0h56.928a5 5 0 0 1 3.536 1.464l15.072 15.072A5 5 0 0 1 80 20.07V101a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3z" id="a"></path></defs><g transform="translate(4 3)" fill="none" fill-rule="evenodd"><use fill="#000" filter="url(#filter-3)" xlink:href="#a"></use><use fill="#FFF" xlink:href="#a"></use><path stroke-opacity="0.08" stroke="#000" d="M3-.5h56.929a5.5 5.5 0 0 1 3.889 1.61l15.071 15.072a5.5 5.5 0 0 1 1.611 3.89V101a3.5 3.5 0 0 1-3.5 3.5H3A3.5 3.5 0 0 1-.5 101V3A3.5 3.5 0 0 1 3-.5z" fill="url(#linearGradient-1)"></path><rect fill-opacity="0.2" fill="#000" x="13" y="84" width="54" height="2" rx="0.5"></rect><rect fill-opacity="0.2" fill="#000" x="13" y="89" width="27" height="2" rx="0.5"></rect><rect fill-opacity="0.2" fill="#000" x="13" y="24" width="54" height="2" rx="0.5"></rect><rect fill-opacity="0.2" fill="#000" x="13" y="29" width="54" height="2" rx="0.5"></rect><rect fill-opacity="0.2" fill="#000" x="13" y="34" width="40" height="2" rx="0.5"></rect><g><g transform="translate(13 42)"><mask id="c" fill="#fff"><use xlink:href="#b"></use></mask><use fill-opacity="0.1" fill="#000" xlink:href="#b"></use><circle fill-opacity="0.1" fill="#000" mask="url(#c)" cx="37.5" cy="11.5" r="5.5"></circle><path d="m34.565 31.195 7.912-7.89a2.37 2.37 0 0 1 3.348 0l25.144 25.073L44.15 75.119l-19.556-19.5-11.259 11.228-26.817-26.742 25.143-25.072a2.37 2.37 0 0 1 3.348 0l16.208 16.162a2.37 2.37 0 0 0 3.347 0z" fill-opacity="0.1" fill="#000" mask="url(#c)"></path></g></g><path d="M61.5.5v15a3 3 0 0 0 3 3h15" stroke-opacity="0.12" stroke="#000" fill="#FFF"></path></g></svg>
+                    <h5 class="card-title">No hay vista previa disponible</h5>
+                    <!--<p class="card-text">18 MB - DOCX</p>-->
+                    </div>
+                </div>
+                `;
+                $("#offcanvas-body").html(vista);
+
+                
+            }
+
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
 
 function convertTimestampToDate(timestamp) {
     const date = new Date(timestamp * 1000); // Multiplicamos por 1000 porque JavaScript usa milisegundos
@@ -576,7 +613,7 @@ function chatDetail(numero, name) {
                                         <i class="uil uil-refresh me-2"></i>fotos y videos
                                     </a>
                                     <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item">
+                                    <a href="javascript:void(0);" class="dropdown-item" onclick="documentoFile()">
                                         <i class="uil uil-user-plus me-2"></i>Documento
                                     </a>
                                 </div>
