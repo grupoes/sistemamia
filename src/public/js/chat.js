@@ -224,7 +224,7 @@ function mostrar_chat(numero) {
                                             <div class="p-2">
                                                 <div class="row align-items-center">
                                                     <div class="col-auto">
-                                                        <img src="./public/img/archivos/${msj.id_document}.jpg" alt="" height="150">
+                                                        <img src="http://157.230.239.170/img/archivos/${msj.id_document}.jpg" alt="" height="150">
                                                     </div>
                                                 </div>
                                             </div>
