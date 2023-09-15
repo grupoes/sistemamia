@@ -756,8 +756,8 @@ function viewFromDocument(data, fecha) {
                                 </div>
                             </div>-->
                             <div class="col ps-0">
-                                <a href="javascript:void(0);" class="text-muted fw-bold">Hyper-admin-design.zip</a>
-                                <p class="mb-0">2.3 MB</p>
+                                <a href="javascript:void(0);" class="text-muted fw-bold">${data.id_document}.pdf</a>
+                                <!--<p class="mb-0">2.3 MB</p>-->
                             </div>
                             <div class="col-auto">
                                 <a href="javascript:void(0);" class="ps-3 fs-24">
@@ -770,8 +770,8 @@ function viewFromDocument(data, fecha) {
                 <div class="conversation-actions dropdown dropend">
                     <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-reply fs-18 me-2"></i>Reply
+                        <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/documentos/archivos/${data.id_document}.pdf', '${data.id_document}.pdf')>
+                            <i class="bi bi-reply fs-18 me-2"></i>Descargar
                         </a>   
                         <a class="dropdown-item" href="#">
                             <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -785,10 +785,13 @@ function viewFromDocument(data, fecha) {
                     </div>
                 </div>
             </div>
-            <p class="text-muted fs-12 mb-0 mt-1">8:32 am</p>
+            <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
         </div>
     </li>
     `;
+
+    const lista = $("#conversation-" + data.from);
+    lista.append(html);
 }
 
 function formMessage() {
