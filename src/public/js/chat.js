@@ -694,6 +694,51 @@ function viewFromImage(data, hora) {
         lista.append(html);
 }
 
+function viewFromVideo(data, fecha) {
+    let html = `
+            <li class="clearfix">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex">
+                        <div class="card mb-1 shadow-none border text-start ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+
+                                        <video width="320" height="240" controls>
+                                            <source src="http://157.230.239.170:4000/videos/archivos/${data.id_document}.mp4" type="video/mp4">
+                                            Tu navegador no soporta la etiqueta de video.
+                                        </video>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="conversation-actions dropdown dropend">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/videos/archivos/${data.id_document}.jpg', '${data.id_document}.mp4')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                </div>
+            </li>`;
+
+        const lista = $("#conversation-" + data.from);
+        lista.append(html);
+}
+
 function formMessage() {
     const form_envio = document.getElementById('chat-form');
     const contentMensaje = document.getElementById('contentMensaje');

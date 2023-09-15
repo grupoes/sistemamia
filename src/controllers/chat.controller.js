@@ -98,22 +98,8 @@ export const mensajes_numero = async (req, res) => {
 export const addMessageFirestore = async(req, res) => {
     const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
-    
-        const newMessage = await Chat.create({
-            codigo: id,
-            from: from,
-            message: message,
-            nameContact: nameContact,
-            receipt: receipt,
-            timestamp: timestamp,
-            typeMessage: type,
-            estadoMessage: "sent",
-            documentId: documentId,
-            id_document: id_document,
-            filename: filename
-        });
 
-        if (type == 'image') {
+        if (type == 'image' || type == 'video') {
             console.log("aca ")
             let config = {
                 method: 'get',
@@ -143,8 +129,18 @@ export const addMessageFirestore = async(req, res) => {
                 try {
                     const resp = await axios.request(configu);
 
+                    let rutaFile;
+
+                    if(type == 'image') {
+                        rutaFile = "./src/public/img/archivos/"+id_document+'.jpg';
+                    }
+
+                    if(type == 'video') {
+                        rutaFile = "./src/public/videos/archivos/"+id_document+'.mp4';
+                    }
+
                     // Crea un write stream para guardar la respuesta en un archivo
-                    const writer = createWriteStream("./src/public/img/archivos/"+id_document+'.jpg'); // Cambia 'output_file.ext' por el nombre y extensión adecuados
+                    const writer = createWriteStream(rutaFile); // Cambia 'output_file.ext' por el nombre y extensión adecuados
 
                     // Usa el stream de la respuesta para escribir en el archivo
                     resp.data.pipe(writer);
@@ -168,6 +164,20 @@ export const addMessageFirestore = async(req, res) => {
                 return res.json(error.message);
             }
         }
+
+        const newMessage = await Chat.create({
+            codigo: id,
+            from: from,
+            message: message,
+            nameContact: nameContact,
+            receipt: receipt,
+            timestamp: timestamp,
+            typeMessage: type,
+            estadoMessage: "sent",
+            documentId: documentId,
+            id_document: id_document,
+            filename: filename
+        });
 
         const addN = await NumeroWhatsapp.create({
             from,
