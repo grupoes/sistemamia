@@ -620,7 +620,7 @@ socket.on("messageChat", data => {
 });
 
 function viewFromText(data, hora) {
-    html = `
+    let html = `
         <li class="clearfix">
             <div class="conversation-text ms-0">
                 <div class="d-flex">
@@ -654,7 +654,7 @@ function viewFromText(data, hora) {
 }
 
 function viewFromImage(data, hora) {
-    html += `
+    let html = `
             <li class="clearfix">
                 <div class="conversation-text ms-0">
                     <div class="d-flex">
