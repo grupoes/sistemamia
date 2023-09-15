@@ -607,7 +607,7 @@ socket.on("messageChat", data => {
             case "video":
                 viewFromVideo(data, fecha_y_hora);
                 break;
-            case "video":
+            case "document":
                 viewFromDocument(data, fecha_y_hora);
                 break;
             case "audio":
