@@ -233,8 +233,8 @@ function mostrar_chat(numero) {
                                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${msj.id_document}.jpg', '${msj.id_document}.jpg')">
+                                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                                 </a>
                                                 <a class="dropdown-item" href="#">
                                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -801,3 +801,12 @@ enviarImagen.addEventListener('click', (e) => {
         })
     }
 });
+
+function descargarImagen(url, filename) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename || 'download';  // Si no proporcionas un nombre, usará 'download'
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
