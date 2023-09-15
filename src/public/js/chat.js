@@ -607,6 +607,9 @@ socket.on("messageChat", data => {
             case "video":
                 viewFromVideo(data, fecha_y_hora);
                 break;
+            case "video":
+                viewFromDocument(data, fecha_y_hora);
+                break;
             case "audio":
                 viewFromAudio(data, fecha_y_hora);
                 break;
@@ -737,6 +740,55 @@ function viewFromVideo(data, fecha) {
 
         const lista = $("#conversation-" + data.from);
         lista.append(html);
+}
+
+function viewFromDocument(data, fecha) {
+    let html = `
+    <li class="clearfix">
+        <div class="conversation-text ms-0">
+            <div class="d-flex">
+                <div class="card mb-1 shadow-none border text-start">
+                    <div class="p-2">
+                        <div class="row align-items-center">
+                            <!--<div class="col-auto">
+                                <div class="avatar-sm bg-primary text-white">
+                                    <span class="avatar-title rounded">.ZIP</span>
+                                </div>
+                            </div>-->
+                            <div class="col ps-0">
+                                <a href="javascript:void(0);" class="text-muted fw-bold">Hyper-admin-design.zip</a>
+                                <p class="mb-0">2.3 MB</p>
+                            </div>
+                            <div class="col-auto">
+                                <a href="javascript:void(0);" class="ps-3 fs-24">
+                                    <i class="bi bi-arrow-down-square"></i>    
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="conversation-actions dropdown dropend">
+                    <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-reply fs-18 me-2"></i>Reply
+                        </a>   
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-star fs-18 me-2"></i>Starred
+                        </a>   
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-trash fs-18 me-2"></i>Delete
+                        </a>   
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-files fs-18 me-2"></i>Copy
+                        </a>                                                                            
+                    </div>
+                </div>
+            </div>
+            <p class="text-muted fs-12 mb-0 mt-1">8:32 am</p>
+        </div>
+    </li>
+    `;
 }
 
 function formMessage() {

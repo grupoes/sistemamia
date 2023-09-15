@@ -99,7 +99,7 @@ export const addMessageFirestore = async(req, res) => {
     const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
 
-        if (type == 'image' || type == 'video') {
+        if (type == 'image' || type == 'video' || type == 'document') {
             console.log("aca ")
             let config = {
                 method: 'get',
@@ -137,6 +137,10 @@ export const addMessageFirestore = async(req, res) => {
 
                     if(type == 'video') {
                         rutaFile = "./src/public/videos/archivos/"+id_document+'.mp4';
+                    }
+
+                    if(type == 'document') {
+                        rutaFile = "./src/public/documentos/archivos/"+id_document+'.pdf';
                     }
 
                     // Crea un write stream para guardar la respuesta en un archivo
