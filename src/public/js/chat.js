@@ -534,7 +534,7 @@ socket.on("messageChat", data => {
                 const listaImage = $("#conversation-" + data.from);
                 listaImage.append(image);
                 break;
-            case "video":
+            /*case "video":
                 viewReceipVideo(data, fecha_y_hora);
                 break;
             case "document":
@@ -542,7 +542,7 @@ socket.on("messageChat", data => {
                 break;
             case "audio":
                 viewReceipAudio(data, fecha_y_hora);
-                break;
+                break;*/
             default:
                 break;
         }
