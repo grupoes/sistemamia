@@ -533,7 +533,9 @@ socket.on("messageChat", data => {
     } else {
         switch (data.typeMessage) {
             case "text":
-                viewReceipText(data, fecha_y_hora);
+                let text = viewReceipText(data, fecha_y_hora);
+                const lista = $("#conversation-" + data.from);
+                lista.append(text);
                 break;
 
             case "image":
@@ -766,6 +768,79 @@ function viewFromDocument(data, fecha) {
     `;
 
     return html;
+}
+
+function viewReceipText(data, fecha) {
+    html += `
+        <li class="clearfix odd">
+            <div class="conversation-text ms-0">
+                <div class="d-flex justify-content-end">
+                    <div class="conversation-actions dropdown dropstart">
+                        <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-star fs-18 me-2"></i>Starred
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                            </a>   
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-files fs-18 me-2"></i>Copy
+                            </a>                                                                            
+                        </div>
+                    </div>  
+                    <div class="ctext-wrap">
+                        <p>${data.message}</p>
+                    </div>  
+                </div>                                                          
+                <p class="text-muted fs-12 mb-0 mt-1">${fecha}<i class="bi bi-check2-all ms-1 text-success"></i></p>
+            </div>
+        </li>`;
+
+    return html;
+}
+
+function viewReceipImage(data, fecha) {
+    let html = `
+            <li class="clearfix odd">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex justify-content-end">
+                        <div class="conversation-actions dropdown dropstart">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                </div>
+            </li>`;
+
+        return html;
 }
 
 function formMessage() {
