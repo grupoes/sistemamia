@@ -114,6 +114,8 @@ export const addMessageFirestore = async(req, res) => {
                 const response = await axios.request(config);
                 const datos = response.data;
 
+                console.log(datos);
+
                 return res.json(datos);
 
                 const urlMedia = datos.url;
