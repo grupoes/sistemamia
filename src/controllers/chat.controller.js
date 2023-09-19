@@ -174,6 +174,7 @@ export const addMessageFirestore = async(req, res) => {
                 }
 
             } catch (error) {
+                console.log(error.message);
                 return res.json(error.message);
             }
         }
