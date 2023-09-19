@@ -764,7 +764,7 @@ function viewFromDocument(data, fecha) {
 }
 
 function viewReceipText(data, fecha) {
-    html += `
+    html = `
         <li class="clearfix odd">
             <div class="conversation-text ms-0">
                 <div class="d-flex justify-content-end">
