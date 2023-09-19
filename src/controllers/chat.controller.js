@@ -101,6 +101,7 @@ export const addMessageFirestore = async(req, res) => {
 
         if (type == 'image' || type == 'video' || type == 'document' || type == 'audio') {
             console.log("aca ")
+            console.log(type);
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
