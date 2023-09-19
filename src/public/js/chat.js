@@ -539,7 +539,9 @@ socket.on("messageChat", data => {
                 break;
 
             case "image":
-                viewReceipImage(data, fecha_y_hora);
+                let image = viewReceipImage(data, fecha_y_hora);
+                const listaImage = $("#conversation-" + data.from);
+                listaImage.append(image);
                 break;
             case "video":
                 viewReceipVideo(data, fecha_y_hora);
