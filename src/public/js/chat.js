@@ -805,7 +805,7 @@ function viewReceipImage(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.filename}', '${data.filename}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -823,7 +823,7 @@ function viewReceipImage(data, fecha) {
                             <div class="p-2">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150">
+                                        <img src="http://157.230.239.170:4000/img/archivos/${data.filename}" alt="" height="150">
                                     </div>
                                 </div>
                             </div>

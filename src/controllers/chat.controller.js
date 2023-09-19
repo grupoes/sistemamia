@@ -411,15 +411,15 @@ export const uploadImage = async (req, res, next) => {
                 message: "",
                 nameContact: "",
                 receipt: numero,
-                timestamp: Math.floor(Date.now() / 10000),
+                timestamp: Math.floor(Date.now() / 1000),
                 typeMessage: "image",
                 estadoMessage: "sent",
                 documentId: "",
-                id_document: "",
+                id_document: Math.floor(Date.now() / 1000),
                 filename: req.file.filename
             });
 
-            return res.json({message: 'ok', data: new_message, datos: dataFile});
+            return res.json({message: 'ok', data: new_message, datos: dataFile, api: datos});
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
