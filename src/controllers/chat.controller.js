@@ -99,6 +99,8 @@ export const addMessageFirestore = async(req, res) => {
     const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
 
+        console.log(req.body);
+
         if (type == 'image' || type == 'video' || type == 'document' || type == 'audio') {
             console.log("aca ")
             console.log(type);
