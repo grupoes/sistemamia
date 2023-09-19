@@ -99,7 +99,7 @@ export const addMessageFirestore = async(req, res) => {
     const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
     try {
 
-        if (type == 'image' || type == 'video' || type == 'document') {
+        if (type == 'image' || type == 'video' || type == 'document' || type == 'audio') {
             console.log("aca ")
             let config = {
                 method: 'get',
@@ -113,6 +113,8 @@ export const addMessageFirestore = async(req, res) => {
             try {
                 const response = await axios.request(config);
                 const datos = response.data;
+
+                return res.json(datos);
 
                 const urlMedia = datos.url;
 
@@ -141,6 +143,10 @@ export const addMessageFirestore = async(req, res) => {
 
                     if(type == 'document') {
                         rutaFile = "./src/public/documentos/archivos/"+id_document+'.pdf';
+                    }
+
+                    if(type == 'audio') {
+                        rutaFile = "./src/public/audios/archivos/"+id_document+'.mp3';
                     }
 
                     // Crea un write stream para guardar la respuesta en un archivo
