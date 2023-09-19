@@ -129,35 +129,26 @@ function mostrar_chat(numero) {
 
                 } else {
 
-                    html += `
-                    <li class="clearfix odd">
-                        <div class="conversation-text ms-0">
-                            <div class="d-flex justify-content-end">
-                                <div class="conversation-actions dropdown dropstart">
-                                    <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-reply fs-18 me-2"></i>Reply
-                                        </a>   
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-star fs-18 me-2"></i>Starred
-                                        </a>   
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-trash fs-18 me-2"></i>Delete
-                                        </a>   
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi bi-files fs-18 me-2"></i>Copy
-                                        </a>                                                                            
-                                    </div>
-                                </div>  
-                                <div class="ctext-wrap">
-                                    <p>${msj.message}</p>
-                                </div>  
-                            </div>                                                          
-                            <p class="text-muted fs-12 mb-0 mt-1">${fecha_y_hora}<i class="bi bi-check2-all ms-1 text-success"></i></p>
-                        </div>
-                    </li>
-                    `;
+                    switch (msj.typeMessage) {
+                        case "text":
+                            html += viewReceipText(msj, fecha_y_hora);
+                            break;
+            
+                        case "image":
+                            html += viewReceipImage(msj, fecha_y_hora);
+                            break;
+                        /*case "video":
+                            viewReceipVideo(msj, fecha_y_hora);
+                            break;
+                        case "document":
+                            viewReceipDocument(msj, fecha_y_hora);
+                            break;
+                        case "audio":
+                            viewReceipAudio(msj, fecha_y_hora);
+                            break;*/
+                        default:
+                            break;
+                    }
 
                 }
             });
