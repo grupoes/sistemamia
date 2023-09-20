@@ -183,23 +183,23 @@ export const addMessageFirestore = async(req, res) => {
             }
         });
 
-        console.log(existe);
-
-        /*const addN = await NumeroWhatsapp.create({
-            from,
-            nameContact
-        });
-
-        const pot = await PotencialCliente.create({
-            nombres: nameContact,
-            apellidos: "",
-            fecha_ingreso: new Date(),
-            fecha_registro: new Date(),
-            prefijo_celular: 51,
-            numero_celular: 51,
-            prefijo_whatsapp: 51,
-            numero_whatsapp: from
-        });
+        if(!existe) {
+            const addN = await NumeroWhatsapp.create({
+                from,
+                nameContact
+            });
+    
+            const pot = await PotencialCliente.create({
+                nombres: nameContact,
+                apellidos: "",
+                fecha_ingreso: new Date(),
+                fecha_registro: new Date(),
+                prefijo_celular: 51,
+                numero_celular: 51,
+                prefijo_whatsapp: 51,
+                numero_whatsapp: from
+            });
+        }
 
         const newMessage = await Chat.create({
             codigo: id,
@@ -213,7 +213,7 @@ export const addMessageFirestore = async(req, res) => {
             documentId: documentId,
             id_document: id_document,
             filename: filename
-        });*/
+        });
 
         return res.json(newMessage);
     } catch (error) {
