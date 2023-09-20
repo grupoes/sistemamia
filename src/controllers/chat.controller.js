@@ -498,8 +498,10 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
                 potencialClienteId: idPt,
                 trabajadoreId: trabajador.id
             });
+
+            const mensaje = `¡Buen día! 👋🏼 somos Grupo ES Consultores agradecemos su interés. Pronto nos pondremos en contacto con usted, se está derivando su número a nuestra Asistente Administrativa, la señorita ${trabajador.nombres} ${trabajador.apellidos}, quien le proporcionará información detallada sobre nuestros servicios, gracias.`;
     
-            return res.json({message: "ok"});
+            return res.json({message: "ok", respuesta: mensaje});
         }
         
         return res.json({message: "ya existe"});
