@@ -177,7 +177,15 @@ export const addMessageFirestore = async(req, res) => {
             }
         }
 
-        const addN = await NumeroWhatsapp.create({
+        const existe = await NumeroWhatsapp.findOne({
+            where: {
+                from: from
+            }
+        });
+
+        console.log(existe);
+
+        /*const addN = await NumeroWhatsapp.create({
             from,
             nameContact
         });
@@ -205,7 +213,7 @@ export const addMessageFirestore = async(req, res) => {
             documentId: documentId,
             id_document: id_document,
             filename: filename
-        });
+        });*/
 
         return res.json(newMessage);
     } catch (error) {
