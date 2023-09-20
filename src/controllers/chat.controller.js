@@ -2,6 +2,8 @@ import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { PotencialCliente } from "../models/potencialCliente.js";
+import { Trabajadores } from "../models/trabajadores.js";
+import { Asignacion } from "../models/asignacion.js";
 
 import { Op } from 'sequelize';
 
@@ -449,3 +451,60 @@ export const uploadImage = async (req, res, next) => {
 
     });
 };
+
+export const asignarClienteAUnTrabajador = async (req, res) => {
+    const numero = req.params.id;
+    try {
+
+        const existeChat = await Chat.findOne({
+            where: {
+                from: String(numero)
+            }
+        });
+
+        if(!existeChat) {
+            const potencial = await PotencialCliente.findOne({
+                where: {
+                    numero_whatsapp: String(numero)
+                }
+            });
+    
+            const idPt = potencial.id;
+    
+            const totalTrabajadores = await Trabajadores.count({
+                where: {
+                    area_id: 2
+                }
+            });
+    
+            // 2. Obtiene cuántas asignaciones ya existen
+            const totalAsignaciones = await Asignacion.count();
+    
+            // 3. Usa el operador módulo para determinar el siguiente trabajador
+            const trabajadorAsignado = totalAsignaciones % totalTrabajadores;
+    
+            // 4. Obtiene el ID del trabajador al que se asignará el cliente
+            const trabajador = await Trabajadores.findOne({
+                where: {
+                    area_id: 2
+                },
+                offset: trabajadorAsignado
+            });
+    
+            // 5. Crea una nueva asignación con el cliente y el trabajador determinado
+            await Asignacion.create({
+                fecha_asignacion: new Date(),
+                estado: 1,  // o el estado que corresponda
+                potencialClienteId: idPt,
+                trabajadoreId: trabajador.id
+            });
+    
+            return res.json({message: "ok"});
+        }
+        
+        return res.json({message: "ya existe"});
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
