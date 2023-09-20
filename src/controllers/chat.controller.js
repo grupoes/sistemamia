@@ -213,6 +213,7 @@ export const addMessageFirestore = async(req, res) => {
 
         return res.json(newMessage);
     } catch (error) {
+        console.log(error.message);
         return res.status(400).json({ message: error.message });
     }
 }
