@@ -179,7 +179,7 @@ export const addMessageFirestore = async(req, res) => {
 
         const existe = await NumeroWhatsapp.findOne({
             where: {
-                from: from
+                from: String(from)
             }
         });
 
