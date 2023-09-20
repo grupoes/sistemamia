@@ -1,6 +1,7 @@
 import { sequelize } from "../database/database.js";
 import { Chat } from "../models/chat.js";
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
+import { PotencialCliente } from "../models/potencialCliente.js";
 
 import { Op } from 'sequelize';
 
@@ -190,10 +191,22 @@ export const addMessageFirestore = async(req, res) => {
             filename: filename
         });
 
-        const addN = await NumeroWhatsapp.create({
-            from,
-            nameContact
+        const existe = await NumeroWhatsapp.findOne({
+            where: {
+                from: from
+            }
         });
+
+        if (!existe) {
+            const addN = await NumeroWhatsapp.create({
+                from,
+                nameContact
+            });
+
+            const addP = await PotencialCliente.create({
+                numero_whatsapp: from
+            });
+        }
 
         return res.json(newMessage);
     } catch (error) {

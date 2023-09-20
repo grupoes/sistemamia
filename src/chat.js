@@ -39,6 +39,10 @@ const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/sis
 io.on('connection', (socket) => {
     console.log('a user connected');
 
+    socket.on("enviarData", (data) => {
+        io.emit("messageChat", data);
+    });
+
 });
 
 pubsub.addChannel('new_contact', async(data) => {
