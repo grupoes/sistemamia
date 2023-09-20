@@ -177,13 +177,13 @@ export const addMessageFirestore = async(req, res) => {
             }
         }
 
+        console.log("hola");
+
         const existe = await NumeroWhatsapp.findOne({
             where: {
                 from: from
             }
         });
-
-        console.log("hola");
 
         if (!existe) {
             console.log("no existe");
