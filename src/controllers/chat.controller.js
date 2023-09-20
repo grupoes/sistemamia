@@ -177,20 +177,6 @@ export const addMessageFirestore = async(req, res) => {
             }
         }
 
-        const newMessage = await Chat.create({
-            codigo: id,
-            from: from,
-            message: message,
-            nameContact: nameContact,
-            receipt: receipt,
-            timestamp: timestamp,
-            typeMessage: type,
-            estadoMessage: "sent",
-            documentId: documentId,
-            id_document: id_document,
-            filename: filename
-        });
-
         const existe = await NumeroWhatsapp.findOne({
             where: {
                 from: from
@@ -210,6 +196,20 @@ export const addMessageFirestore = async(req, res) => {
                 numero_whatsapp: from
             });
         }
+
+        const newMessage = await Chat.create({
+            codigo: id,
+            from: from,
+            message: message,
+            nameContact: nameContact,
+            receipt: receipt,
+            timestamp: timestamp,
+            typeMessage: type,
+            estadoMessage: "sent",
+            documentId: documentId,
+            id_document: id_document,
+            filename: filename
+        });
 
         return res.json(newMessage);
     } catch (error) {
