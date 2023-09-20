@@ -29,7 +29,7 @@ export const PotencialCliente = sequelize.define('potencial_cliente', {
         type: DataTypes.STRING
     },
     numero_whatsapp: {
-        type: DataTypes.BIGINT
+        type: DataTypes.STRING
     }
 }, {
     freezeTableName: true,

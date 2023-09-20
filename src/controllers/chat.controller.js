@@ -184,6 +184,12 @@ export const addMessageFirestore = async(req, res) => {
 
         const pot = await PotencialCliente.create({
             nombres: nameContact,
+            apellidos: "",
+            fecha_ingreso: new Date(),
+            fecha_registro: new Date(),
+            prefijo_celular: 51,
+            numero_celular: 51,
+            prefijo_whatsapp: 51,
             numero_whatsapp: from
         });
 
