@@ -182,6 +182,11 @@ export const addMessageFirestore = async(req, res) => {
             nameContact
         });
 
+        const pot = await PotencialCliente.create({
+            nombres: nameContact,
+            numero_whatsapp: from
+        });
+
         const newMessage = await Chat.create({
             codigo: id,
             from: from,

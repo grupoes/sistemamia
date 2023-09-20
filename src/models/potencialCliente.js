@@ -31,4 +31,7 @@ export const PotencialCliente = sequelize.define('potencial_cliente', {
     numero_whatsapp: {
         type: DataTypes.BIGINT
     }
+}, {
+    freezeTableName: true,
+    timestamps: true
 })
