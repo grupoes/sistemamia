@@ -456,16 +456,16 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
     const numero = req.params.id;
     try {
 
-        const existeChat = await Chat.findOne({
+        const existeChat = await Chat.count({
             where: {
                 from: String(numero)
             }
         });
 
-        if(!existeChat) {
+        if(existeChat == 1) {
             const potencial = await PotencialCliente.findOne({
                 where: {
-                    numero_whatsapp: String(numero)
+                    numero_whatsapp: numero
                 }
             });
     
