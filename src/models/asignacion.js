@@ -17,9 +17,15 @@ export const Asignacion = sequelize.define('asignacion', {
         type: DataTypes.INTEGER
     }
 }, {
+    indexes: [
+        {
+          unique: false,
+          fields: ['trabajadoreId', 'potencialClienteId']
+        }
+    ],
     freezeTableName: true,
     timestamps: true
 });
 
-Trabajadores.belongsToMany(PotencialCliente, { through: Asignacion });
-PotencialCliente.belongsToMany(Trabajadores, { through: Asignacion });
+Trabajadores.belongsToMany(PotencialCliente, { through: Asignacion, unique: false });
+PotencialCliente.belongsToMany(Trabajadores, { through: Asignacion, unique: false });
