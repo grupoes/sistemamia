@@ -462,7 +462,7 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
             }
         });
 
-        if(existeChat == 1) {
+        if(existeChat >= 1) {
             const potencial = await PotencialCliente.findOne({
                 where: {
                     numero_whatsapp: numero
@@ -490,13 +490,21 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
                 },
                 offset: trabajadorAsignado
             });
+
+            let data = {
+                fecha_asignacion: new Date(),
+                estado: 1,  // o el estado que corresponda
+                trabajadoreId: trabajador.id,
+                potencialClienteId: idPt
+            }
     
             // 5. Crea una nueva asignación con el cliente y el trabajador determinado
             await Asignacion.create({
                 fecha_asignacion: new Date(),
                 estado: 1,  // o el estado que corresponda
-                potencialClienteId: idPt,
-                trabajadoreId: trabajador.id
+                trabajadoreId: trabajador.id,
+                potencialClienteId: idPt
+                
             });
 
             const mensaje = `¡Buen día! 👋🏼 somos Grupo ES Consultores agradecemos su interés. Pronto nos pondremos en contacto con usted, se está derivando su número a nuestra Asistente Administrativa, la señorita ${trabajador.nombres} ${trabajador.apellidos}, quien le proporcionará información detallada sobre nuestros servicios, gracias.`;
