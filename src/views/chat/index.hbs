@@ -1,30 +1,29 @@
 <style>
     /* Estilo general del scrollbar */
-::-webkit-scrollbar {
-    width: 3px;
-}
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
 
-/* Estilo del botón (flechas arriba y abajo) del scrollbar */
-::-webkit-scrollbar-button {
-    display: none;
-}
+    /* Estilo del botón (flechas arriba y abajo) del scrollbar */
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
 
-/* Estilo de la 'track' (trayectoria) del scrollbar */
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
+    /* Estilo de la 'track' (trayectoria) del scrollbar */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
 
-/* Estilo de la 'handle' (barra móvil) del scrollbar */
-::-webkit-scrollbar-thumb {
-    background: #b6b4b4;
-    border-radius: 4px;
-}
+    /* Estilo de la 'handle' (barra móvil) del scrollbar */
+    ::-webkit-scrollbar-thumb {
+        background: #b6b4b4;
+        border-radius: 4px;
+    }
 
-/* Estilo de la 'handle' al pasar el ratón */
-::-webkit-scrollbar-thumb:hover {
-    background: #818181;
-}
-
+    /* Estilo de la 'handle' al pasar el ratón */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #818181;
+    }
 </style>
 
 <!-- start page title -->
@@ -96,7 +95,8 @@
                 <!-- End searchbar -->
 
                 <!-- start contact list -->
-                <div class="pe-2" data-simplebar style="max-height: 450px; min-height: 450px; overflow-y: scroll;" id="contactos-whatsapp">
+                <div class="pe-2" data-simplebar style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
+                    id="contactos-whatsapp">
 
                 </div>
                 <!-- End contact list -->
@@ -106,7 +106,7 @@
     <div class="col-xl-9 col-lg-7">
         <div class="card">
             <div class="card-body" id="cardBody">
-                
+
             </div>
         </div> <!-- End card -->
     </div> <!-- End col -->
@@ -189,14 +189,16 @@
 </div>
 
 <!-- Contenido del Offcanvas -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="myOffcanvas" aria-labelledby="myOffcanvasLabel" id="myOffcanvas">
-            <div class="offcanvas-header">
-                <h5 id="myOffcanvasLabel">Enviar Imagen</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body" id="offcanvas-body">
-                
-            </div>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="myOffcanvas" aria-labelledby="myOffcanvasLabel" id="myOffcanvas">
+    <div class="offcanvas-header">
+        <h5 id="myOffcanvasLabel">Enviar Imagen</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="offcanvas-body">
 
-            <button class="btn btn-primary" id="enviarImagen">Enviar</button>
-        </div>
+    </div>
+
+    <button class="btn btn-primary" id="enviarImagen">Enviar</button>
+</div>
+
+<audio id="audio" controls></audio>

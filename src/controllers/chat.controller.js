@@ -8,16 +8,22 @@ import { Asignacion } from "../models/asignacion.js";
 import { Op } from 'sequelize';
 
 import axios from 'axios';
+import path from 'path';
+import fs from 'fs';
 import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 import multer from 'multer';
 
+const storageAudio = multer.memoryStorage();
+const uploadVoz = multer({ storage: storageAudio });
+
 import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 
 dotenv.config();
 
@@ -554,3 +560,68 @@ export const insertChat = async (req, res) => {
         return res.json({message: error});
     }
 }
+
+export const uploadAudio = async (req, res) => {
+    const { numero } = req.body;
+    try {
+        if (!req.file) {
+            return res.status(400).json({message: 'No se subió ningún archivo.'});
+        }
+
+        const timestamp = Date.now();
+
+        const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.ogg');
+        fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
+
+        const url_audio = "http://157.230.239.170:4000/audios/archivos/"+timestamp+".ogg";
+
+        const dataFile = {
+            messaging_product: "whatsapp",
+            to: numero,
+            type: 'audio',
+            audio: {
+                link: url_audio
+            }
+        };
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://graph.facebook.com/v17.0/122094968330010315/messages',
+            headers: { 
+              'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+            },
+            data: dataFile
+        };
+
+        try {
+            const response = await axios(config);
+            const datos = response.data;
+
+            const new_message = await Chat.create({
+                codigo: datos.messages[0].id,
+                from: "51927982544",
+                message: "",
+                nameContact: "",
+                receipt: numero,
+                timestamp: Math.floor(Date.now() / 1000),
+                typeMessage: "audio",
+                estadoMessage: "sent",
+                documentId: "",
+                id_document: Math.floor(Date.now() / 1000),
+                filename: timestamp + '.ogg'
+            });
+            
+            return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile });
+        }
+          catch (error) {
+            console.error("Error in making request:", error.response.data || error.message);
+            return res.json({message: error.message});
+        }
+
+    } catch (error) {
+        return res.json({message: error});
+    }
+}
+
+export const audioMiddleware = uploadVoz.single('audio');

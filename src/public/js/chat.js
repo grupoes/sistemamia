@@ -87,6 +87,7 @@ function chatContacto(whatsapp, nameContacto) {
     whatsappNumber.value = whatsapp;
 
     mostrar_chat(whatsapp);
+
 }
 
 function mostrar_chat(numero) {
@@ -154,6 +155,8 @@ function mostrar_chat(numero) {
             });
 
             conversation.innerHTML = html;
+
+            grabarAudio();
         })
 }
 
@@ -448,7 +451,7 @@ function chatDetail(numero, name) {
                                         <i class="uil uil-user-plus me-2"></i>Documento
                                     </a>
                                 </div>
-                                <a href="#" class="btn btn-light"><i class="bi bi-mic-fill fs-18"></i></a>
+                                <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
                                 <div class="d-grid">
                                 <button type="submit" class="btn btn-success chat-send"><i
                                         class='uil uil-message'></i></button>
@@ -948,4 +951,58 @@ function descargarImagen(url, filename) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function grabarAudio() {
+
+    const recordButton = document.getElementById('btnAudio');
+    const audioElement = document.getElementById('audio');
+
+    const numeroW = document.getElementById('whatsappNumber');
+    console.log(numeroW.value);
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    recordButton.addEventListener('mousedown', () => {
+        console.log("hola");
+        audioChunks = []; // Limpiar chunks anteriores
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioElement.src = audioUrl;
+
+                    // Enviar al servidor
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob);
+                    formData.append('numero', numeroW.value);
+
+                    fetch('/uploadAudio', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
+                };
+
+                mediaRecorder.start();
+            })
+            .catch(error => console.error('Error accediendo al micrófono:', error));
+    });
+
+    recordButton.addEventListener('mouseup', () => {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+        }
+    });
+
+
 }
