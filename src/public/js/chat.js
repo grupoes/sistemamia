@@ -934,7 +934,6 @@ enviarImagen.addEventListener('click', (e) => {
                 console.log(data);
                 if (data.message == 'ok') {
                     $('#myOffcanvas').offcanvas('hide');
-                    socket.emit("enviarData", data.data);
                 } else {
                     alert(data.message);
                 }
