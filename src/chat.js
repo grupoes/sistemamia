@@ -34,7 +34,7 @@ const io = new Server(server, {
     }
 });
 
-const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/sistemamia');
+const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/miasis');
 
 io.on('connection', (socket) => {
     console.log('a user connected');
