@@ -16,6 +16,9 @@ export const NumeroWhatsapp = sequelize.define('numeros_whatsapp', {
     estado: {
         type: DataTypes.INTEGER,
         defaultValue: 1
+    },
+    asistente: {
+        type: DataTypes.INTEGER
     }
 }, {
     freezeTableName: true,

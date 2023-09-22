@@ -490,6 +490,21 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
                 },
                 offset: trabajadorAsignado
             });
+
+            //actualizar numeros whatsapp
+            const traer = await NumeroWhatsapp.findOne({
+                where: {
+                    from: numero
+                }
+            });
+
+            const idWhatsapp = traer.id;
+
+            const updateWhatsapp = await NumeroWhatsapp.update({asistente: trabajador.id}, {
+                where: {
+                    id: idWhatsapp
+                }
+            });
     
             // 5. Crea una nueva asignación con el cliente y el trabajador determinado
             const newAsignacion = await Asignacion.create({
@@ -500,7 +515,12 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
                 
             });
 
-            const mensaje = `¡Buen día! 👋🏼 somos Grupo ES Consultores agradecemos su interés. Pronto nos pondremos en contacto con usted, se está derivando su número a nuestra Asistente Administrativa, la señorita ${trabajador.nombres} ${trabajador.apellidos}, quien le proporcionará información detallada sobre nuestros servicios, gracias.`;
+            const mensaje = `
+            Buen día, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa de Grupo ES Consultores "Asesores de investigación" (Tesis). Nos escribió solicitando información acerca de nuestros servicios y me encantaría poder ayudarlo(a) 
+
+            ¿Cuál es su nombre?
+            ¿De qué especialidad y de qué universidad es Ud.?
+            ¿Desde que departamento nos escribe?`;
     
             return res.json({message: "ok", respuesta: mensaje});
         }
