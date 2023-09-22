@@ -515,8 +515,7 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
                 
             });
 
-            const mensaje = `
-            Buen día, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa de Grupo ES Consultores "Asesores de investigación" (Tesis). Nos escribió solicitando información acerca de nuestros servicios y me encantaría poder ayudarlo(a) 
+            const mensaje = `Buen día, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa de Grupo ES Consultores "Asesores de investigación" (Tesis). Nos escribió solicitando información acerca de nuestros servicios y me encantaría poder ayudarlo(a).
 
             ¿Cuál es su nombre?
             ¿De qué especialidad y de qué universidad es Ud.?
