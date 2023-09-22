@@ -67,3 +67,5 @@ node_modules/
 
 src/public/img/archivos/*
 src/public/videos/archivos/*
+src/public/documentos/archivos/*
+src/public/audios/archivos/*
