@@ -903,13 +903,13 @@ function formMessage() {
                 listConversation(contentMensaje.value, whatsappNumber.value);*/
 
                 let datos = {
-                    codigo: result.messages[0].id,
+                    id: result.messages[0].id,
                     from: whatsappNumber.value,
                     message: contentMensaje.value,
                     nameContact: "Grupo Es consultores",
                     receipt: "51927982544",
                     timestamp: Math.floor(Date.now() / 1000),
-                    typeMessage: "text",
+                    type: "text",
                     estadoMessage: "sent",
                     documentId: "",
                     id_document: "",
