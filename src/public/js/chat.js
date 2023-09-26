@@ -528,13 +528,13 @@ socket.on("messageChat", data => {
         switch (data.typeMessage) {
             case "text":
                 let text = viewReceipText(data, fecha_y_hora);
-                const lista = $("#conversation-" + data.from);
+                const lista = $("#conversation-" + data.receipt);
                 lista.append(text);
                 break;
 
             case "image":
                 let image = viewReceipImage(data, fecha_y_hora);
-                const listaImage = $("#conversation-" + data.from);
+                const listaImage = $("#conversation-" + data.receipt);
                 listaImage.append(image);
                 break;
             /*case "video":
@@ -925,7 +925,7 @@ function formMessage() {
                 })
                 .then(r => r.json())
                 .then(resp => {
-                    console.log(resp)
+                    //console.log(resp)
                 })
 
             })
