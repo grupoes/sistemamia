@@ -895,12 +895,38 @@ function formMessage() {
                     redirect: 'follow'
                 };
 
-                fetch("http://157.230.239.170:4000/addMessageChat", requestOptions)
+                /*fetch("http://157.230.239.170:4000/addMessageChat", requestOptions)
                     .then(response => response.text())
                     .then(result => console.log(result))
                     .catch(error => console.log('error', error));
 
-                listConversation(contentMensaje.value, whatsappNumber.value);
+                listConversation(contentMensaje.value, whatsappNumber.value);*/
+
+                let datos = {
+                    codigo: result.messages[0].id,
+                    from: whatsappNumber.value,
+                    message: contentMensaje.value,
+                    nameContact: "Grupo Es consultores",
+                    receipt: "51927982544",
+                    timestamp: Math.floor(Date.now() / 1000),
+                    typeMessage: "text",
+                    estadoMessage: "sent",
+                    documentId: "",
+                    id_document: "",
+                    filename: ""
+                };
+
+                fetch("http://157.230.239.170:4000/insertChat", {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                })
+                .then(r => r.json())
+                .then(resp => {
+                    console.log(resp)
+                })
 
             })
             .catch(error => console.log('error', error))
