@@ -848,6 +848,7 @@ function viewReceipImage(data, fecha) {
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <img src="http://157.230.239.170:4000/img/archivos/${data.filename}" alt="" height="150">
+                                        <p style="margin-top: 5px">Esto es una Imagen</p>
                                     </div>
                                 </div>
                             </div>

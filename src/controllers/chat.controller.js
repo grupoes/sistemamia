@@ -447,7 +447,8 @@ export const uploadImage = async (req, res, next) => {
                 estadoMessage: "sent",
                 documentId: "",
                 id_document: Math.floor(Date.now() / 1000),
-                filename: req.file.filename
+                filename: req.file.filename,
+                description: description
             });
 
             return res.json({message: 'ok', data: new_message, datos: dataFile, api: datos});

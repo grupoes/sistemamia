@@ -39,6 +39,10 @@ export const Chat = sequelize.define('chat', {
         type: DataTypes.STRING
     },
     filename: {
+        type: DataTypes.STRING,
+        defaultValue: ""
+    },
+    description: {
         type: DataTypes.STRING
     }
 }, {
