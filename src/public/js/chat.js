@@ -493,7 +493,7 @@ socket.on("messageChat", data => {
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
-    if (data.from != '"51927982544"') {
+    if (data.from != '51927982544') {
         switch (data.typeMessage) {
             case "text":
                 let text = viewFromText(data, fecha_y_hora);
