@@ -618,6 +618,7 @@ function viewFromImage(data, hora) {
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150">
+                                        <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
                             </div>
@@ -662,6 +663,8 @@ function viewFromVideo(data, fecha) {
                                             <source src="http://157.230.239.170:4000/videos/archivos/${data.id_document}.mp4" type="video/mp4">
                                             Tu navegador no soporta la etiqueta de video.
                                         </video>
+
+                                        <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
                             </div>
@@ -751,6 +754,7 @@ function viewFromDocument(data, fecha) {
                             </div>-->
                             <div class="col ps-0">
                                 <a href="javascript:void(0);" class="text-muted fw-bold">${data.id_document}.pdf</a>
+                                <p style="margin-top: 5px">${data.description}</p>
                                 <!--<p class="mb-0">2.3 MB</p>-->
                             </div>
                             <div class="col-auto">
@@ -848,7 +852,7 @@ function viewReceipImage(data, fecha) {
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <img src="http://157.230.239.170:4000/img/archivos/${data.filename}" alt="" height="150">
-                                        <p style="margin-top: 5px">Esto es una Imagen</p>
+                                        <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
                             </div>
