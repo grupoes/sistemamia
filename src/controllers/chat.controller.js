@@ -365,7 +365,7 @@ export const uploadImage = async (req, res, next) => {
     
     const uploadSingle = upload.single('imagen');
     uploadSingle(req, res, async (error) => {
-        const { numero } = req.body;
+        const { numero, description } = req.body;
         if (error) {
             // Handle error
             return res.status(500).send(error.message);
@@ -386,7 +386,8 @@ export const uploadImage = async (req, res, next) => {
                 to: numero,
                 type: typeFile,
                 video: {
-                    link: url_imagen
+                    link: url_imagen,
+                    caption: description
                 }
             };
         }
@@ -400,7 +401,8 @@ export const uploadImage = async (req, res, next) => {
                 to: numero,
                 type: typeFile,
                 image: {
-                    link: url_imagen
+                    link: url_imagen,
+                    caption: description
                 }
             };
         }
@@ -415,7 +417,7 @@ export const uploadImage = async (req, res, next) => {
                 type: typeFile,
                 document: {
                     link: url_imagen,
-                    caption: ""
+                    caption: description
                 }
             };
         }
