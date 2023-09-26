@@ -904,10 +904,10 @@ function formMessage() {
 
                 let datos = {
                     id: result.messages[0].id,
-                    from: whatsappNumber.value,
+                    from: "51927982544",
                     message: contentMensaje.value,
                     nameContact: "Grupo Es consultores",
-                    receipt: "51927982544",
+                    receipt: whatsappNumber.value,
                     timestamp: Math.floor(Date.now() / 1000),
                     type: "text",
                     estadoMessage: "sent",
