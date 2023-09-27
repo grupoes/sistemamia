@@ -151,7 +151,7 @@ export const addMessageFirestore = async(req, res) => {
                     }
 
                     if(type == 'document') {
-                        rutaFile = "./src/public/documentos/archivos/"+id_document+'.pdf';
+                        rutaFile = "./src/public/documentos/archivos/"+filename;
                     }
 
                     if(type == 'audio') {
