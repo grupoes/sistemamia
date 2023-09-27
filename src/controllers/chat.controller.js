@@ -444,7 +444,7 @@ export const uploadImage = async (req, res, next) => {
                 nameContact: "",
                 receipt: numero,
                 timestamp: Math.floor(Date.now() / 1000),
-                typeMessage: "image",
+                typeMessage: typeFile,
                 estadoMessage: "sent",
                 documentId: "",
                 id_document: Math.floor(Date.now() / 1000),
