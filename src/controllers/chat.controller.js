@@ -350,7 +350,7 @@ const storage = multer.diskStorage({
             cb(null, './src/public/img/archivos/')
         }
 
-        if(file.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype == 'application/pdf' || file.mimetype == 'text/xml' || file.mimetype == 'application/x-zip-compressed' || file.mimetype == 'application/octet-stream') {
+        if(file.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype == 'application/pdf' || file.mimetype == 'text/xml' || file.mimetype == 'application/x-zip-compressed' || file.mimetype == 'application/octet-stream' || file.mimetype == 'text/plain') {
             cb(null, './src/public/documentos/archivos/')
         }
         
@@ -408,7 +408,7 @@ export const uploadImage = async (req, res, next) => {
             };
         }
 
-        if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream') {
+        if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain') {
             url_imagen = "http://157.230.239.170:4000/documentos/archivos/"+req.file.filename;
             typeFile = "document";
 
@@ -626,6 +626,21 @@ export const uploadAudio = async (req, res) => {
     } catch (error) {
         return res.json({message: error});
     }
+}
+
+const getExtensionFromMimeType = (mimeType) => {
+    const mimeToExtensionMap = {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
+        "application/vnd.ms-excel": ".xls",
+        "application/pdf": ".pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "text/xml": ".xml",
+        "application/x-zip-compressed": ".zip",
+        "": ".rar"
+        // ... puedes añadir más mapeos según lo necesites
+    };
+
+    return mimeToExtensionMap[mimeType] || null;
 }
 
 export const audioMiddleware = uploadVoz.single('audio');

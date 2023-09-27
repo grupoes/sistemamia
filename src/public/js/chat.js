@@ -138,13 +138,13 @@ function mostrar_chat(numero) {
                         case "image":
                             html += viewReceipImage(msj, fecha_y_hora);
                             break;
-                        /*case "video":
-                            viewReceipVideo(msj, fecha_y_hora);
+                        case "video":
+                            html += viewReceipVideo(msj, fecha_y_hora);
                             break;
                         case "document":
-                            viewReceipDocument(msj, fecha_y_hora);
+                            html += viewReceipDocument(msj, fecha_y_hora);
                             break;
-                        case "audio":
+                        /*case "audio":
                             viewReceipAudio(msj, fecha_y_hora);
                             break;*/
                         default:
@@ -558,13 +558,17 @@ socket.on("messageChat", data => {
                 const listaImage = $("#conversation-" + data.receipt);
                 listaImage.append(image);
                 break;
-            /*case "video":
-                viewReceipVideo(data, fecha_y_hora);
+            case "video":
+                let videoRec = viewReceipVideo(data, fecha_y_hora);
+                const listaVideo = $("#conversation-" + data.receipt);
+                listaVideo.append(videoRec);
                 break;
             case "document":
-                viewReceipDocument(data, fecha_y_hora);
+                let documentRec = viewReceipDocument(data, fecha_y_hora);
+                const listaDoc = $("#conversation-" + data.receipt);
+                listaDoc.append(documentRec);
                 break;
-            case "audio":
+            /*case "audio":
                 viewReceipAudio(data, fecha_y_hora);
                 break;*/
             default:
@@ -852,6 +856,88 @@ function viewReceipImage(data, fecha) {
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <img src="http://157.230.239.170:4000/img/archivos/${data.filename}" alt="" height="150">
+                                        <p style="margin-top: 5px">${data.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                </div>
+            </li>`;
+
+        return html;
+}
+
+function viewReceipVideo(data, fecha) {
+    let html = `
+            <li class="clearfix odd">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex justify-content-end">
+                        <div class="conversation-actions dropdown dropstart">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/videos/archivos/${data.filename}', '${data.filename}')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <img src="http://157.230.239.170:4000/videos/archivos/${data.filename}" alt="" height="150">
+                                        <p style="margin-top: 5px">${data.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                </div>
+            </li>`;
+
+        return html;
+}
+
+function viewReceipDocument(data, fecha) {
+    let html = `
+            <li class="clearfix odd">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex justify-content-end">
+                        <div class="conversation-actions dropdown dropstart">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/documentos/archivos/${data.filename}', '${data.filename}')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <img src="http://157.230.239.170:4000/documentos/archivos/${data.filename}" alt="" height="150">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
