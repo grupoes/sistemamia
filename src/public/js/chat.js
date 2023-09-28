@@ -898,7 +898,7 @@ function viewReceipVideo(data, fecha) {
                                     <div class="col-auto">
 
                                         <video width="320" height="240" controls>
-                                            <source src="http://157.230.239.170:4000/videos/archivos/${data.filename}.mp4" type="video/mp4">
+                                            <source src="http://157.230.239.170:4000/videos/archivos/${data.filename}" type="video/mp4">
                                             Tu navegador no soporta la etiqueta de video.
                                         </video>
                                         <p style="margin-top: 5px">${data.description}</p>
