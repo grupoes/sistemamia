@@ -3,6 +3,7 @@ import hbs from "hbs";
 import path from 'path';
 import {fileURLToPath} from 'url';
 import bodyParser from "body-parser";
+import cors from 'cors';
 
 import login from './routes/login.routes.js';
 import dashboard from './routes/dashboard.routes.js';
@@ -15,6 +16,12 @@ import potencialCliente from './routes/potencialCliente.routes.js';
 import chatEstados from './routes/chatEstados.routes.js';
 
 const app = express();
+
+const corsOptions = {
+    exposedHeaders: ['Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

@@ -3,6 +3,8 @@ import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhat
 
 import corsMiddleware from "../middlewares/cors.js";
 
+import { checkAuth } from "../middlewares/auth.js";
+
 const router = Router();
 
 router.use(corsMiddleware);
@@ -11,7 +13,7 @@ router.get('/chat', chatView);
 router.post('/addMessageChat', addMessage);
 router.get('/messageNumber/:id', mensajes_numero);
 router.post('/messageFirestore', addMessageFirestore);
-router.get('/numeroWhatsapp', numerosWhatsapp);
+router.get('/numeroWhatsapp', checkAuth, numerosWhatsapp);
 router.get('/ultimoMensaje/:id', traer_ultimo_mensaje);
 router.post('/subir_imagen', uploadImage);
 router.get('/welcome/:id', asignarClienteAUnTrabajador);

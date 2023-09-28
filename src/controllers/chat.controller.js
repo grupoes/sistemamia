@@ -233,7 +233,9 @@ export const addMessageFirestore = async(req, res) => {
 
 export const numerosWhatsapp = async(req, res) => {
     try { 
-        
+        const rol = req.usuarioToken._role;
+        const id = req.usuarioToken._id;
+
         const results = await Chat.findAll({
             attributes: ['from', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
             group: ['from'],
@@ -295,18 +297,39 @@ export const numerosWhatsapp = async(req, res) => {
                     }
                 });
 
+                const idAsis = name.asistente;
+
+                const asistente = await Trabajadores.findOne({
+                    where: {
+                        id: idAsis
+                    }
+                });
+
+                let nameAsistente = ""
+
+                if (asistente) {
+                    nameAsistente = asistente.nombres+" "+asistente.apellidos;
+                }
+
                 let array = {
                     numero: from,
                     contact: name.nameContact,
                     mensaje: mensa.message,
                     estado: mensa.estadoMessage,
                     time: time,
-                    cantidad: chatCount
+                    cantidad: chatCount,
+                    asistente: nameAsistente,
+                    idAsistente: idAsis
                 }
 
                 arrayContactos.push(array)
             }
         }
+
+        if(rol === 2) {
+            const filterData = arrayContactos.filter(item => item.idAsistente === id);
+            return res.json(filterData);  
+        } 
 
         return res.json(arrayContactos);    
 

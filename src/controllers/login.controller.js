@@ -30,7 +30,9 @@ export const sigin = async (req, res) => {
             token: tokenSession
         };
 
-        res.json(data);
+        console.log(data);
+
+        return res.json(data);
 
     } catch (error) {
         return res.status(400).json({message: error.message});

@@ -6,6 +6,8 @@ const contactos = document.getElementById('contactos-whatsapp');
 
 const cardBody = document.querySelector("#cardBody");
 
+const token = localStorage.getItem('token');
+
 function listConversation(mensaje, numero) {
     let html = `
     <li class="clearfix odd">
@@ -161,7 +163,11 @@ function mostrar_chat(numero) {
 }
 
 function loadNumber() {
-    fetch('/numeroWhatsapp')
+    fetch('/numeroWhatsapp',{
+        headers: {
+            'Authorization': 'Bearer ' + token,
+        }
+    })
         .then(res => res.json())
         .then(data => {
             let html = "";
@@ -313,7 +319,11 @@ socket.on("messageContacts", data => {
 });
 
 function loadContact() {
-    fetch("/numeroWhatsapp")
+    fetch("/numeroWhatsapp", {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+        }
+    })
         .then(res => res.json())
         .then(data => {
             viewContact(data);
@@ -458,6 +468,8 @@ function chatDetail(numero, name) {
                         <div class="btn-group">
                             <a href="#" class="btn btn-light"><i class="bi bi-emoji-smile fs-18"></i></a>
                             <input type="file" id="fileInput" style="display: none;" />
+                            <audio id="audio" controls="" style="display: none"></audio>
+                            <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
                             <div class="dropdown">
                                 <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="true">
                                     <i class="uil uil-ellipsis-v"></i>
@@ -621,7 +633,7 @@ function viewFromImage(data, hora) {
                             <div class="p-2">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150">
+                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150" onclick="openFullscreen(this)">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -1108,14 +1120,19 @@ function grabarAudio() {
 
     const recordButton = document.getElementById('btnAudio');
     const audioElement = document.getElementById('audio');
+    const sendButton = document.getElementById('sendAudio');
 
     const numeroW = document.getElementById('whatsappNumber');
     console.log(numeroW.value);
 
     let mediaRecorder;
     let audioChunks = [];
+    let audioBlob;
 
-    recordButton.addEventListener('mousedown', () => {
+    recordButton.addEventListener('mousedown', (e) => {
+        audioElement.style.display = "inline";
+        sendButton.style.display = "inline";
+        e.target.style.color = "red";
         console.log("hola");
         audioChunks = []; // Limpiar chunks anteriores
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -1126,22 +1143,11 @@ function grabarAudio() {
                 };
 
                 mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioElement.src = audioUrl;
-
                     // Enviar al servidor
-                    const formData = new FormData();
-                    formData.append('audio', audioBlob);
-                    formData.append('numero', numeroW.value);
-
-                    fetch('/uploadAudio', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error:', error));
+                    
                 };
 
                 mediaRecorder.start();
@@ -1149,11 +1155,44 @@ function grabarAudio() {
             .catch(error => console.error('Error accediendo al micrófono:', error));
     });
 
-    recordButton.addEventListener('mouseup', () => {
+    recordButton.addEventListener('mouseup', (e) => {
+        e.target.style.color = "black";
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
         }
     });
 
+    sendButton.addEventListener('click', () => {
+        // Enviar al servidor
+        const formData = new FormData();
+        formData.append('audio', audioBlob);
+        formData.append('numero', numeroW.value);
 
+        console.log(audioBlob);
+
+        fetch('/uploadAudio', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            audioElement.style.display = "none";
+            sendButton.style.display = "none";
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+}
+
+function openFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) { /* Firefox */
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { /* IE/Edge */
+        element.msRequestFullscreen();
+    }
 }
