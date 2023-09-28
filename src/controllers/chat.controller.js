@@ -115,9 +115,9 @@ export const addMessageFirestore = async(req, res) => {
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: 'https://graph.facebook.com/v17.0/'+id_document,
+                url: process.env.URL_META+""+id_document,
                 headers: { 
-                  'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
                 }
             };
 
@@ -133,7 +133,7 @@ export const addMessageFirestore = async(req, res) => {
                     maxBodyLength: Infinity,
                     url: urlMedia,
                     headers: { 
-                      'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+                      'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
                     }
                 };
 
@@ -250,12 +250,12 @@ export const numerosWhatsapp = async(req, res) => {
             const { from } = result;
             const max_timestamp = result.get('max_timestamp');
 
-            if (from != '51927982544') {
+            if (from != process.env.NUMERO_WHATSAPP) {
                 console.log(from);
                 const resu = await Chat.findOne({
                     attributes: ['receipt', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
                     where: {
-                        from: '51927982544',
+                        from: process.env.NUMERO_WHATSAPP,
                         receipt: from
                     },
                     group: ['receipt'],
@@ -402,7 +402,7 @@ export const uploadImage = async (req, res, next) => {
         const ar = req.file;
 
         if(ar.mimetype == 'video/mp4' || ar.mimetype === 'video/webm') {
-            url_imagen = "http://157.230.239.170:4000/videos/archivos/"+req.file.filename;
+            url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/videos/archivos/"+req.file.filename;
             typeFile = "video";
 
             dataFile = {
@@ -417,7 +417,7 @@ export const uploadImage = async (req, res, next) => {
         }
 
         if(ar.mimetype == 'image/jpeg' || ar.mimetype == 'image/png' || ar.mimetype == 'image/gif' || ar.mimetype == 'image/webp' || ar.mimetype == 'image/svg+xml') {
-            url_imagen = "http://157.230.239.170:4000/img/archivos/"+req.file.filename;
+            url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/img/archivos/"+req.file.filename;
             typeFile = "image";
 
             dataFile = {
@@ -432,7 +432,7 @@ export const uploadImage = async (req, res, next) => {
         }
 
         if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain') {
-            url_imagen = "http://157.230.239.170:4000/documentos/archivos/"+req.file.filename;
+            url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/documentos/archivos/"+req.file.filename;
             typeFile = "document";
 
             dataFile = {
@@ -449,9 +449,9 @@ export const uploadImage = async (req, res, next) => {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://graph.facebook.com/v17.0/122094968330010315/messages',
+            url: process.env.URL_MESSAGES,
             headers: { 
-              'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+              'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
             },
             data: dataFile
         };
@@ -462,7 +462,7 @@ export const uploadImage = async (req, res, next) => {
 
             const new_message = await Chat.create({
                 codigo: datos.messages[0].id,
-                from: "51927982544",
+                from: process.env.NUMERO_WHATSAPP,
                 message: "",
                 nameContact: "",
                 receipt: numero,
@@ -600,7 +600,7 @@ export const uploadAudio = async (req, res) => {
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.ogg');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
-        const url_audio = "http://157.230.239.170:4000/audios/archivos/"+timestamp+".ogg";
+        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP+"/audios/archivos/"+timestamp+".ogg";
 
         const dataFile = {
             messaging_product: "whatsapp",
@@ -614,9 +614,9 @@ export const uploadAudio = async (req, res) => {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://graph.facebook.com/v17.0/122094968330010315/messages',
+            url: process.env.URL_MESSAGES,
             headers: { 
-              'Authorization': 'Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE'
+              'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
             },
             data: dataFile
         };
@@ -627,7 +627,7 @@ export const uploadAudio = async (req, res) => {
 
             const new_message = await Chat.create({
                 codigo: datos.messages[0].id,
-                from: "51927982544",
+                from: process.env.NUMERO_WHATSAPP,
                 message: "",
                 nameContact: "",
                 receipt: numero,
