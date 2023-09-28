@@ -227,8 +227,8 @@ function fileWhatsapp() {
                         $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;"> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
                     }
     
-                    if (file.type == 'video/mp4') {
-                        $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="video/mp4">Your browser does not support the video tag.</video> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
+                    if (file.type == 'video/mp4' || file.type === 'video/webm') {
+                        $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="'+file.type+'">Your browser does not support the video tag.</video> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
                     }
     
                 }

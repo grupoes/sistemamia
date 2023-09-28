@@ -378,7 +378,7 @@ export const uploadImage = async (req, res, next) => {
 
         const ar = req.file;
 
-        if(ar.mimetype == 'video/mp4') {
+        if(ar.mimetype == 'video/mp4' || ar.mimetype === 'video/webm') {
             url_imagen = "http://157.230.239.170:4000/videos/archivos/"+req.file.filename;
             typeFile = "video";
 
