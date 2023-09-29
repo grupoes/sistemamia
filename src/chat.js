@@ -27,7 +27,7 @@ app.use(express.static(__dirname + "/public"));
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: process.env.URL_APP+":"+process.env.PUERTO_APP,  // configura la URL de tu cliente o usa "*" para permitir cualquier origen
+        origin: process.env.URL_APP+":"+process.env.PUERTO_APP_RED,  // configura la URL de tu cliente o usa "*" para permitir cualquier origen
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
