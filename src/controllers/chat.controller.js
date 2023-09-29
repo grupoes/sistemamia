@@ -640,7 +640,7 @@ export const uploadAudio = async (req, res) => {
                 filename: timestamp + '.ogg'
             });
 
-            return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos });
+            return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
         }
           catch (error) {
             console.error("Error in making request:", error.response.data || error.message);
