@@ -601,7 +601,7 @@ export const uploadAudio = async (req, res) => {
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.ogg');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
-        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP+"/audios/archivos/"+timestamp+".ogg";
+        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".ogg";
 
         const dataFile = {
             messaging_product: "whatsapp",
