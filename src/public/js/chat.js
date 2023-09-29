@@ -971,7 +971,7 @@ function viewReceipDocument(data, fecha) {
         return html;
 }
 
-function viewReceipAudio() {
+function viewReceipAudio(data, fecha) {
     let html = `
             <li class="clearfix odd">
                 <div class="conversation-text ms-0">
