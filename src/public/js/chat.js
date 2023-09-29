@@ -8,6 +8,8 @@ const cardBody = document.querySelector("#cardBody");
 
 const token = localStorage.getItem('token');
 
+const dominio = document.getElementById('dominio').value;
+
 function listConversation(mensaje, numero) {
     let html = `
     <li class="clearfix odd">
@@ -633,7 +635,7 @@ function viewFromImage(data, hora) {
                             <div class="p-2">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg" alt="" height="150" onclick="openFullscreen(this)">
+                                        <img src="${dominio}/img/archivos/${data.id_document}.jpg" alt="" height="150" onclick="openFullscreen(this)">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -643,7 +645,7 @@ function viewFromImage(data, hora) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -676,7 +678,7 @@ function viewFromVideo(data, fecha) {
                                     <div class="col-auto">
 
                                         <video width="320" height="240" controls>
-                                            <source src="http://157.230.239.170:4000/videos/archivos/${data.id_document}.mp4" type="video/mp4">
+                                            <source src="${dominio}/videos/archivos/${data.id_document}.mp4" type="video/mp4">
                                             Tu navegador no soporta la etiqueta de video.
                                         </video>
 
@@ -689,7 +691,7 @@ function viewFromVideo(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/videos/archivos/${data.id_document}.jpg', '${data.id_document}.mp4')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/videos/archivos/${data.id_document}.mp4', '${data.id_document}.mp4')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -722,7 +724,7 @@ function viewFromAudio(data, fecha) {
                                     <div class="col-auto">
 
                                         <audio controls>
-                                            <source src="http://157.230.239.170:4000/audios/archivos/${data.id_document}.ogg" type="audio/ogg">
+                                            <source src="${dominio}/audios/archivos/${data.id_document}.ogg" type="audio/ogg">
                                             Tu navegador no soporta la etiqueta de audio.
                                         </audio>
                                     </div>
@@ -733,7 +735,7 @@ function viewFromAudio(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/audios/archivos/${data.id_document}.ogg', '${data.id_document}.ogg')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.id_document}.ogg', '${data.id_document}.ogg')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -784,7 +786,7 @@ function viewFromDocument(data, fecha) {
                 <div class="conversation-actions dropdown dropend">
                     <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/documentos/archivos/${data.filename}', '${data.filename}')">
+                        <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/documentos/archivos/${data.filename}', '${data.filename}')">
                             <i class="bi bi-reply fs-18 me-2"></i>Descargar
                         </a>   
                         <a class="dropdown-item" href="#">
@@ -849,7 +851,7 @@ function viewReceipImage(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/img/archivos/${data.filename}', '${data.filename}')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/img/archivos/${data.filename}', '${data.filename}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -867,7 +869,7 @@ function viewReceipImage(data, fecha) {
                             <div class="p-2">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="http://157.230.239.170:4000/img/archivos/${data.filename}" alt="" height="150">
+                                        <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -890,7 +892,7 @@ function viewReceipVideo(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/videos/archivos/${data.filename}', '${data.filename}')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/videos/archivos/${data.filename}', '${data.filename}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -910,7 +912,7 @@ function viewReceipVideo(data, fecha) {
                                     <div class="col-auto">
 
                                         <video width="320" height="240" controls>
-                                            <source src="http://157.230.239.170:4000/videos/archivos/${data.filename}" type="video/mp4">
+                                            <source src="${dominio}/videos/archivos/${data.filename}" type="video/mp4">
                                             Tu navegador no soporta la etiqueta de video.
                                         </video>
                                         <p style="margin-top: 5px">${data.description}</p>
@@ -935,7 +937,7 @@ function viewReceipDocument(data, fecha) {
                             <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="descargarImagen('http://157.230.239.170:4000/documentos/archivos/${data.filename}', '${data.filename}')">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/documentos/archivos/${data.filename}', '${data.filename}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -1044,7 +1046,7 @@ function formMessage() {
                     filename: ""
                 };
 
-                fetch("http://157.230.239.170:4000/insertChat", {
+                fetch(dominio+"/insertChat", {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/json'
