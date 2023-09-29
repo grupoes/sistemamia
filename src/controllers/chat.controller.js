@@ -37,7 +37,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 export const chatView = (req, res) => {
-    const url_chat = process.env.URL_APP+":"+process.env.PUERTO_SOCKET;
+    const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
     const js = [
         url_chat+'/socket.io/socket.io.js',
         url_chat+'/js/chat.js'
