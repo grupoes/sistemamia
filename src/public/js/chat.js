@@ -148,9 +148,9 @@ function mostrar_chat(numero) {
                         case "document":
                             html += viewReceipDocument(msj, fecha_y_hora);
                             break;
-                        /*case "audio":
-                            viewReceipAudio(msj, fecha_y_hora);
-                            break;*/
+                        case "audio":
+                            html += viewReceipAudio(msj, fecha_y_hora);
+                            break;
                         default:
                             break;
                     }
@@ -582,9 +582,11 @@ socket.on("messageChat", data => {
                 const listaDoc = $("#conversation-" + data.receipt);
                 listaDoc.append(documentRec);
                 break;
-            /*case "audio":
-                viewReceipAudio(data, fecha_y_hora);
-                break;*/
+            case "audio":
+                let audioRec = viewReceipAudio(data, fecha_y_hora);
+                const listaAudio = $("#conversation-" + data.receipt);
+                listaAudio.append(audioRec);
+                break;
             default:
                 break;
         }
@@ -957,6 +959,49 @@ function viewReceipDocument(data, fecha) {
                                     <div class="col-auto">
                                         <a href="javascript:void(0);" class="text-muted fw-bold">${data.filename}</a>
                                         <p style="margin-top: 5px">${data.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                </div>
+            </li>`;
+
+        return html;
+}
+
+function viewReceipAudio() {
+    let html = `
+            <li class="clearfix odd">
+                <div class="conversation-text ms-0">
+                    <div class="d-flex justify-content-end">
+                        <div class="conversation-actions dropdown dropstart">
+                            <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.filename}', '${data.filename}')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-files fs-18 me-2"></i>Copy
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ctext-wrap">
+                            <div class="p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <audio controls>
+                                            <source src="${dominio}/audios/archivos/${data.filename}" type="audio/ogg">
+                                            Tu navegador no soporta la etiqueta de audio.
+                                        </audio>
                                     </div>
                                 </div>
                             </div>
