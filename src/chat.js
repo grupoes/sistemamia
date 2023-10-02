@@ -3,6 +3,9 @@ import express from "express";
 import path from 'path';
 import {fileURLToPath} from 'url';
 
+import https from 'https';
+import fs from 'fs';
+
 import dotenv from "dotenv";
 
 import axios from "axios";
@@ -24,7 +27,23 @@ app.use(cors());
 
 app.use(express.static(__dirname + "/public"));
 
-const server = http.createServer(app);
+let server;
+
+if (process.env.ENVIRONMENT === "PRODUCCION") {
+    const httpsOptions = {
+        key: fs.readFileSync('/etc/sslpay2/private.key'),  // Reemplaza con el path a tu archivo .key
+        cert: fs.readFileSync('/etc/sslpay2/dominio.crt'),   // Reemplaza con el path a tu archivo .crt
+    
+        // Si tienes un certificado intermedio o bundle, lo incluyes así:
+        ca: fs.readFileSync('/etc/sslpay2/bundle')
+    };
+    
+    server = https.createServer(httpsOptions, app);
+} else {
+    server = http.createServer(app);
+}
+
+
 const io = new Server(server, {
     cors: {
         origin: process.env.URL_APP+":"+process.env.PUERTO_APP_RED,  // configura la URL de tu cliente o usa "*" para permitir cualquier origen
