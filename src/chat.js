@@ -71,7 +71,7 @@ pubsub.addChannel('new_contact', async(data) => {
         io.emit("messageChat", data);
         
     } catch (error) {
-        return res.status(400).json({ message: error.message });
+        console.log(error.message);
     }
     
 });
