@@ -64,7 +64,11 @@ pubsub.addChannel('new_contact', async(data) => {
     console.log('New contact added:', data);
 
     try {
-        const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp");
+        const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp", {
+            headers: {
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsIl9yb2xlIjoxLCJfbmFtZSI6IkVSSUsgUEVaTyIsImlhdCI6MTY5NjM2MTY3MywiZXhwIjoxNjk2NDA0ODczfQ.4mFRu1KWmFAKdF32y6aqInSOVoL4YkUMUS8owFylBJY`
+            }
+        });
         const datos = response.data;
 
         io.emit('messageContacts', datos);
