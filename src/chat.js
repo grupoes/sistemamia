@@ -63,11 +63,17 @@ io.on('connection', (socket) => {
 pubsub.addChannel('new_contact', async(data) => {
     console.log('New contact added:', data);
 
-    const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp");
-    const datos = response.data;
+    try {
+        const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp");
+        const datos = response.data;
 
-    io.emit('messageContacts', datos);
-    io.emit("messageChat", data);
+        io.emit('messageContacts', datos);
+        io.emit("messageChat", data);
+        
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+    
 });
 
 
