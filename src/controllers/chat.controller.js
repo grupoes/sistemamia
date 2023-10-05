@@ -91,10 +91,9 @@ export const mensajes_numero = async (req, res) => {
     try {
         const mensajes = await Chat.findAll({
             where: {
-                [Op.or]: [
-                  { from: numero },
-                  { receipt: numero },
-                ],
+                id: {
+                    [Op.in]: sequelize.literal(`(SELECT id FROM chat WHERE "from"='${numero}' OR receipt='${numero}' ORDER BY timestamp DESC LIMIT 10)`)
+                }
               },
             order: [
                 ['timestamp', 'ASC'],

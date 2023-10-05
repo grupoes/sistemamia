@@ -160,6 +160,8 @@ function mostrar_chat(numero) {
 
             conversation.innerHTML = html;
 
+            conversation.scrollTop = conversation.scrollHeight;
+
             grabarAudio();
         })
 }
@@ -525,9 +527,9 @@ document.addEventListener('keydown', function (event) {
 
 socket.on("messageChat", data => {
 
-    const audio = new Audio('./audios/whatsapp/whatsapp-campana.mp3');
+    /*const audio = new Audio('./audios/whatsapp/whatsapp-campana.mp3');
     audio.volume = 0.5;
-    audio.play();
+    audio.play();*/
 
     socket.emit('getToken', { token: token });
     console.log(data);
