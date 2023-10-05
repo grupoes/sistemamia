@@ -58,8 +58,24 @@ const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/mia
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('getToken', data => {
+    socket.on('getToken', async data => {
         console.log(data);
+
+        try {
+    
+            const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", {
+                headers: {
+                    'Authorization': `Bearer ${data}`  // <-- Agrega el token en el header de autorización
+                }
+            });
+    
+            const datos = response.data;
+    
+            io.emit('messageContacts', datos);
+            
+        } catch (error) {
+            console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error
+        }
     });
     
 });
@@ -68,10 +84,7 @@ pubsub.addChannel('new_contact', async(data) => {
     console.log('New contact added:', data);
 
     try {
-        /*const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp");
-        const datos = response.data;
-
-        io.emit('messageContacts', datos);*/
+        
         io.emit("messageChat", data);
         
     } catch (error) {
