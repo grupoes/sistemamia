@@ -607,10 +607,10 @@ export const uploadAudio = async (req, res) => {
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
         try {
-            const filePath = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.wav');
-            const newFile = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.mp3');
-            const inputBuffer = fs.readFileSync(filePath);
-            const outputStream = fs.createWriteStream(newFile);
+            //const filePath = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.wav');
+            //const newFile = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.mp3');
+            const inputBuffer = fs.readFileSync('/var/www/node/sistemamia/src/public/audios/archivos/'+ timestamp + '.wav');
+            const outputStream = fs.createWriteStream('/var/www/node/sistemamia/src/public/audios/archivos/'+ timestamp + '.mp3');
 
             const mensaje = await convertWavToMp3(inputBuffer, outputStream);
             return res.json({ mensaje: mensaje });
