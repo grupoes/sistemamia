@@ -59,20 +59,20 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('getToken', async data => {
-        console.log(data);
+        console.log(data.token);
 
         try {
-    
+            const token = data.token;
             const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", {
                 headers: {
-                    'Authorization': `Bearer ${data}`  // <-- Agrega el token en el header de autorización
+                    'Authorization': `Bearer ${token}`  // <-- Agrega el token en el header de autorización
                 }
             });
     
             const datos = response.data;
     
             io.emit('messageContacts', datos);
-            
+
         } catch (error) {
             console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error
         }
