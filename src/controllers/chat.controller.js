@@ -609,12 +609,12 @@ export const uploadAudio = async (req, res) => {
         try {
             const filePath = path.resolve(__dirname, '../public/audios/archivos/', timestamp + '.wav');
             const newFile = path.resolve(__dirname, '../public/audios/archivos/', timestamp + '.mp3');
-            const inputBuffer = fs.readFileSync(filePath);  // Asegúrate de reemplazar 'ruta_del_archivo.wav' con la ruta de tu archivo WAV
-            const outputStream = fs.createWriteStream(newFile);  // 'salida.mp3' es el nombre del archivo de salida en formato MP3
+            const inputBuffer = fs.readFileSync(filePath);
+            const outputStream = fs.createWriteStream(newFile);
 
-            const convertir = await convertWavToMp3(inputBuffer);
-            console.log(convertir);
-            return res.json({ mensaje: convertir})
+            const mensaje = await convertWavToMp3(inputBuffer, outputStream);
+            return res.json({ mensaje: mensaje });
+            
         } catch (error) {
             console.error('Error al convertir:', error);
             return res.json({ mensaje: 'Error al convertir:'+ error});
@@ -686,17 +686,16 @@ const getExtensionFromMimeType = (mimeType) => {
     return mimeToExtensionMap[mimeType] || null;
 }
 
-async function convertWavToMp3(inputBuffer) {
+function convertWavToMp3(inputBuffer, outputStream) {
     return new Promise((resolve, reject) => {
         ffmpeg()
             .input(inputBuffer)
             .toFormat('mp3')
             .on('end', () => {
                 console.log('Conversion finished.');
-                resolve();
+                resolve('Conversion finished.');
             })
             .on('error', (err) => {
-                console.log(err);
                 reject(err);
             })
             .pipe(outputStream, { end: true });
