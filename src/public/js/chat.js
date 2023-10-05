@@ -1208,7 +1208,9 @@ function grabarAudio() {
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioElement.src = audioUrl;
                     // Enviar al servidor
-                    
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
                 };
 
                 mediaRecorder.start();
@@ -1220,6 +1222,7 @@ function grabarAudio() {
         e.target.style.color = "black";
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
+
         }
     });
 
