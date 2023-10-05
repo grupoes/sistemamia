@@ -1109,6 +1109,8 @@ function formMessage() {
                 .then(r => r.json())
                 .then(resp => {
                     //console.log(resp)
+                    const conversation = document.getElementById('conversation-'+whatsappNumber.value);
+                    conversation.scrollTop = conversation.scrollHeight;
                 })
 
             })
