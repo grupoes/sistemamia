@@ -524,6 +524,7 @@ document.addEventListener('keydown', function (event) {
 });
 
 socket.on("messageChat", data => {
+    socket.emit('getToken', { token: token });
     console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);

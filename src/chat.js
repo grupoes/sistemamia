@@ -58,21 +58,21 @@ const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/mia
 io.on('connection', (socket) => {
     console.log('a user connected');
 
+    socket.on('getToken', data => {
+        console.log(data);
+    });
+    
 });
 
 pubsub.addChannel('new_contact', async(data) => {
     console.log('New contact added:', data);
 
     try {
-        const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp", {
-            headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsIl9yb2xlIjoxLCJfbmFtZSI6IkVSSUsgUEVaTyIsImlhdCI6MTY5NjM2MTY3MywiZXhwIjoxNjk2NDA0ODczfQ.4mFRu1KWmFAKdF32y6aqInSOVoL4YkUMUS8owFylBJY`
-            }
-        });
+        /*const response = await axios.get(process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/numeroWhatsapp");
         const datos = response.data;
 
         io.emit('messageContacts', datos);
-        io.emit("messageChat", data);
+        io.emit("messageChat", data);*/
         
     } catch (error) {
         console.log(error.message);
