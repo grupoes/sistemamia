@@ -671,34 +671,4 @@ export const uploadAudio = async (req, res) => {
     }
 }
 
-const getExtensionFromMimeType = (mimeType) => {
-    const mimeToExtensionMap = {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
-        "application/vnd.ms-excel": ".xls",
-        "application/pdf": ".pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
-        "text/xml": ".xml",
-        "application/x-zip-compressed": ".zip",
-        "": ".rar"
-        // ... puedes añadir más mapeos según lo necesites
-    };
-
-    return mimeToExtensionMap[mimeType] || null;
-}
-
-function convertAudioToMP3(inputBuffer) {
-    return new Promise((resolve, reject) => {
-        ffmpeg()
-            .input(inputBuffer)
-            .toFormat('mp3')
-            .on('end', () => {
-                console.log('Conversión finalizada.');
-            })
-            .on('error', (err) => {
-                reject(err);
-            })
-            .pipe(res, { end: true });
-    });
-}
-
 export const audioMiddleware = uploadVoz.single('audio');

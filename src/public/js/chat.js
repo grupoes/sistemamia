@@ -524,6 +524,11 @@ document.addEventListener('keydown', function (event) {
 });
 
 socket.on("messageChat", data => {
+
+    const audio = new window.Audio('./src/public/audios/whatsapp/whatsapp-campana.mp3');
+    audio.volume = 0.5;
+    audio.play();
+
     socket.emit('getToken', { token: token });
     console.log(data);
 
