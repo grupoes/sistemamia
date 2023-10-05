@@ -10,6 +10,9 @@ import { Op } from 'sequelize';
 import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
+
+import ffmpeg from 'fluent-ffmpeg';
+
 import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -603,7 +606,13 @@ export const uploadAudio = async (req, res) => {
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.wav');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
-        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".wav";
+        const inputBuffer = fs.readFileSync('../public/audios/archivos/'+timestamp+'.wav');  // Asegúrate de reemplazar 'ruta_del_archivo.wav' con la ruta de tu archivo WAV
+        const outputStream = fs.createWriteStream('../public/audios/archivos/'+timestamp+'.mp3');  // 'salida.mp3' es el nombre del archivo de salida en formato MP3
+
+        await convertWavToMp3(inputBuffer);
+        console.log('Archivo MP3 creado exitosamente.');
+
+        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
 
         const dataFile = {
             messaging_product: "whatsapp",
@@ -667,6 +676,22 @@ const getExtensionFromMimeType = (mimeType) => {
     };
 
     return mimeToExtensionMap[mimeType] || null;
+}
+
+async function convertWavToMp3(inputBuffer) {
+    return new Promise((resolve, reject) => {
+        ffmpeg()
+            .input(inputBuffer)
+            .toFormat('mp3')
+            .on('end', () => {
+                console.log('Conversion finished.');
+                resolve();
+            })
+            .on('error', (err) => {
+                reject(err);
+            })
+            .pipe(outputStream, { end: true });
+    });
 }
 
 export const audioMiddleware = uploadVoz.single('audio');
