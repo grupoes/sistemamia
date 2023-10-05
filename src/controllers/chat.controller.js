@@ -600,7 +600,7 @@ export const uploadAudio = async (req, res) => {
 
         const timestamp = Date.now();
 
-        const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+        const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.wav');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
         const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".wav";
