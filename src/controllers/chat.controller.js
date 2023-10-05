@@ -620,8 +620,6 @@ export const uploadAudio = async (req, res) => {
         // (Opcional) Eliminar el archivo .wav temporal
         fs.unlinkSync(inputPath);
 
-        return res.json("hola");
-
         const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
 
         const dataFile = {
