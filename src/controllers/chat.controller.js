@@ -11,6 +11,9 @@ import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
 
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
 import ffmpeg from 'fluent-ffmpeg';
 
 import { createWriteStream } from 'fs';
@@ -49,6 +52,8 @@ export const chatView = (req, res) => {
 
     res.render('chat/index', { layout: 'partials/main', js, urlchat: url_chat, dominio: dominio });
 }
+
+const execAsync = promisify(exec);
 
 export const addMessage = async (req, res) => {
     const { text, messageId, numberWhatsapp } = req.body;
