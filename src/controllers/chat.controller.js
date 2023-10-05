@@ -596,6 +596,8 @@ export const uploadAudio = async (req, res) => {
             return res.status(400).json({message: 'No se subió ningún archivo.'});
         }
 
+        console.log(req.file);
+
         const timestamp = Date.now();
 
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
