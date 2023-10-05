@@ -603,14 +603,14 @@ export const uploadAudio = async (req, res) => {
 
         const timestamp = Date.now();
 
-        const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.wav');
-        fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
+        const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+        //fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
         try {
             const inputAudioBuffer = req.file.buffer;
             const convertedAudioBuffer = await convertAudioToMP3(inputAudioBuffer);
             
-
+            fs.writeFileSync(audioPath, convertedAudioBuffer);
         } catch (error) {
             console.error('Error al convertir:', error);
             return res.json({ mensaje: 'Error al convertir:'+ error});
