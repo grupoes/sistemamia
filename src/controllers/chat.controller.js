@@ -603,7 +603,7 @@ export const uploadAudio = async (req, res) => {
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
-        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
+        const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".wav";
 
         const dataFile = {
             messaging_product: "whatsapp",
