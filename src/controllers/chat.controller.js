@@ -606,8 +606,8 @@ export const uploadAudio = async (req, res) => {
         const audioPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.wav');
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
-        const inputBuffer = fs.readFileSync('../public/audios/archivos/'+timestamp+'.wav');  // Asegúrate de reemplazar 'ruta_del_archivo.wav' con la ruta de tu archivo WAV
-        const outputStream = fs.createWriteStream('../public/audios/archivos/'+timestamp+'.mp3');  // 'salida.mp3' es el nombre del archivo de salida en formato MP3
+        const inputBuffer = fs.readFileSync('./src/public/audios/archivos/'+timestamp+'.wav');  // Asegúrate de reemplazar 'ruta_del_archivo.wav' con la ruta de tu archivo WAV
+        const outputStream = fs.createWriteStream('./src/public/audios/archivos/'+timestamp+'.mp3');  // 'salida.mp3' es el nombre del archivo de salida en formato MP3
 
         await convertWavToMp3(inputBuffer);
         console.log('Archivo MP3 creado exitosamente.');
