@@ -1157,6 +1157,10 @@ enviarImagen.addEventListener('click', (e) => {
 
                 if (data.message == 'ok') {
                     $('#myOffcanvas').offcanvas('hide');
+
+                    const conversation = document.getElementById('conversation-'+numero.value);
+                    conversation.scrollTop = conversation.scrollHeight;
+
                 } else {
                     alert(data.message);
                 }
@@ -1236,6 +1240,9 @@ function grabarAudio() {
             console.log(data);
             audioElement.style.display = "none";
             sendButton.style.display = "none";
+
+            const conversation = document.getElementById('conversation-'+numeroW.value);
+            conversation.scrollTop = conversation.scrollHeight;
         })
         .catch(error => console.error('Error:', error));
     });
