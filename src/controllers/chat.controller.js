@@ -614,8 +614,10 @@ export const uploadAudio = async (req, res) => {
 
             await convertWavToMp3(inputBuffer);
             console.log('Archivo MP3 creado exitosamente.');
+            return res.json({ mensaje: 'Archivo MP3 creado exitosamente.'})
         } catch (error) {
             console.error('Error al convertir:', err);
+            return res.json({ mensaje: error})
         }
 
         const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
