@@ -607,14 +607,14 @@ export const uploadAudio = async (req, res) => {
         fs.writeFileSync(audioPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
         try {
-            const filePath = path.resolve(__dirname, '../public/audios/archivos/', timestamp + '.wav');
-            const newFile = path.resolve(__dirname, '../public/audios/archivos/', timestamp + '.mp3');
+            const filePath = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.wav');
+            const newFile = path.resolve(__dirname, '../public/audios/archivos/'+ timestamp + '.mp3');
             const inputBuffer = fs.readFileSync(filePath);
             const outputStream = fs.createWriteStream(newFile);
 
             const mensaje = await convertWavToMp3(inputBuffer, outputStream);
             return res.json({ mensaje: mensaje });
-            
+
         } catch (error) {
             console.error('Error al convertir:', error);
             return res.json({ mensaje: 'Error al convertir:'+ error});
