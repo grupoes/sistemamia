@@ -612,9 +612,9 @@ export const uploadAudio = async (req, res) => {
             const inputBuffer = fs.readFileSync(filePath);  // Asegúrate de reemplazar 'ruta_del_archivo.wav' con la ruta de tu archivo WAV
             const outputStream = fs.createWriteStream(newFile);  // 'salida.mp3' es el nombre del archivo de salida en formato MP3
 
-            await convertWavToMp3(inputBuffer);
-            console.log('Archivo MP3 creado exitosamente.');
-            return res.json({ mensaje: 'Archivo MP3 creado exitosamente.'})
+            const convertir = await convertWavToMp3(inputBuffer);
+            console.log(convertir);
+            return res.json({ mensaje: convertir})
         } catch (error) {
             console.error('Error al convertir:', err);
             return res.json({ mensaje: error})
@@ -696,6 +696,7 @@ async function convertWavToMp3(inputBuffer) {
                 resolve();
             })
             .on('error', (err) => {
+                console.log(err);
                 reject(err);
             })
             .pipe(outputStream, { end: true });
