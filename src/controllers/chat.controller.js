@@ -616,8 +616,8 @@ export const uploadAudio = async (req, res) => {
             console.log(convertir);
             return res.json({ mensaje: convertir})
         } catch (error) {
-            console.error('Error al convertir:', err);
-            return res.json({ mensaje: error})
+            console.error('Error al convertir:', error);
+            return res.json({ mensaje: 'Error al convertir:'+ error});
         }
 
         const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
