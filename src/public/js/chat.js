@@ -340,9 +340,14 @@ function viewContact(data) {
         let hourMessage = formatDate(contact.time);
 
         let countMessage = "";
+        let asistente = "";
 
         if (contact.cantidad > 0) {
             countMessage = `<span class="float-end badge bg-danger text-white">${contact.cantidad}</span>`;
+        }
+
+        if(contact.rol === 1 || contact.rol === 3) {
+            asistente = `<p style="margin: 0;font-size: 12px;color: dodgerblue;">${contact.asistente}</p>`;
         }
 
         let nameContact = contact.contact;
@@ -356,6 +361,7 @@ function viewContact(data) {
                     <img src="assets/images/users/avatar-6.jpg" class="me-2 rounded-circle" height="48" alt="Michael H" />
                 </div>
                 <div class="w-100 overflow-hidden">
+                    ${asistente}
                     <h5 class="mt-0 mb-0 fs-14">
                         <span class="float-end text-muted fs-12">${hourMessage}</span>
                         ${contact.contact}

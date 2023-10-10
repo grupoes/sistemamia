@@ -327,7 +327,8 @@ export const numerosWhatsapp = async(req, res) => {
                     time: time,
                     cantidad: chatCount,
                     asistente: nameAsistente,
-                    idAsistente: idAsis
+                    idAsistente: idAsis,
+                    rol: rol
                 }
 
                 arrayContactos.push(array)
