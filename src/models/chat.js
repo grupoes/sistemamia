@@ -44,6 +44,12 @@ export const Chat = sequelize.define('chat', {
     },
     description: {
         type: DataTypes.STRING
+    },
+    fromRes: {
+        type: DataTypes.STRING
+    },
+    idRes: {
+        type: DataTypes.STRING
     }
 }, {
     freezeTableName: true,

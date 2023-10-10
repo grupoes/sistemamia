@@ -113,7 +113,7 @@ export const mensajes_numero = async (req, res) => {
 };
 
 export const addMessageFirestore = async(req, res) => {
-    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename, description} = req.body;
+    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename, description, fromRes, idRes} = req.body;
     try {
 
         console.log(req.body);
@@ -229,7 +229,9 @@ export const addMessageFirestore = async(req, res) => {
             documentId: documentId,
             id_document: id_document,
             filename: filename,
-            description: description
+            description: description,
+            fromRes: fromRes,
+            idRes: idRes
         });
 
         return res.json(newMessage);
