@@ -12,7 +12,7 @@ export const tokenSing = async (user) => {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "12h"
+            expiresIn: "48h"
         }
     );
 }
