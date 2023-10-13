@@ -854,6 +854,13 @@ function viewFromDocument(data, fecha) {
 }
 
 function viewReceipText(data, fecha) {
+
+    let resp = "";
+
+    if (data.mensajeRelacionado) {
+        resp = mensajeRespondidoReceipText(data.mensajeRelacionado);
+    }
+
     let html = `
         <li class="clearfix odd">
             <div class="conversation-text ms-0">
@@ -876,6 +883,7 @@ function viewReceipText(data, fecha) {
                         </div>
                     </div>  
                     <div class="ctext-wrap">
+                        ${resp}
                         <p id="${data.codigo}">${data.message}</p>
                     </div>  
                 </div>                                                          
@@ -1340,6 +1348,11 @@ function mensajeRespondidoFromVideo(data) {
 
 function mensajeRespondidoFromDocument(data) {
     return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><i class="bi bi-file-text"></i> ${data.filename}</a> </p>`;
+}
+
+//receipt
+function mensajeRespondidoReceipText(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')">${data.message}</a> </p>`;
 }
 
 function verRes(e,codigo) {
