@@ -1178,6 +1178,7 @@ function formMessage() {
             .catch(error => console.log('error', error))
             .finally(() => {
                 contentMensaje.value = "";
+                document.getElementById('responderMessage').innerHTML = "";
             });
     })
 }
