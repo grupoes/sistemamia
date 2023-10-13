@@ -1061,14 +1061,14 @@ function formMessage() {
     const contentMensaje = document.getElementById('contentMensaje');
     const whatsappNumber = document.getElementById('whatsappNumber');
 
-    let rescod = "";
-
-    if(document.getElementById('codigoRes')) {
-        rescod = document.getElementById('codigoRes').value;
-    }
-
     form_envio.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        let rescod = "";
+
+        if(document.getElementById('codigoRes')) {
+            rescod = document.getElementById('codigoRes').value;
+        }
 
         if (contentMensaje.value == "") {
             return false;
