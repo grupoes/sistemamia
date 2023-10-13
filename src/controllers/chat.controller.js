@@ -104,6 +104,17 @@ export const mensajes_numero = async (req, res) => {
             return res.status(404).json({ message: 'No se encontraron mensajes.' });
         }
 
+        for (let mensaje of mensajes) {
+            if (mensaje.idRes) {
+                const mensajeIdRes = await Chat.findOne({ where: { codigo: mensaje.idRes } });
+                if (mensajeIdRes) {
+                    let plainObject = mensaje.get({ plain: true });
+                    // Agrega el mensajeIdRes como un nuevo campo 'mensajeRelacionado' en el objeto plainObject
+                    plainObject.mensajeRelacionado = mensajeIdRes.get({ plain: true });
+                }
+            }
+        }
+
         return res.json(mensajes);
 
     } catch (error) {

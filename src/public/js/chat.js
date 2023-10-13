@@ -464,8 +464,12 @@ function chatDetail(numero, name) {
 
         </ul>
         <div class="mt-2 bg-light p-3 rounded">
+            
             <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">
                 <input type="hidden" name="numberWhat" value="${numero}">
+                <div id="responderMessage">
+                    
+                </div>
                 <div class="row">
                     <div class="col mb-2 mb-sm-0">
                         <input type="text" class="form-control border-0" name="mensaje_form"
@@ -609,18 +613,42 @@ socket.on("messageChat", data => {
 });
 
 function viewFromText(data, hora) {
+
+    let responseData = "";
+
+    if(data.mensajeRelacionado) {
+
+        if(data.mensajeRelacionado.typeMessage === 'text') {
+            responseData = mensajeRespondidoFromText(data.mensajeRelacionado);
+        }
+
+        if(data.mensajeRelacionado.typeMessage === 'audio') {
+            responseData = mensajeRespondidoFromAudio(data.mensajeRelacionado);
+        }
+
+        if(data.mensajeRelacionado.typeMessage === 'video') {
+            responseData = mensajeRespondidoFromVideo(data.mensajeRelacionado);
+        }
+
+        if(data.mensajeRelacionado.typeMessage === 'document') {
+            responseData = mensajeRespondidoFromDocument(data.mensajeRelacionado);
+        }
+    }
+
     let html = `
         <li class="clearfix">
             <div class="conversation-text ms-0">
                 <div class="d-flex">
-                    <div class="ctext-wrap">
-                        <p>${data.message}</p>                                                                                                                                        
+                    
+                    <div class="ctext-wrap" style="padding: 0;">
+                        ${responseData}
+                        <p id="${data.codigo}" style="padding: 5px 10px 5px 10px;">${data.message}</p>                                
                     </div>                                                                    
                     <div class="conversation-actions dropdown dropend">
                         <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}', '${data.message}')">
+                                <i class="bi bi-reply fs-18 me-2"></i>Responder
                             </a>   
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -834,7 +862,7 @@ function viewReceipText(data, fecha) {
                         <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#">
-                                <i class="bi bi-reply fs-18 me-2"></i>Reply
+                                <i class="bi bi-reply fs-18 me-2"></i>Responder
                             </a>   
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -848,7 +876,7 @@ function viewReceipText(data, fecha) {
                         </div>
                     </div>  
                     <div class="ctext-wrap">
-                        <p>${data.message}</p>
+                        <p id="${data.codigo}">${data.message}</p>
                     </div>  
                 </div>                                                          
                 <p class="text-muted fs-12 mb-0 mt-1">${fecha}<i class="bi bi-check2-all ms-1 text-success"></i></p>
@@ -882,7 +910,7 @@ function viewReceipImage(data, fecha) {
                             </div>
                         </div>
                         <div class="ctext-wrap">
-                            <div class="p-2">
+                            <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150">
@@ -923,7 +951,7 @@ function viewReceipVideo(data, fecha) {
                             </div>
                         </div>
                         <div class="ctext-wrap">
-                            <div class="p-2">
+                            <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
 
@@ -968,7 +996,7 @@ function viewReceipDocument(data, fecha) {
                             </div>
                         </div>
                         <div class="ctext-wrap">
-                            <div class="p-2">
+                            <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <a href="javascript:void(0);" class="text-muted fw-bold">${data.filename}</a>
@@ -1009,7 +1037,7 @@ function viewReceipAudio(data, fecha) {
                             </div>
                         </div>
                         <div class="ctext-wrap">
-                            <div class="p-2">
+                            <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <audio controls>
@@ -1033,6 +1061,12 @@ function formMessage() {
     const contentMensaje = document.getElementById('contentMensaje');
     const whatsappNumber = document.getElementById('whatsappNumber');
 
+    let rescod = "";
+
+    if(document.getElementById('codigoRes')) {
+        rescod = document.getElementById('codigoRes').value;
+    }
+
     form_envio.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -1044,16 +1078,32 @@ function formMessage() {
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE");
 
-        var raw = JSON.stringify({
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": whatsappNumber.value,
-            "type": "text",
-            "text": {
-                "preview_url": false,
-                "body": contentMensaje.value
-            }
-        });
+        if(rescod === "") {
+            var raw = JSON.stringify({
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": whatsappNumber.value,
+                "type": "text",
+                "text": {
+                    "preview_url": false,
+                    "body": contentMensaje.value
+                }
+            });
+        } else {
+            var raw = JSON.stringify({
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "context": {
+                    "message_id": rescod
+                },
+                "to": whatsappNumber.value,
+                "type": "text",
+                "text": {
+                    "preview_url": false,
+                    "body": contentMensaje.value
+                }
+            });
+        }
 
         var requestOptions = {
             method: 'POST',
@@ -1091,6 +1141,9 @@ function formMessage() {
 
                 listConversation(contentMensaje.value, whatsappNumber.value);*/
 
+                fromRes = whatsappNumber.value;
+                idRes = rescod;
+
                 let datos = {
                     id: result.messages[0].id,
                     from: "51927982544",
@@ -1102,7 +1155,9 @@ function formMessage() {
                     estadoMessage: "sent",
                     documentId: "",
                     id_document: "",
-                    filename: ""
+                    filename: "",
+                    fromRes: fromRes,
+                    idRes: idRes
                 };
 
                 fetch(dominio+"/insertChat", {
@@ -1268,4 +1323,54 @@ function openFullscreen(element) {
     } else if (element.msRequestFullscreen) { /* IE/Edge */
         element.msRequestFullscreen();
     }
+}
+
+function mensajeRespondidoFromText(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')">${data.message}</a> </p>`;
+}
+
+function mensajeRespondidoFromAudio(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><i class="bi bi-headphones"></i> Audio</a> </p>`;
+}
+
+function mensajeRespondidoFromVideo(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><i class="bi bi-camera-video"></i> Video</a> </p>`;
+}
+
+function mensajeRespondidoFromDocument(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><i class="bi bi-file-text"></i> ${data.filename}</a> </p>`;
+}
+
+function verRes(e,codigo) {
+    e.preventDefault();
+    const targetElement = document.getElementById(codigo);
+    targetElement.scrollIntoView({ behavior: 'smooth' });
+
+    const parent = targetElement.parentElement;
+
+    parent.style.background = '#e3dddd';
+
+    setInterval(() => {
+        parent.removeAttribute('style');
+    }, 2000);
+
+    
+}
+
+function responderFrom(e, codigo, mensaje) {
+    e.preventDefault();
+    const resm = document.getElementById('responderMessage');
+
+    resm.innerHTML = `
+    <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
+        <p style="margin-bottom: 0px;padding: 5px;">${mensaje}</p>
+        <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
+        <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
+    </div>
+    `;
+}
+
+function cerrarRes() {
+    const resm = document.getElementById('responderMessage');
+    resm.innerHTML = "";
 }
