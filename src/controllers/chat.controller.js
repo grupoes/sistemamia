@@ -588,7 +588,7 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
 }
 
 export const insertChat = async (req, res) => {
-    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename} = req.body;
+    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename, fromRes, idRes} = req.body;
     try {
         const newMessage = await Chat.create({
             codigo: id,
@@ -601,7 +601,9 @@ export const insertChat = async (req, res) => {
             estadoMessage: "sent",
             documentId: documentId,
             id_document: id_document,
-            filename: filename
+            filename: filename,
+            fromRes: fromRes,
+            idRes: idRes
         });
 
         return res.json(newMessage);
