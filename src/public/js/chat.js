@@ -622,6 +622,10 @@ function viewFromText(data, hora) {
             responseData = mensajeRespondidoFromText(data.mensajeRelacionado);
         }
 
+        if(data.mensajeRelacionado.typeMessage === 'image') {
+            responseData = mensajeRespondidoFromImagen(data.mensajeRelacionado);
+        }
+
         if(data.mensajeRelacionado.typeMessage === 'audio') {
             responseData = mensajeRespondidoFromAudio(data.mensajeRelacionado);
         }
@@ -858,7 +862,13 @@ function viewReceipText(data, fecha) {
     let resp = "";
 
     if (data.mensajeRelacionado) {
-        resp = mensajeRespondidoReceipText(data.mensajeRelacionado);
+        if(data.mensajeRelacionado.typeMessage === 'text') {
+            resp = mensajeRespondidoReceipText(data.mensajeRelacionado);
+        }
+        
+        if(data.mensajeRelacionado.typeMessage === 'image') {
+            resp = mensajeRespondidoReceipImagen(data.mensajeRelacionado);
+        }
     }
 
     let html = `
@@ -895,6 +905,12 @@ function viewReceipText(data, fecha) {
 }
 
 function viewReceipImage(data, fecha) {
+    let resp = "";
+
+    if (data.mensajeRelacionado) {
+        resp = mensajeRespondidoReceipImagen(data.mensajeRelacionado);
+    }
+
     let html = `
             <li class="clearfix odd">
                 <div class="conversation-text ms-0">
@@ -1338,6 +1354,10 @@ function mensajeRespondidoFromText(data) {
     return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')">${data.message}</a> </p>`;
 }
 
+function mensajeRespondidoFromImagen(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><img src="https://esconsultoresyasesores.com:4000/img/archivos/${data.filename}" style="width: 40px; height: 30px" /></a> </p>`;
+}
+
 function mensajeRespondidoFromAudio(data) {
     return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><i class="bi bi-headphones"></i> Audio</a> </p>`;
 }
@@ -1353,6 +1373,10 @@ function mensajeRespondidoFromDocument(data) {
 //receipt
 function mensajeRespondidoReceipText(data) {
     return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')">${data.message}</a> </p>`;
+}
+
+function mensajeRespondidoReceipImagen(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><img src="https://esconsultoresyasesores.com:4000/img/archivos/${data.filename}" /></a> </p>`;
 }
 
 function verRes(e,codigo) {
