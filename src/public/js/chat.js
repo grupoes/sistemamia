@@ -1150,8 +1150,8 @@ function formMessage() {
         fetch("https://graph.facebook.com/v17.0/122094968330010315/messages", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result);
-                console.log(result.messages[0].id);
+                //console.log(result);
+                //console.log(result.messages[0].id);
 
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
@@ -1239,7 +1239,7 @@ enviarImagen.addEventListener('click', (e) => {
         formData.append('numero', numero.value);
         formData.append('description', fileDescription.value);
 
-        console.log(file.type);
+        //console.log(file.type);
 
         fetch('subir_imagen', {
             method: 'POST',
@@ -1247,7 +1247,7 @@ enviarImagen.addEventListener('click', (e) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
 
                 e.target.disabled = false;
                 e.target.textContent = 'Enviar';
@@ -1281,7 +1281,7 @@ function grabarAudio() {
     const sendButton = document.getElementById('sendAudio');
 
     const numeroW = document.getElementById('whatsappNumber');
-    console.log(numeroW.value);
+    //console.log(numeroW.value);
 
     let mediaRecorder;
     let audioChunks = [];
@@ -1291,7 +1291,7 @@ function grabarAudio() {
         audioElement.style.display = "inline";
         sendButton.style.display = "inline";
         e.target.style.color = "red";
-        console.log("hola");
+        //console.log("hola");
         audioChunks = []; // Limpiar chunks anteriores
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
@@ -1329,7 +1329,7 @@ function grabarAudio() {
         formData.append('audio', audioBlob);
         formData.append('numero', numeroW.value);
 
-        console.log(audioBlob);
+        //console.log(audioBlob);
 
         fetch('/uploadAudio', {
             method: 'POST',
@@ -1337,7 +1337,7 @@ function grabarAudio() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            //console.log(data);
             audioElement.style.display = "none";
             sendButton.style.display = "none";
 
