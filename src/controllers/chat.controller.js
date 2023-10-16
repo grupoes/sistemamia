@@ -113,6 +113,12 @@ export const mensajes_numero = async (req, res) => {
                     plainObject.mensajeRelacionado = mensajeIdRes.get({ plain: true });
                 }
             }
+
+            if(mensaje.from === numero) {
+                await Chat.update({ estadoMessage: 'read' }, {
+                    where: { id: mensaje.id }
+                });
+            }
         }
 
         return res.json(mensajes);
