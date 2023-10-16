@@ -72,7 +72,9 @@ io.on('connection', (socket) => {
     
             io.emit('messageContacts', datos);
 
-            io.emit('audioReproducido');
+            if(data.from != process.env.NUMERO_WHATSAPP) {
+                io.emit('audioReproducido');
+            }
 
         } catch (error) {
             console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error

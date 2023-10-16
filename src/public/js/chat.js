@@ -554,7 +554,7 @@ socket.on("messageChat", data => {
     audio.volume = 0.5;
     audio.play();*/
 
-    socket.emit('getToken', { token: token });
+    socket.emit('getToken', { token: token, from: data.from });
     console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
