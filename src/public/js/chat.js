@@ -321,9 +321,15 @@ function convertTimestampToDate(timestamp) {
 socket.on('audioReproducido', () => {
     // Obtener el elemento de audio
     const audioPlayer = document.getElementById('audioPlayer');
+
+    audioPlayer.play().then(() => {
+        // Reproducir el audio
+        audioPlayer.play();
+    }).catch((error) => {
+        console.log(error);
+    });
   
-    // Reproducir el audio
-    audioPlayer.play();
+    
 });
 
 socket.on("messageContacts", data => {
