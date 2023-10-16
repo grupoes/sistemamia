@@ -318,6 +318,14 @@ function convertTimestampToDate(timestamp) {
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 }
 
+socket.on('audioReproducido', () => {
+    // Obtener el elemento de audio
+    const audioPlayer = document.getElementById('audioPlayer');
+  
+    // Reproducir el audio
+    audioPlayer.play();
+});
+
 socket.on("messageContacts", data => {
     viewContact(data);
 });
@@ -448,10 +456,7 @@ function chatDetail(numero, name) {
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
                                 class="bi bi-search fs-18 me-2"></i>Buscar</a>
-                        <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-image fs-18 me-2"></i>Wallpaper</a>
-                        <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-arrow-right-circle fs-18 me-2"></i>More</a>
+                        
                     </div>
                 </li>
             </ul>

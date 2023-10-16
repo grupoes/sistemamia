@@ -59,7 +59,6 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('getToken', async data => {
-        console.log(data.token);
 
         try {
             const token = data.token;
@@ -72,6 +71,8 @@ io.on('connection', (socket) => {
             const datos = response.data;
     
             io.emit('messageContacts', datos);
+
+            io.emit('audioReproducido');
 
         } catch (error) {
             console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error

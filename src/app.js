@@ -14,6 +14,7 @@ import carrera from './routes/carrera.routes.js';
 import chat from './routes/chat.routes.js';
 import potencialCliente from './routes/potencialCliente.routes.js';
 import chatEstados from './routes/chatEstados.routes.js';
+import clientes from './routes/clientes.routes.js';
 
 const app = express();
 
@@ -46,5 +47,6 @@ app.use(carrera);
 app.use(chat);
 app.use(potencialCliente);
 app.use(chatEstados);
+app.use(clientes);
 
 export default app;
