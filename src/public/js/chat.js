@@ -555,7 +555,7 @@ socket.on("messageChat", data => {
     audio.play();*/
 
     socket.emit('getToken', { token: token });
-    //console.log(data);
+    console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
@@ -1107,7 +1107,7 @@ function formMessage() {
             rescod = document.getElementById('codigoRes').value;
         }
 
-        if (contentMensaje.value == "") {
+        if (contentMensaje.value === "") {
             return false;
         }
 
