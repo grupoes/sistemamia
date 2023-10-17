@@ -4,6 +4,8 @@ import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { PotencialCliente } from "../models/potencialCliente.js";
 import { Trabajadores } from "../models/trabajadores.js";
 import { Asignacion } from "../models/asignacion.js";
+import { EtiquetaCliente } from "../models/etiquetaCliente.js";
+import { Etiqueta } from "../models/etiquetas.js";
 
 import { Op } from 'sequelize';
 
@@ -232,6 +234,12 @@ export const addMessageFirestore = async(req, res) => {
                 prefijo_whatsapp: 51,
                 numero_whatsapp: from
             });
+
+            const potEtiqueta = await EtiquetaCliente.create({
+                cliente_id: pot.id,
+                etiqueta_id: 1,
+                estado: 1
+            });
         }
 
         const newMessage = await Chat.create({
@@ -274,12 +282,12 @@ export const numerosWhatsapp = async(req, res) => {
         let arrayContactos = [];
 
         for (const result of results) {
-            const { from } = result;
-            const max_timestamp = result.get('max_timestamp');
+            let { from } = result;
+            let max_timestamp = result.get('max_timestamp');
 
             if (from != process.env.NUMERO_WHATSAPP) {
                 console.log(from);
-                const resu = await Chat.findOne({
+                let resu = await Chat.findOne({
                     attributes: ['receipt', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
                     where: {
                         from: process.env.NUMERO_WHATSAPP,
@@ -305,28 +313,28 @@ export const numerosWhatsapp = async(req, res) => {
                     time = max_timestamp;
                 }
 
-                const mensa = await Chat.findOne({
+                let mensa = await Chat.findOne({
                     where: {
                         timestamp: time
                     }
                 });
 
-                const chatCount = await Chat.count({
+                let chatCount = await Chat.count({
                     where: {
                         from: from,
                         estadoMessage: "sent"
                     }
                 });
 
-                const name = await NumeroWhatsapp.findOne({
+                let name = await NumeroWhatsapp.findOne({
                     where: {
                         from: from
                     }
                 });
 
-                const idAsis = name.asistente;
+                let idAsis = name.asistente;
 
-                const asistente = await Trabajadores.findOne({
+                let asistente = await Trabajadores.findOne({
                     where: {
                         id: idAsis
                     }
@@ -338,6 +346,29 @@ export const numerosWhatsapp = async(req, res) => {
                     nameAsistente = asistente.nombres+" "+asistente.apellidos;
                 }
 
+                let poten = await PotencialCliente.findOne({
+                    where: {
+                        numero_whatsapp: from
+                    }
+                });
+
+                let idpotencial = poten.id;
+
+                let etiquetaC = await EtiquetaCliente.findOne({
+                    where: {
+                        cliente_id: idpotencial,
+                        estado: 1
+                    }
+                });
+
+                let idetiqueta = etiquetaC.etiqueta_id;
+
+                let eti = await Etiqueta.findOne({
+                    where: {
+                        id: idetiqueta
+                    }
+                });
+
                 let array = {
                     numero: from,
                     contact: name.nameContact,
@@ -347,7 +378,8 @@ export const numerosWhatsapp = async(req, res) => {
                     cantidad: chatCount,
                     asistente: nameAsistente,
                     idAsistente: idAsis,
-                    rol: rol
+                    rol: rol,
+                    etiqueta: eti.descripcion
                 }
 
                 arrayContactos.push(array)

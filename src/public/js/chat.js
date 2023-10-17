@@ -433,7 +433,7 @@ chatPrincipalView();
 function chatDetail(numero, name) {
     let html = `
     <div class="d-flex pb-2 border-bottom align-items-center">
-        <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded-circle" height="48" alt="Brandon Smith" />
+        <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded-circle" height="48" alt="Cliente" />
         <div>
             <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${name}</h5>
             <p class="mb-0" id="numberWhatsapp">${numero}</p>
@@ -441,6 +441,9 @@ function chatDetail(numero, name) {
         </div>
         <div class="flex-grow-1">
             <ul class="list-inline float-end mb-0">
+                <li class="list-inline-item fs-18 me-3 dropdown">
+                    <span class="badge badge-soft-success py-1">SE LE ENVIO INFORMACIÓN (NO OBSERVO LA INFORMACIÓN)</span>
+                </li>
                 <li class="list-inline-item fs-18 me-3 dropdown">
                     <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#voicecall">
                         <i class="bi bi-telephone-plus"></i>
