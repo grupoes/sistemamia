@@ -370,7 +370,7 @@ function viewContact(data) {
         nameContact = nameContact.replace("'", "");
 
         html += `
-        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}')">
+        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id})">
             <div class="d-flex align-items-start p-2">
                 <div class="position-relative">
                     <span class="user-status"></span>
@@ -430,7 +430,7 @@ function chatPrincipalView() {
 
 chatPrincipalView();
 
-function chatDetail(numero, name) {
+function chatDetail(numero, name, etiqueta, potencial, etiqueta_id) {
     let html = `
     <div class="d-flex pb-2 border-bottom align-items-center">
         <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded-circle" height="48" alt="Cliente" />
@@ -438,11 +438,12 @@ function chatDetail(numero, name) {
             <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${name}</h5>
             <p class="mb-0" id="numberWhatsapp">${numero}</p>
             <input type="hidden" id="whatsappNumber" value="${numero}">
+            <input type="hidden" id="potencialId" value="${potencial}">
         </div>
         <div class="flex-grow-1">
             <ul class="list-inline float-end mb-0">
                 <li class="list-inline-item fs-18 me-3 dropdown">
-                    <span class="badge badge-soft-success py-1">SE LE ENVIO INFORMACIÓN (NO OBSERVO LA INFORMACIÓN)</span>
+                    <span class="badge badge-soft-success py-1" id="etiquetaTitle">${etiqueta}</span>
                 </li>
                 <li class="list-inline-item fs-18 me-3 dropdown">
                     <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#voicecall">
@@ -463,7 +464,7 @@ function chatDetail(numero, name) {
                         <a class="dropdown-item" href="javascript: void(0);" onclick="viewProfle()">
                             <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
                         </a>
-                        <a class="dropdown-item" href="javascript: void(0);"><i
+                        <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         <a class="dropdown-item" href="javascript: void(0);"><i
                                 class="bi bi-search fs-18 me-2"></i>Buscar</a>
@@ -1428,3 +1429,103 @@ function cerrarRes() {
     const resm = document.getElementById('responderMessage');
     resm.innerHTML = "";
 }
+
+const embudohtml = document.getElementById('embudo');
+const etiquetahtml = document.getElementById('etiqueta');
+const idpot = document.getElementById('idpot');
+
+function etiquetaCliente(potencial, etiqueta) {
+    $("#modalEtiqueta").modal("show");
+
+    idpot.value = potencial;
+
+    const formData = new FormData();
+
+    formData.append('potencial', potencial);
+    formData.append('etiqueta', etiqueta);
+
+    fetch('/getEmbudoEtiqueta/'+etiqueta)
+    .then(res => res.json())
+    .then(data => {
+
+        let select_embudo = "";
+        let select_etiqueta = "";
+
+        let embudoData = data.embudo;
+        let etiquetaData = data.etiqueta;
+
+        embudoData.forEach(embudo => {
+            if(embudo.id === data.embudo_id) {
+                select_embudo += `<option value="${embudo.id}" selected="">${embudo.descripcion}</option>`;
+            } else {
+                select_embudo += `<option value="${embudo.id}">${embudo.descripcion}</option>`;
+            }
+            
+        });
+
+        embudohtml.innerHTML = select_embudo;
+
+        etiquetaData.forEach(etiq => {
+            if(etiq.id === etiqueta) {
+                select_etiqueta += `<option value="${etiq.id}" selected="">${etiq.descripcion}</option>`;
+            } else {
+                select_etiqueta += `<option value="${etiq.id}">${etiq.descripcion}</option>`;
+            }
+            
+        });
+
+        etiquetahtml.innerHTML = select_etiqueta;
+
+    })
+}
+
+embudohtml.addEventListener('change', (e) => {
+    e.preventDefault();
+
+    const id = e.target.value;
+
+    fetch('/getEtiquetaEmbudo/'+id)
+    .then(res => res.json())
+    .then(data => {
+        const eti = data.etiquetas;
+        let html = "";
+
+        eti.forEach(etiqueta => {
+            html += `<option value="${etiqueta.id}">${etiqueta.descripcion}</option>`;
+        });
+
+        etiquetahtml.innerHTML = html;
+    })
+});
+
+const editar_etiqueta = document.getElementById('editar_etiqueta');
+
+editar_etiqueta.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const embudo = embudohtml.value;
+    const etiqueta = etiquetahtml.value;
+    const potencial = idpot.value;
+
+    fetch('/actualizarEtiqueta', {
+        method: 'POST',
+        body: JSON.stringify({
+            embudo: embudo,
+            etiqueta: etiqueta,
+            potencial: potencial
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            $("#modalEtiqueta").modal("hide");
+            alert('Se cambio correctamente de etiqueta');
+        } else {
+            alert('Comunicar con el administrador');
+        }
+    })
+
+});

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware } from "../controllers/chat.controller.js";
+import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta } from "../controllers/chat.controller.js";
 
 import corsMiddleware from "../middlewares/cors.js";
 
@@ -16,8 +16,11 @@ router.post('/messageFirestore', addMessageFirestore);
 router.get('/numeroWhatsapp', checkAuth, numerosWhatsapp);
 router.get('/ultimoMensaje/:id', traer_ultimo_mensaje);
 router.post('/subir_imagen', uploadImage);
+router.post('/actualizarEtiqueta', actualizarEtiqueta);
 router.get('/welcome/:id', asignarClienteAUnTrabajador);
 router.post('/insertChat', insertChat);
 router.post('/uploadAudio', audioMiddleware, uploadAudio);
+router.get('/getEmbudoEtiqueta/:id', getEmbudoEtiqueta);
+router.get('/getEtiquetaEmbudo/:id', getEtiquetaEmbudo);
 
 export default router;

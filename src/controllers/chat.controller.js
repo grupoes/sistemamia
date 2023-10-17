@@ -6,6 +6,7 @@ import { Trabajadores } from "../models/trabajadores.js";
 import { Asignacion } from "../models/asignacion.js";
 import { EtiquetaCliente } from "../models/etiquetaCliente.js";
 import { Etiqueta } from "../models/etiquetas.js";
+import { Embudo } from "../models/embudo.js";
 
 import { Op } from 'sequelize';
 
@@ -379,7 +380,9 @@ export const numerosWhatsapp = async(req, res) => {
                     asistente: nameAsistente,
                     idAsistente: idAsis,
                     rol: rol,
-                    etiqueta: eti.descripcion
+                    etiqueta: eti.descripcion,
+                    potencial_id: idpotencial,
+                    etiqueta_id: idetiqueta
                 }
 
                 arrayContactos.push(array)
@@ -724,4 +727,83 @@ export const uploadAudio = async (req, res) => {
     }
 }
 
+export const actualizarEtiqueta = async (req, res) => {
+    const { embudo, etiqueta, potencial } = req.body;
+    try {
+        const etiPo = await EtiquetaCliente.findOne({
+            where: {
+                cliente_id: potencial,
+                estado: 1
+            }
+        });
+
+        const idEC = etiPo.id;
+
+        const updateE = await EtiquetaCliente.update(
+            {
+                estado: 0
+            },
+            {
+                where: {
+                    id: idEC
+                }
+            }
+        );
+
+        const newE = await EtiquetaCliente.create({
+            cliente_id: potencial,
+            etiqueta_id: etiqueta,
+            estado: 1
+        });
+
+        return res.json({ message: 'ok', data: newE });
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const getEmbudoEtiqueta = async (req, res) => {
+    const etiqueta = req.params.id;
+    
+    try {
+
+        const dataEmbudo = await Etiqueta.findOne({
+            where: {
+                id: etiqueta
+            }
+        });
+
+        const emb = dataEmbudo.embudo_id;
+
+        const dataEtiqueta = await Etiqueta.findAll({
+            where: {
+                embudo_id: emb
+            }
+        });
+
+        const embudo = await Embudo.findAll();
+
+        return res.json({ mensaje: 'ok',etiqueta: dataEtiqueta, embudo_id: emb, embudo: embudo });
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
 export const audioMiddleware = uploadVoz.single('audio');
+
+export const getEtiquetaEmbudo = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const etiquetas = await Etiqueta.findAll({
+            where: {
+                embudo_id: id
+            }
+        });
+
+        res.json({message: 'ok', etiquetas: etiquetas});
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}

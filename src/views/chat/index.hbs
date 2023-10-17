@@ -27,16 +27,19 @@
 
 
     .quoted-message {
-        border-left: 4px solid #00bfa5; /* Línea vertical para la cita */
+        border-left: 4px solid #00bfa5;
+        /* Línea vertical para la cita */
         position: relative;
     }
 
     .quoted-message .audio-icon {
-        width: 20px; /* Ajusta según tus necesidades */
+        width: 20px;
+        /* Ajusta según tus necesidades */
     }
 
     .main-message.bg-success {
-        background-color: #34b7f1 !important; /* Cambia el color de fondo predeterminado de Bootstrap */
+        background-color: #34b7f1 !important;
+        /* Cambia el color de fondo predeterminado de Bootstrap */
     }
 </style>
 
@@ -217,6 +220,33 @@
 
 
 <audio id="audioPlayer" style="display: none;">
-  <source src="/audios/whatsapp/whatsapp-campana.mp3" type="audio/mpeg">
-  Tu navegador no soporta la reproducción de audio.
+    <source src="/audios/whatsapp/whatsapp-campana.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
 </audio>
+
+<!-- Modal -->
+<div class="modal fade" id="modalEtiqueta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEtiqueta">Editar Etiqueta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="idpot" value="">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Embudo:</label>
+                    <select name="embudo" id="embudo" class="form-select"></select>
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Etiqueta:</label>
+                    <select name="etiqueta" id="etiqueta" class="form-select"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="editar_etiqueta">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
