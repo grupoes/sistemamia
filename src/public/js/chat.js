@@ -109,7 +109,7 @@ function mostrar_chat(numero) {
             data.forEach(msj => {
                 let fecha_y_hora = convertTimestampToDate(msj.timestamp);
 
-                if (msj.from != '51927982544') {
+                if (msj.from != '51938669769') {
                     switch (msj.typeMessage) {
                         case "text":
                             html += viewFromText(msj, fecha_y_hora);
@@ -563,7 +563,7 @@ socket.on("messageChat", data => {
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
-    if (data.from != '51927982544') {
+    if (data.from != '51938669769') {
         switch (data.typeMessage) {
             case "text":
                 let text = viewFromText(data, fecha_y_hora);
@@ -1187,7 +1187,7 @@ function formMessage() {
 
                 let datos = {
                     id: result.messages[0].id,
-                    from: "51927982544",
+                    from: "51938669769",
                     message: contentMensaje.value,
                     nameContact: "Grupo Es consultores",
                     receipt: whatsappNumber.value,
