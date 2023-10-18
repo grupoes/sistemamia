@@ -133,7 +133,7 @@ function mostrar_chat(numero) {
 
 
                 } else {
-
+                    console.log(msj.typeMessage);
                     switch (msj.typeMessage) {
                         case "text":
                             html += viewReceipText(msj, fecha_y_hora);
@@ -875,10 +875,11 @@ function viewFromDocument(data, fecha) {
 }
 
 function viewReceipText(data, fecha) {
-
+    
     let resp = "";
 
     if (data.mensajeRelacionado) {
+        console.log(data.mensajeRelacionado.typeMessage);
         if(data.mensajeRelacionado.typeMessage === 'text') {
             resp = mensajeRespondidoReceipText(data.mensajeRelacionado);
         }
@@ -886,6 +887,8 @@ function viewReceipText(data, fecha) {
         if(data.mensajeRelacionado.typeMessage === 'image') {
             resp = mensajeRespondidoReceipImagen(data.mensajeRelacionado);
         }
+    } else {
+        console.log("no llego hasta aca");
     }
 
     let html = `
