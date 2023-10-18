@@ -8,7 +8,8 @@ export const viewPotenciales = (req, res) => {
     ];
     const js = [
         'assets/libs/datatables.net/js/jquery.dataTables.min.js',
-        'assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js'
+        'assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js',
+        'js/potencialcliente.js'
     ];
 
     res.render('clientes/potenciales', { layout: 'partials/main', js });
@@ -77,4 +78,17 @@ export const updateArea = async (req, res) => {
     } catch (error) {
         return res.status(400).json({message: error.message});
     }
+}
+
+export const viewCreatePotencial = (req, res) => {
+    const css = [
+        'assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css'
+    ];
+    const js = [
+        'assets/libs/datatables.net/js/jquery.dataTables.min.js',
+        'assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js',
+        'js/potencialcliente.js'
+    ];
+
+    res.render('clientes/crear_potencial_cliente', { layout: 'partials/main', js });
 }

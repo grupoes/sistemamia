@@ -1,0 +1,183 @@
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Crear Potencial Cliente</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Lista</a></li>
+                    <li class="breadcrumb-item active">Clientes Potenciales</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" id="formCustomer">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">Tipo Documento</label>
+                                <select class="form-select" name="tipo_documento">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">N° de Documento de
+                                    Identidad</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="numero_documento"
+                                        placeholder="Ingrese el número del documento" aria-label="Recipient's username"
+                                        aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button"><i
+                                                class="uil-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Nombre</label>
+                                <input type="text" class="form-control" id="formrow-firstname-input"
+                                    name="customerName">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Apellidos</label>
+                                <input type="text" class="form-control" id="formrow-firstname-input" name="lastName">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Ciudad</label>
+                                <input type="text" class="form-control" id="formrow-firstname-input" name="city">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Distrito</label>
+                                <select class="form-select" name="distrito">
+                                    <option>....</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Institución (Universidad,
+                                    Instituto, etc)</label>
+                                <select class="form-select" name="universidad">
+                                    <option value="">Seleccionar</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Nivel</label>
+                                <select class="form-select" name="nivel">
+                                    <option value="">Seleccionar...</option>
+                                    <option>PREGRADO</option>
+                                    <option value="">POSTGRADO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Ciclo</label>
+                                <select class="form-select" name="ciclo">
+                                    <option value="">Seleccionar...</option>
+                                    <option>10</option>
+                                    <option value="">9</option>
+                                    <option value="">8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Especialidad</label>
+                                <select class="form-select" name="especialidad">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Celular</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="paises"
+                                        data-placeholder="buscar" name="prefijo">
+                                        <option value="51">+51 Perú</option>
+                                    </select>
+                                    <input type="text" class="form-control" name="celularCliente" id="celularCliente">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Correo Electrónico</label>
+                                <input type="text" class="form-control" id="formrow-firstname-input" name="email">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Contacto</label>
+                                <select class="form-select" name="contacto">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Embudo</label>
+                                <select class="form-select" name="embudo" id="embudo">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Etiqueta</label>
+                                <select class="form-select" name="etiqueta" id="etiqueta">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="formrow-firstname-input">Plantilla</label>
+                                <select class="form-select" name="plantilla" id="plantilla">
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3 text-center">
+                                <a href="/clientes-potenciales" class="btn btn-danger">REGRESAR</a>
+                                <button type="submit" class="btn btn-primary">GUARDAR</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->

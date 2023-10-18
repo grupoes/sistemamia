@@ -712,7 +712,7 @@ export const uploadAudio = async (req, res) => {
                 estadoMessage: "sent",
                 documentId: "",
                 id_document: Math.floor(Date.now() / 1000),
-                filename: timestamp + '.ogg'
+                filename: timestamp + '.mp3'
             });
 
             return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
@@ -803,6 +803,125 @@ export const getEtiquetaEmbudo = async (req, res) => {
         });
 
         res.json({message: 'ok', etiquetas: etiquetas});
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const enviar_mensaje_icono_whatsapp = async (req, res) => {
+    const { nombre, numero } = req.body;
+
+    try {
+        const existeChat = await Chat.count({
+            where: {
+                from: String(numero)
+            }
+        });
+
+        if(existeChat === 0) {
+            const newPotencial = await PotencialCliente.create({
+                nombres: nombre,
+                apellidos: "",
+                fecha_ingreso: new Date(),
+                fecha_registro: new Date(),
+                prefijo_celular: 51,
+                numero_celular: 51,
+                prefijo_whatsapp: 51,
+                numero_whatsapp: numero
+            });
+
+            const newNumeroWhatsapp =await NumeroWhatsapp.create({
+                from: numero,
+                nameContact: nombre,
+                estado: 1
+            });
+
+            const totalTrabajadores = await Trabajadores.count({
+                where: {
+                    area_id: 2
+                }
+            });
+
+            // 2. Obtiene cuántas asignaciones ya existen
+            const totalAsignaciones = await Asignacion.count();
+    
+            // 3. Usa el operador módulo para determinar el siguiente trabajador
+            const trabajadorAsignado = totalAsignaciones % totalTrabajadores;
+    
+            // 4. Obtiene el ID del trabajador al que se asignará el cliente
+            const trabajador = await Trabajadores.findOne({
+                where: {
+                    area_id: 2
+                },
+                offset: trabajadorAsignado
+            });
+
+            // 5. Crea una nueva asignación con el cliente y el trabajador determinado
+            const newAsignacion = await Asignacion.create({
+                fecha_asignacion: new Date(),
+                estado: 1,  // o el estado que corresponda
+                trabajadoreId: trabajador.id,
+                potencialClienteId: newPotencial.id
+                
+            });
+
+            const mensajeJSON = {
+                "messaging_product": "whatsapp",
+                "to": numero,
+                "type": "template",
+                "template": {
+                  "name": "ejemplo",
+                  "language": { "code": "es" },
+                  "components": [
+                    {
+                      "type": "body",
+                      "parameters": [
+                        {
+                          "type": "text",
+                          "text": trabajador.nombres
+                        },
+                        {
+                          "type": "text",
+                          "text": trabajador.apellidos
+                        }
+                      ]
+                    }
+                  ]
+                }
+            };
+            
+            // URL de la API a la que deseas enviar el JSON
+            const apiUrl = process.env.URL_MESSAGES;
+            
+            // Token de autenticación
+            const authToken = process.env.TOKEN_WHATSAPP;
+
+            try {
+                // Realizar una solicitud POST a la API con el JSON y el token de autenticación
+                const response = await axios.post(apiUrl, mensajeJSON, {
+                  headers: {
+                    'Authorization': `Bearer ${authToken}`
+                  }
+                });
+
+                const data = response.data;
+            
+                const messageStatus = data.messages[0].message_status;
+
+                if(messageStatus === 'accepted') {
+
+                } else {
+                    return res.json({message: "No fue enviado la plantilla"});
+                }
+
+            } catch (error) {
+                return res.json({message: error.message});
+            }
+
+            return res.json(trabajador.id);
+
+        }
+
     } catch (error) {
         return res.json({message: error.message});
     }
