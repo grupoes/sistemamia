@@ -1589,7 +1589,7 @@ btnAsignar.addEventListener('click', (e) => {
             numero: whatsapp.value,
         }),
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         }
     })
     .then(res => res.json())
@@ -1604,3 +1604,146 @@ btnAsignar.addEventListener('click', (e) => {
     })
 
 });
+
+//Agregar Contacto
+const newContacto = document.getElementById('newContact');
+const btnAgregar = document.getElementById('btnNuevoContacto');
+
+newContacto.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    $("#modalNuevoContacto").modal('show');
+});
+
+btnAgregar.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const nameContacto = document.getElementById('nombreContacto');
+    const codigopais = document.getElementById('codigopais');
+    const nWhatsapp = document.getElementById('nWhatsapp');
+
+    const numero = nWhatsapp.value;
+
+    if (numero.length != 9) {
+        alert('Ingrese el número de whatsapp de 9 dígitos');
+        return false;
+    }
+
+    const numeroChat = codigopais.value+""+numero;
+
+    e.target.disabled = true;
+
+    fetch('/addContact', {
+        method: 'POST',
+        body: JSON.stringify({
+            numero: numeroChat,
+            name: nameContacto.value,
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        e.target.disabled = false;
+        if(data.message === 'ok') {
+            $("#modalNuevoContacto").modal("hide");
+            alert('Se agrego correctamente');
+        } else {
+            if (data.message === 'existe') {
+                alert(data.data);
+            } else {
+                alert('Comunicar con el administrador');
+            }
+        }
+    })
+});
+
+//ver contactos
+const misContactos = document.getElementById('misContactos');
+
+const buscar = document.getElementById('buscarContact');
+
+const lista = document.getElementById('listaCont');
+
+misContactos.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    buscar.value = "";
+    lista.innerHTML = "";
+
+    $("#modalContacts").modal('show');
+
+    contactosLista(buscar.value);
+});
+
+buscar.addEventListener('keyup', (e) => {
+    const busqueda = e.target.value;
+    console.log("hola");
+
+    contactosLista(busqueda);
+});
+
+function contactosLista(buscar) {
+    fetch('/getContacts', {
+        method: 'POST',
+        body: JSON.stringify({
+            buscar: buscar
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const datos = data.data;
+
+        let html = "";
+
+        datos.forEach(contact => {
+            html += `
+            <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente})">
+                <img src="assets/images/users/avatar-7.jpg" class="avatar rounded me-3" alt="shreyu">
+                <div class="flex-grow-1">
+                    <h5 class="mt-1 mb-0 fs-15">${contact.name}</h5>
+                    <h6 class="text-muted fw-normal mt-1 mb-2">${contact.numero}</h6>
+                </div>
+                <div class="dropdown align-self-center float-end">
+                    <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="uil uil-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="uil uil-edit-alt me-2"></i>Edit
+                        </a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="uil uil-exit me-2"></i>Remove from Team
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item text-danger">
+                            <i class="uil uil-trash me-2"></i>Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+
+        lista.innerHTML = html;
+    })
+}
+
+function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente) {
+    console.log('hola');
+
+    $("#modalContacts").modal('hide');
+
+    chatDetail(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente);
+}

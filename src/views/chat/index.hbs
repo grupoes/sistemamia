@@ -41,6 +41,16 @@
         background-color: #34b7f1 !important;
         /* Cambia el color de fondo predeterminado de Bootstrap */
     }
+
+    #buscarContact::placeholder {
+        padding: 5px;
+        /* Ajusta el valor de acuerdo a tus necesidades */
+    }
+
+    #buscarContact {
+        padding: 10px;
+        /* Ajusta el valor de acuerdo a tus necesidades */
+    }
 </style>
 
 <!-- start page title -->
@@ -78,18 +88,20 @@
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-people fs-18 me-2"></i>New Group</a>
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
+                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
+                                            class="bi bi-people fs-18 me-2"></i>New Group</a>-->
+                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
                                             class="bi bi-person-lines-fill fs-18 me-2"></i>Contacts</a>
                                     <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-bookmark fs-18 me-2"></i>Saved Message</a>
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-person-plus fs-18 me-2"></i>Invite Friends</a>
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
+                                            class="bi bi-bookmark fs-18 me-2"></i>Saved Message</a>-->
+                                    <a class="dropdown-item" href="javascript: void(0);" id="newContact"><i
+                                            class="bi bi-person-plus fs-18 me-2"></i>Nuevo Contacto</a>
+                                    <a class="dropdown-item" href="javascript: void(0);" id="misContactos"><i
+                                            class="bi bi-person-lines-fill fs-18 me-2"></i>Contactos</a>
+                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
                                             class="bi bi-question-circle fs-18 me-2"></i>Help</a>
                                     <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-gear fs-18 me-2"></i>Setting</a>
+                                            class="bi bi-gear fs-18 me-2"></i>Setting</a>-->
                                 </div>
                             </li>
                         </ul>
@@ -269,6 +281,81 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id="btnAsignarEmpleado">Asignar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalNuevoContacto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEtiqueta">Nuevo Contacto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="nombreContacto" class="col-form-label">Nombre Contacto:</label>
+                            <input type="text" class="form-control" id="nombreContacto">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="nWhatsapp" class="col-form-label">Código:</label>
+                            <select name="codigopais" id="codigopais" class="form-select">
+                                <option value="51">+51</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="nWhatsapp" class="col-form-label">Numero de Whatsapp:</label>
+                            <input type="number" class="form-control" id="nWhatsapp">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnNuevoContacto">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Long Content Scroll Modal -->
+<div class="modal fade" id="modalContacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">CONTACTOS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div style="padding: 0 1rem;">
+                <div class="chat-search" style="height: 40px">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Buscar..." id="buscarContact" value="">
+                        <button class="btn input-group-text" type="submit">
+                            <i class="uil uil-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-body" id="listaCont">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
