@@ -352,7 +352,10 @@ function loadContact() {
 
 function viewContact(data) {
     let html = "";
-    data.forEach(contact => {
+    const datos = data.data;
+    const rol = data.rol;
+
+    datos.forEach(contact => {
         let hourMessage = formatDate(contact.time);
 
         let countMessage = "";
@@ -370,7 +373,7 @@ function viewContact(data) {
         nameContact = nameContact.replace("'", "");
 
         html += `
-        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id})">
+        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})">
             <div class="d-flex align-items-start p-2">
                 <div class="position-relative">
                     <span class="user-status"></span>
@@ -430,7 +433,15 @@ function chatPrincipalView() {
 
 chatPrincipalView();
 
-function chatDetail(numero, name, etiqueta, potencial, etiqueta_id) {
+function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado) {
+
+    let asignar = "";
+
+    if(rol === 1 || rol === 3) {
+        asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${potencial}, ${asignado})"><i
+        class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
+    }
+
     let html = `
     <div class="d-flex pb-2 border-bottom align-items-center">
         <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded-circle" height="48" alt="Cliente" />
@@ -466,8 +477,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id) {
                         </a>
                         <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
-                        <a class="dropdown-item" href="javascript: void(0);"><i
-                                class="bi bi-search fs-18 me-2"></i>Buscar</a>
+                        ${asignar}
                         
                     </div>
                 </li>
@@ -1526,6 +1536,68 @@ editar_etiqueta.addEventListener('click', (e) => {
         if(data.message === 'ok') {
             $("#modalEtiqueta").modal("hide");
             alert('Se cambio correctamente de etiqueta');
+        } else {
+            alert('Comunicar con el administrador');
+        }
+    })
+
+});
+
+function asignarChat(cliente, asignado) {
+    $("#modalAsignar").modal("show");
+
+    const idpotencial = document.getElementById('idcp');
+
+    idpotencial.value = cliente;
+
+    fetch('/getEmpleadosAsignar')
+    .then(res => res.json())
+    .then(data => {
+        const trabajador = document.getElementById('trabajador');
+        
+        let option = "";
+
+        let datos = data.data;
+
+        datos.forEach(tra => {
+            if(tra.id === asignado) {
+                option += `<option value="${tra.id}" selected>${tra.nombres} ${tra.apellidos}</option>`;
+            } else {
+                option += `<option value="${tra.id}">${tra.nombres} ${tra.apellidos}</option>`;
+            }
+            
+        });
+
+        trabajador.innerHTML = option;
+    })
+}
+
+const btnAsignar = document.getElementById('btnAsignarEmpleado');
+
+btnAsignar.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.target.disabled = true;
+
+    const whatsapp = document.getElementById('whatsappNumber');
+    const cliente = document.getElementById('idcp');
+    const tra = document.getElementById('trabajador');
+
+    fetch('/asignarAsistente', {
+        method: 'POST',
+        body: JSON.stringify({
+            asistente: tra.value,
+            numero: whatsapp.value,
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        e.target.disabled = true;
+        if(data.message === 'ok') {
+            $("#modalAsignar").modal("hide");
+            alert('Se asigno correctamente');
         } else {
             alert('Comunicar con el administrador');
         }

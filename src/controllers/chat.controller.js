@@ -391,10 +391,10 @@ export const numerosWhatsapp = async(req, res) => {
 
         if(rol === 2) {
             const filterData = arrayContactos.filter(item => item.idAsistente === id);
-            return res.json(filterData);  
-        } 
+            return res.json({message: "ok", data: filterData, rol: rol});
+        }
 
-        return res.json(arrayContactos);    
+        return res.json({message: "ok",data: arrayContactos, rol: rol });    
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
@@ -921,6 +921,69 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
             return res.json(trabajador.id);
 
         }
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const socketMensaje = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const chat = await Chat.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if(chat.idRes) {
+            const mensajeIdRes = await Chat.findOne({ where: { codigo: chat.idRes } });
+
+            if (mensajeIdRes) {
+                let plainObject = chat.get({ plain: true });
+                // Agrega el mensajeIdRes como un nuevo campo 'mensajeRelacionado' en el objeto plainObject
+                plainObject.mensajeRelacionado = mensajeIdRes.get({ plain: true });
+            }
+        }
+
+        return res.json(chat);
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+
+}
+
+export const getEmpleadosAsignar = async (req, res) => {
+    try {
+
+        // IDs de perfiles que deseas consultar (1 y 6)
+        const perfilesAConsultar = [2, 6];
+
+        const trabajadores = await Trabajadores.findAll({
+            where: {
+                area_id: {
+                    [Op.in]: perfilesAConsultar
+                }
+            }
+        });
+
+        return res.json({ message: 'ok', data: trabajadores });
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const asignarAsistente = async (req, res) => {
+    const { numero, asistente } = req.body;
+    try {
+        console.log(numero)
+        const actualizar = await NumeroWhatsapp.update({ asistente: asistente }, {
+            where: { from: numero }
+        });
+
+        return res.json({ message: 'ok', data: actualizar });
 
     } catch (error) {
         return res.json({message: error.message});

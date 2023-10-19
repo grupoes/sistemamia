@@ -87,8 +87,11 @@ pubsub.addChannel('new_contact', async(data) => {
     console.log('New contact added:', data);
 
     try {
-        
-        io.emit("messageChat", data);
+        const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/socketMensaje/"+data.id);
+
+        const datos = response.data;
+
+        io.emit("messageChat", datos);
         
     } catch (error) {
         console.log(error.message);
