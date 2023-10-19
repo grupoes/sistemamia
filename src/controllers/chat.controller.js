@@ -389,7 +389,7 @@ export const numerosWhatsapp = async(req, res) => {
             }
         }
 
-        if(rol === 2) {
+        if(rol === 2 || rol === 6) {
             const filterData = arrayContactos.filter(item => item.idAsistente === id);
             return res.json({message: "ok", data: filterData, rol: rol});
         }
