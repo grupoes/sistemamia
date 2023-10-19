@@ -527,7 +527,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                                 </div>
                                 <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
                                 <div class="d-grid">
-                                <button type="submit" class="btn btn-success chat-send"><i
+                                <button type="submit" class="btn btn-success chat-send" id="sendChat"><i
                                         class='uil uil-message'></i></button>
                                 </div>
                             </div>
@@ -1114,6 +1114,7 @@ function formMessage() {
     const form_envio = document.getElementById('chat-form');
     const contentMensaje = document.getElementById('contentMensaje');
     const whatsappNumber = document.getElementById('whatsappNumber');
+    const sendChat = document.getElementById('sendChat');
 
     form_envio.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1127,6 +1128,8 @@ function formMessage() {
         if (contentMensaje.value === "") {
             return false;
         }
+
+        sendChat.disabled = true;
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -1233,6 +1236,7 @@ function formMessage() {
             .finally(() => {
                 contentMensaje.value = "";
                 document.getElementById('responderMessage').innerHTML = "";
+                sendChat.disabled = false;
             });
     })
 }
