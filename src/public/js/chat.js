@@ -1346,13 +1346,15 @@ function grabarAudio() {
         }
     });
 
-    sendButton.addEventListener('click', () => {
+    sendButton.addEventListener('click', (e) => {
         // Enviar al servidor
         const formData = new FormData();
         formData.append('audio', audioBlob);
         formData.append('numero', numeroW.value);
 
         //console.log(audioBlob);
+
+        e.target.disabled = true;
 
         fetch('/uploadAudio', {
             method: 'POST',
@@ -1361,11 +1363,13 @@ function grabarAudio() {
         .then(response => response.json())
         .then(data => {
             //console.log(data);
+            e.target.disabled = false;
             audioElement.style.display = "none";
             sendButton.style.display = "none";
 
             const conversation = document.getElementById('conversation-'+numeroW.value);
             conversation.scrollTop = conversation.scrollHeight;
+
         })
         .catch(error => console.error('Error:', error));
     });
