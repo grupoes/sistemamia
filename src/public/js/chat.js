@@ -100,13 +100,15 @@ function mostrar_chat(numero) {
         .then(data => {
             let html = "";
 
+            const datos = data.data;
+
             const conversation = document.getElementById('conversation-' + numero);
 
-            if (!Array.isArray(data)) {
+            if (!Array.isArray(datos)) {
                 conversation.innerHTML = html;
             }
 
-            data.forEach(msj => {
+            datos.forEach(msj => {
                 let fecha_y_hora = convertTimestampToDate(msj.timestamp);
 
                 if (msj.from != '51938669769') {
@@ -501,7 +503,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                     <div class="col mb-2 mb-sm-0">
                         <input type="text" class="form-control border-0" name="mensaje_form"
                             placeholder="Ingrese el mensaje" required="" id="contentMensaje">
-                        <div class="invalid-feedback">
+                        <ul id="listaSugerencias"></ul>
+                        <div class="" id="horas_transcurridas">
                             Por favor ingrese su mensaje
                         </div>
                     </div>

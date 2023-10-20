@@ -104,7 +104,7 @@ export const mensajes_numero = async (req, res) => {
         });
 
         if (mensajes.length === 0) {
-            return res.status(404).json({ message: 'No se encontraron mensajes.' });
+            return res.status(404).json({ message: 'No_hay', data: 'No se encontraron mensajes' });
         }
 
         for (let mensaje of mensajes) {
@@ -124,11 +124,11 @@ export const mensajes_numero = async (req, res) => {
             }
         }
 
-        return res.json(mensajes);
+        return res.json({ message: 'ok', data: mensajes });
 
     } catch (error) {
         console.error('Error obteniendo los documentos', error);
-        return res.status(500).json({ message: "Error interno del servidor." });
+        return res.status(500).json({ message: "error", data: 'Error interno del servidor.' });
     }
 };
 
@@ -442,9 +442,43 @@ const storage = multer.diskStorage({
         
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`)
+        const newFilename = changeNameFile(file.originalname);
+        cb(null, `${Date.now()}-${newFilename}`)
     }
 });
+
+function changeNameFile(filename) {
+    // Reemplazar espacios por guiones
+    const textoSinEspacios = filename.replace(/\s+/g, '-');
+
+    // Quitar tildes y caracteres especiales
+    const textoLimpio = quitarTildes(textoSinEspacios);
+
+    return textoLimpio;
+}
+
+function quitarTildes(texto) {
+    return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s-.]/g, "") // Excluimos el punto (.)
+        .replace(/[\s]+/g, "-")
+        .replace(/[áéíóúÁÉÍÓÚ]/g, function(match) {
+        switch (match) {
+            case 'á': return 'a';
+            case 'é': return 'e';
+            case 'í': return 'i';
+            case 'ó': return 'o';
+            case 'ú': return 'u';
+            case 'Á': return 'A';
+            case 'É': return 'E';
+            case 'Í': return 'I';
+            case 'Ó': return 'O';
+            case 'Ú': return 'U';
+        }
+        })
+        .toLowerCase();
+}
 
 const upload = multer({ storage: storage });
 
@@ -461,6 +495,8 @@ export const uploadImage = async (req, res, next) => {
         let url_imagen;
         let typeFile;
         let dataFile;
+
+        return;
 
         const ar = req.file;
 
