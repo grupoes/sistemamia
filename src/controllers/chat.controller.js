@@ -496,8 +496,6 @@ export const uploadImage = async (req, res, next) => {
         let typeFile;
         let dataFile;
 
-        return;
-
         const ar = req.file;
 
         if(ar.mimetype == 'video/mp4' || ar.mimetype === 'video/webm') {
