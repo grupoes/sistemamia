@@ -19,9 +19,20 @@ import plantillas from './routes/plantilla.routes.js';
 
 const app = express();
 
+const whitelist = [
+    'https://grupoesconsultores.com',
+    'https://console.firebase.google.com/project/whatsapp-api-data/overview'
+];
+
 const corsOptions = {
     exposedHeaders: ['Authorization'],
-    origin: 'https://grupoesconsultores.com',
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
     methods: 'POST',
     allowedHeaders: ['Content-Type']
 };
