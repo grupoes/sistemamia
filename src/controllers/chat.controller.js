@@ -592,6 +592,16 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
             }
         });
 
+        const existeChatReceipt = await Chat.count({
+            where: {
+                receipt: String(numero)
+            }
+        });
+
+        if(existeChatReceipt != 0) {
+            return res.json({message: "ya existe"});
+        }
+
         if(existeChat == 1) {
             const potencial = await PotencialCliente.findOne({
                 where: {
