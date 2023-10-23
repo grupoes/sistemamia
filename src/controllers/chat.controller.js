@@ -876,12 +876,6 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 numero_whatsapp: numero
             });
 
-            const newNumeroWhatsapp =await NumeroWhatsapp.create({
-                from: numero,
-                nameContact: nombre,
-                estado: 1
-            });
-
             const totalTrabajadores = await Trabajadores.count({
                 where: {
                     area_id: 2
@@ -900,6 +894,13 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                     area_id: 2
                 },
                 offset: trabajadorAsignado
+            });
+
+            const newNumeroWhatsapp =await NumeroWhatsapp.create({
+                from: numero,
+                nameContact: nombre,
+                estado: 1,
+                asistente: trabajador.id
             });
 
             // 5. Crea una nueva asignación con el cliente y el trabajador determinado
@@ -996,6 +997,8 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 return res.json({message: error.message});
             }
 
+        } else {
+            return res.json({message: "Ya existe"});
         }
 
     } catch (error) {
