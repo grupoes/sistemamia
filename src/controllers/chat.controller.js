@@ -842,6 +842,8 @@ export const getEtiquetaEmbudo = async (req, res) => {
     }
 }
 
+//enviar plantilla del icono de whatsapp de la pagina web
+
 export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     const { nombre, numero } = req.body;
 
@@ -942,7 +944,31 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
             
                 const messageStatus = data.messages[0].message_status;
 
+                const messageSend = `Buen día ☀️, le saluda ${trabajador.nombres} ${trabajador.apellidos} Asistente administrativa 📋 de Grupo ES Consultores "Asesores de investigación" (Tesis) 📚. Nos escribió ✍️ solicitando información acerca de nuestros servicios y me encantaría poder ayudarlo(a) 🤝.
+
+                🙋 ¿Cuál es su nombre?
+                🎓 ¿De qué especialidad y de qué universidad es Ud.?
+                🌍 ¿Desde qué departamento nos escribe?`;
+
                 if(messageStatus === 'accepted') {
+
+                    const newMessage = await Chat.create({
+                        codigo: data.messages[0].id,
+                        from: process.env.NUMERO_WHATSAPP,
+                        message: messageSend,
+                        nameContact: "Grupo Es Consultores",
+                        receipt: numero,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        typeMessage: "text",
+                        estadoMessage: "sent",
+                        documentId: "",
+                        id_document: "",
+                        filename: "",
+                        fromRes: "",
+                        idRes: ""
+                    });
+
+                    return res.json({ message: 'ok', data: newMessage });
 
                 } else {
                     return res.json({message: "No fue enviado la plantilla"});
@@ -951,8 +977,6 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
             } catch (error) {
                 return res.json({message: error.message});
             }
-
-            return res.json(trabajador.id);
 
         }
 

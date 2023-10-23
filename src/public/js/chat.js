@@ -504,7 +504,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                         <input type="text" class="form-control border-0" name="mensaje_form"
                             placeholder="Ingrese el mensaje" required="" id="contentMensaje">
                         <ul id="listaSugerencias"></ul>
-                        <div class="" id="horas_transcurridas">
+                        <div class="" id="horas_transcurridas" style="display:none">
                             Por favor ingrese su mensaje
                         </div>
                     </div>
@@ -521,11 +521,14 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                                 <div class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-143px, 21px);">
                                     <!-- item-->
                                     <a href="javascript:void(0);" class="dropdown-item" onclick="fileWhatsapp()">
-                                        <i class="uil uil-refresh me-2"></i>fotos y videos
+                                        <i class="uil-image-upload me-2"></i>fotos y videos
                                     </a>
                                     <!-- item-->
                                     <a href="javascript:void(0);" class="dropdown-item" onclick="documentoFile()">
-                                        <i class="uil uil-user-plus me-2"></i>Documento
+                                        <i class="uil-file-upload-alt me-2"></i>Documento
+                                    </a>
+                                    <a href="javascript:void(0);" class="dropdown-item" onclick="plantillaGet()">
+                                        <i class="uil-file-landscape-alt me-2"></i>Plantilla
                                     </a>
                                 </div>
                                 <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
@@ -1758,3 +1761,88 @@ function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol
 
     chatDetail(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente);
 }
+
+const escogePlantilla = document.getElementById('escogePlantilla');
+
+function plantillaGet() {
+    $("#modalPlantilla").modal("show");
+
+    fetch('/getPlantillas')
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.message === 'ok') {
+            const plantilas = data.data;
+
+            let html = `<option value="">Seleccione...</option>`;
+
+            plantilas.forEach(plantilla => {
+                html += `<option value="${plantilla.id}">${plantilla.nombre}</option>`;
+            });
+
+            escogePlantilla.innerHTML = html;
+
+        } else {
+            alert('Intente de nuevo o contactarse con el administrador');
+        }
+
+    })
+}
+
+escogePlantilla.addEventListener('change', (e) =>  {
+    e.preventDefault();
+
+    const contentPlantilla = document.getElementById('contenidoPlantilla');
+
+    const html = `
+    <div class="col-md-12">
+        <div class="mb-3">
+            <label for="encabezado" class="col-form-label">Encabezado:</label>
+            <p>Video</p>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="mb-3">
+            <label for="cuerpo" class="col-form-label">Cuerpo:</label>
+            <p>¡!!_bienvenida_!! con excelentes noticias! 🎉</p>
+            <p>En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin.¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝</p>
+            <p>¡Contáctanos hoy mismo! 📚✨</p>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group mb-3">
+            <label for="cuerpo" class="col-form-label">Variables:</label>
+            <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable>
+            <span class="input-group-text" id="basic-addon2">!!_bienvenida_!!</span>
+        </div>
+    </div>
+    `;
+
+    contentPlantilla.innerHTML = html;
+
+});
+
+const btnEnviarPlatilla = document.getElementById('btnEnviarPlatilla');
+
+btnEnviarPlatilla.addEventListener('click', (e) => {
+    const idPlantilla = escogePlantilla.value;
+    const contentVariable = document.getElementById('contentVariable');
+    const numberWhat = document.getElementById('whatsappNumber');
+
+    fetch('/sendPlantilla', {
+        method: 'POST',
+        body: JSON.stringify({
+            idPlantilla: idPlantilla,
+            contentVariable: contentVariable.value,
+            numero: numberWhat.value
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+    })
+});
