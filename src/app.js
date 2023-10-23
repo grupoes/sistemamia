@@ -26,13 +26,7 @@ const whitelist = [
 
 const corsOptions = {
     exposedHeaders: ['Authorization'],
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('No permitido por CORS'));
-        }
-    },
+    origin: 'https://grupoesconsultores.com',
     methods: 'POST',
     allowedHeaders: ['Content-Type']
 };
