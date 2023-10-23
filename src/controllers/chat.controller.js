@@ -272,68 +272,33 @@ export const numerosWhatsapp = async(req, res) => {
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        const results = await Chat.findAll({
-            attributes: ['from', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
-            group: ['from'],
-            order: [
-              [sequelize.literal('"max_timestamp" DESC')]
-            ],
-        });
+        const contactos = await NumeroWhatsapp.findAll();
 
-        let arrayContactos = [];
+        let array_ = [];
 
-        for (const result of results) {
-            let { from } = result;
-            let max_timestamp = result.get('max_timestamp');
-
-            if (from != process.env.NUMERO_WHATSAPP) {
-                console.log(from);
-                let resu = await Chat.findOne({
-                    attributes: ['receipt', [sequelize.fn('MAX', sequelize.col('timestamp')), 'max_timestamp']],
-                    where: {
-                        from: process.env.NUMERO_WHATSAPP,
-                        receipt: from
-                    },
-                    group: ['receipt'],
-                    order: [
-                        [sequelize.literal('max_timestamp DESC')]
+        for(const contacto of contactos) {
+            const ultimoChat = await Chat.findOne({
+                where: {
+                    [Op.or]: [
+                        { from: contacto.from },
+                        { receipt: contacto.from }
                     ]
-                });
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
 
-                let time = "";
-
-                if (resu) {
-                    let timestamp1 = resu.get('max_timestamp');
-
-                    if (max_timestamp > timestamp1) {
-                        time = max_timestamp;
-                    } else {
-                        time = timestamp1;
-                    }
-                } else {
-                    time = max_timestamp;
-                }
-
-                let mensa = await Chat.findOne({
-                    where: {
-                        timestamp: time
-                    }
-                });
+            if(ultimoChat) {
 
                 let chatCount = await Chat.count({
                     where: {
-                        from: from,
+                        from: contacto.from,
                         estadoMessage: "sent"
                     }
                 });
 
-                let name = await NumeroWhatsapp.findOne({
-                    where: {
-                        from: from
-                    }
-                });
-
-                let idAsis = name.asistente;
+                let idAsis = contacto.asistente;
 
                 let asistente = await Trabajadores.findOne({
                     where: {
@@ -349,7 +314,7 @@ export const numerosWhatsapp = async(req, res) => {
 
                 let poten = await PotencialCliente.findOne({
                     where: {
-                        numero_whatsapp: from
+                        numero_whatsapp: contacto.from
                     }
                 });
 
@@ -370,12 +335,13 @@ export const numerosWhatsapp = async(req, res) => {
                     }
                 });
 
+
                 let array = {
-                    numero: from,
-                    contact: name.nameContact,
-                    mensaje: mensa.message,
-                    estado: mensa.estadoMessage,
-                    time: time,
+                    numero: contacto.from,
+                    contact: contacto.nameContact,
+                    mensaje: ultimoChat.message,
+                    estado: ultimoChat.estadoMessage,
+                    time: ultimoChat.timestamp,
                     cantidad: chatCount,
                     asistente: nameAsistente,
                     idAsistente: idAsis,
@@ -385,16 +351,18 @@ export const numerosWhatsapp = async(req, res) => {
                     etiqueta_id: idetiqueta
                 }
 
-                arrayContactos.push(array)
+                array_.push(array);
             }
         }
 
+        const sortedData = array_.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+
         if(rol === 2 || rol === 6) {
-            const filterData = arrayContactos.filter(item => item.idAsistente === id);
+            const filterData = sortedData.filter(item => item.idAsistente === id);
             return res.json({message: "ok", data: filterData, rol: rol});
         }
 
-        return res.json({message: "ok",data: arrayContactos, rol: rol });    
+        return res.json({message: "ok",data: sortedData, rol: rol });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
