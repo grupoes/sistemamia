@@ -21,6 +21,7 @@ const app = express();
 
 const corsOptions = {
     exposedHeaders: ['Authorization'],
+    origin: 'https://grupoesconsultores.com'
 };
 
 app.use(cors(corsOptions));
