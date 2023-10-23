@@ -22,7 +22,7 @@ router.post('/insertChat', insertChat);
 router.post('/uploadAudio', audioMiddleware, uploadAudio);
 router.get('/getEmbudoEtiqueta/:id', getEmbudoEtiqueta);
 router.get('/getEtiquetaEmbudo/:id', getEtiquetaEmbudo);
-router.post('/sendMessageCustomerWhatsappIcocoWeb', enviar_mensaje_icono_whatsapp);
+router.post('/sendMensajeWhatsapp', enviar_mensaje_icono_whatsapp);
 router.get('/socketMensaje/:id', socketMensaje);
 router.get('/getEmpleadosAsignar', getEmpleadosAsignar);
 router.post('/asignarAsistente', asignarAsistente);

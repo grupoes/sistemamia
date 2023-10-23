@@ -901,44 +901,46 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 
             });
 
-            const mensajeJSON = {
-                "messaging_product": "whatsapp",
-                "to": numero,
-                "type": "template",
-                "template": {
-                  "name": "ejemplo",
-                  "language": { "code": "es" },
-                  "components": [
-                    {
-                      "type": "body",
-                      "parameters": [
+            try {
+
+                const mensajeJSON = {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": numero,
+                    "type": "template",
+                    "template": {
+                      "name": "mensaje_icono_whatsapp",
+                      "language": { "code": "es" },
+                      "components": [
                         {
-                          "type": "text",
-                          "text": trabajador.nombres
-                        },
-                        {
-                          "type": "text",
-                          "text": trabajador.apellidos
+                          "type": "body",
+                          "parameters": [
+                            {
+                              "type": "text",
+                              "text": trabajador.nombres
+                            },
+                            {
+                              "type": "text",
+                              "text": trabajador.apellidos
+                            }
+                          ]
                         }
                       ]
                     }
-                  ]
-                }
-            };
-            
-            // URL de la API a la que deseas enviar el JSON
-            const apiUrl = process.env.URL_MESSAGES;
-            
-            // Token de autenticación
-            const authToken = process.env.TOKEN_WHATSAPP;
+                };
 
-            try {
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: process.env.URL_MESSAGES,
+                    headers: { 
+                      'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                    },
+                    data: mensajeJSON
+                };
+
                 // Realizar una solicitud POST a la API con el JSON y el token de autenticación
-                const response = await axios.post(apiUrl, mensajeJSON, {
-                  headers: {
-                    'Authorization': `Bearer ${authToken}`
-                  }
-                });
+                const response = await axios(config);
 
                 const data = response.data;
             
