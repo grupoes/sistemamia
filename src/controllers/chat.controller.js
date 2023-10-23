@@ -860,7 +860,7 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     try {
         const existeChat = await Chat.count({
             where: {
-                from: String(numero)
+                receipt: String(numero)
             }
         });
 
