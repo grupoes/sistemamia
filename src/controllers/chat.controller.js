@@ -911,6 +911,12 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 
             });
 
+            const potEtiqueta = await EtiquetaCliente.create({
+                cliente_id: newPotencial.id,
+                etiqueta_id: 1,
+                estado: 1
+            });
+
             try {
 
                 const mensajeJSON = {
