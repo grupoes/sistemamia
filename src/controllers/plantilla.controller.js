@@ -1,4 +1,5 @@
 import { Plantilla } from "../models/plantilla.js";
+import { Chat } from "../models/chat.js";
 
 import axios from 'axios';
 
