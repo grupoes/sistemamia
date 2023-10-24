@@ -62,7 +62,9 @@ export const sendPlantilla = async (req, res) => {
             const response = await axios(config);
 
             const data = response.data;
-            
+
+            return res.json(data);
+
         } catch (err) {
             return res.status(400).json({ message: err.message });
         }
