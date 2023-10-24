@@ -1874,11 +1874,57 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
 });
 
 function editContact() {
-    $("#modalNuevoContacto").modal('show');
+    $("#modalEditarContacto").modal('show');
     const n = document.getElementById('whatsappNumber');
-    const nameCont = document.getElementById('nombreContacto');
-    const nueveDi = document.getElementById('nWhatsapp');
+    const nameCont = document.getElementById('nContacto');
+    const nueveDi = document.getElementById('what');
+
+    const conta = document.getElementById('nameContacto');
 
     nueveDi.value = n.value;
+    nameCont.value = conta.textContent;
 
 }
+
+const editarContact = document.getElementById('btnEditarContacto');
+
+editarContact.addEventListener('click', (e) => {
+
+    const nombre_contacto = document.getElementById('nContacto');
+    const whatsapp = document.getElementById('whatsappNumber');
+
+    fetch('/editContact', {
+        method: 'PUT',
+        body: JSON.stringify({
+            nombre_contacto: nombre_contacto.value,
+            whatsapp: whatsapp.value
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.message === 'ok') {
+            $("#modalEditarContacto").modal('hide');
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Se edito correctamente el contacto',
+                showConfirmButton: false,
+                timer: 2000
+            })
+
+            chatDetail(data.data.from,data.data.nameContact, data.datos.etiqueta, data.datos.potencial_id, data.datos.etiqueta_id, data.datos.rol, data.datos.idAsistente);
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No se pudo editar el contacto, intentalo otra vez!'
+            })
+        }
+
+    })
+});

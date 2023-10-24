@@ -175,6 +175,64 @@ export const getContacts = async (req, res) => {
     }
 }
 
+export const editContact = async (req, res) => {
+    const { nombre_contacto, whatsapp } = req.body;
+    try {
+
+        const rol = req.usuarioToken._role;
+        const id = req.usuarioToken._id;
+
+        const potencial = await PotencialCliente.findOne({
+            where: {
+                numero_whatsapp: whatsapp
+            }
+        });
+
+        const idpotencial = potencial.id;
+
+        const etiqCliente = await EtiquetaCliente.findOne({
+            where: {
+                cliente_id: idpotencial,
+                estado: 1
+            }
+        });
+
+        const etiqueta = await Etiqueta.findOne({
+            where: {
+                id: etiqCliente.etiqueta_id
+            }
+        });
+
+        const contacto = await NumeroWhatsapp.findOne({
+            where: {
+                from: whatsapp
+            }
+        });
+
+        const updatePotencial = await PotencialCliente.update({ nombres: nombre_contacto }, {
+            where: { id: idpotencial }
+        });
+
+        const actualizar = await NumeroWhatsapp.update({ nameContact: nombre_contacto }, {
+            where: { from: whatsapp }
+        });
+
+        const datos = {
+            potencial_id: idpotencial,
+            etiqueta: etiqueta.descripcion,
+            etiqueta_id: etiqueta.id,
+            rol: rol,
+            idAsistente: contacto.asistente
+        };
+
+        return res.json({ message: 'ok', data:contacto, datos: datos });
+
+
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})
 
 /*let array = {
