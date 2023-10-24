@@ -203,18 +203,18 @@ export const editContact = async (req, res) => {
             }
         });
 
-        const contacto = await NumeroWhatsapp.findOne({
-            where: {
-                from: whatsapp
-            }
-        });
-
         const updatePotencial = await PotencialCliente.update({ nombres: nombre_contacto }, {
             where: { id: idpotencial }
         });
 
         const actualizar = await NumeroWhatsapp.update({ nameContact: nombre_contacto }, {
             where: { from: whatsapp }
+        });
+
+        const contacto = await NumeroWhatsapp.findOne({
+            where: {
+                from: whatsapp
+            }
         });
 
         const datos = {
