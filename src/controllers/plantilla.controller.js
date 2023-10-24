@@ -1,5 +1,7 @@
 import { Plantilla } from "../models/plantilla.js";
 
+import axios from 'axios';
+
 export const getPlantillas = async (req, res) => {
     try {
         const plantillas = await Plantilla.findAll({
