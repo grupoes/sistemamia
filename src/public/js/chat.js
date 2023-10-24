@@ -1835,6 +1835,8 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
     const contentVariable = document.getElementById('contentVariable');
     const numberWhat = document.getElementById('whatsappNumber');
 
+    e.target.disabled = true;
+
     fetch('/sendPlantilla', {
         method: 'POST',
         body: JSON.stringify({
@@ -1849,8 +1851,26 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+        e.target.disabled = false;
+        if(data.message === 'ok') {
+            $("#modalPlantilla").modal('hide');
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Se envio correctamente la plantilla',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No se pudo enviar la plantilla!'
+            })
+        }
+       
     })
+    .catch(err => console.log(err.message));
 });
 
 function editContact() {

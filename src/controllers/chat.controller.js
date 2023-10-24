@@ -50,10 +50,15 @@ export const chatView = (req, res) => {
     const dominio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED;
     const js = [
         url_chat+'/socket.io/socket.io.js',
-        url_chat+'/js/chat.js'
+        url_chat+'/js/chat.js',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
     ];
 
-    res.render('chat/index', { layout: 'partials/main', js, urlchat: url_chat, dominio: dominio });
+    const css = [
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css'
+    ];
+
+    res.render('chat/index', { layout: 'partials/main', css, js, urlchat: url_chat, dominio: dominio });
 }
 
 const execAsync = promisify(exec);

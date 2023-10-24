@@ -65,7 +65,37 @@ export const sendPlantilla = async (req, res) => {
 
             const data = response.data;
 
-            return res.json(data);
+            const messageStatus = data.messages[0].message_status;
+
+            const messageSend = `¡${contentVariable} con excelentes noticias! 🎉
+
+            En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin. ¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝
+            
+            ¡Contáctanos hoy mismo! 📚✨`;
+
+            if(messageStatus === 'accepted') {
+
+                const newMessage = await Chat.create({
+                    codigo: data.messages[0].id,
+                    from: process.env.NUMERO_WHATSAPP,
+                    message: messageSend,
+                    nameContact: "Grupo Es Consultores",
+                    receipt: numero,
+                    timestamp: Math.floor(Date.now() / 1000),
+                    typeMessage: "text",
+                    estadoMessage: "sent",
+                    documentId: "",
+                    id_document: "",
+                    filename: "",
+                    fromRes: "",
+                    idRes: ""
+                });
+
+                return res.json({ message: 'ok', data: newMessage });
+
+            } else {
+                return res.json({message: "No fue enviado la plantilla"});
+            }
 
         } catch (err) {
             return res.status(400).json({ message: err.message });
