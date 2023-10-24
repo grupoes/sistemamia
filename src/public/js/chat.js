@@ -478,7 +478,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                             <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
                         </a>
                         <a class="dropdown-item" href="javascript: void(0);" onclick="editContact()">
-                            <i class="bi bi-person-circle fs-18 me-2"></i>Editar Contacto
+                            <i class="bi bi-person-check fs-18 me-2"></i>Editar Contacto
                         </a>
                         <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
@@ -1906,6 +1906,7 @@ editarContact.addEventListener('click', (e) => {
     })
     .then(res => res.json())
     .then(data => {
+        console.log(data);
         if (data.message === 'ok') {
             $("#modalEditarContacto").modal('hide');
             Swal.fire({
