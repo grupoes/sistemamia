@@ -5,6 +5,6 @@ import { getPlantillas, sendPlantilla } from "../controllers/plantilla.controlle
 const router = Router();
 
 router.get('/getPlantillas', getPlantillas);
-router.get('/sendPlantilla', sendPlantilla);
+router.post('/sendPlantilla', sendPlantilla);
 
 export default router;
