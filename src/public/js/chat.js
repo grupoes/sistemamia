@@ -1893,6 +1893,8 @@ editarContact.addEventListener('click', (e) => {
     const nombre_contacto = document.getElementById('nContacto');
     const whatsapp = document.getElementById('whatsappNumber');
 
+    e.target.disabled = true;
+
     fetch('/editContact', {
         method: 'PUT',
         body: JSON.stringify({
@@ -1906,7 +1908,7 @@ editarContact.addEventListener('click', (e) => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+        e.target.disabled = true;
         if (data.message === 'ok') {
             $("#modalEditarContacto").modal('hide');
             Swal.fire({
@@ -1928,4 +1930,5 @@ editarContact.addEventListener('click', (e) => {
         }
 
     })
+    .catch((err) => console.log(err.message));
 });
