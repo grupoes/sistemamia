@@ -366,10 +366,10 @@ export const numerosWhatsapp = async(req, res) => {
 
         if(rol === 2 || rol === 6) {
             const filterData = sortedData.filter(item => item.idAsistente === id);
-            return res.json({message: "ok", data: filterData, rol: rol});
+            return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
 
-        return res.json({message: "ok",data: sortedData, rol: rol });
+        return res.json({message: "ok",data: sortedData, rol: rol, id:id });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

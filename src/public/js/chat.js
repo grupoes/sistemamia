@@ -337,7 +337,9 @@ socket.on('audioReproducido', () => {
 });
 
 socket.on("messageContacts", data => {
-    viewContact(data);
+    if(data.rol == rol.value) {
+        viewContact(data);
+    }
 });
 
 function loadContact() {
@@ -535,8 +537,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                         <input type="text" class="form-control border-0" name="mensaje_form"
                             placeholder="Ingrese el mensaje" required="" id="contentMensaje">
                         <ul id="listaSugerencias"></ul>
-                        <div class="" id="horas_transcurridas" style="display:none">
-                            Por favor ingrese su mensaje
+                        <div class="" id="horas_transcurridas" style="display:none; text-align:center;">
+                            <span class="hora-estilo">01:45:30 H </span>
                         </div>
                     </div>
                     <div class="col-sm-auto">

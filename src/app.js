@@ -16,6 +16,7 @@ import potencialCliente from './routes/potencialCliente.routes.js';
 import chatEstados from './routes/chatEstados.routes.js';
 import clientes from './routes/clientes.routes.js';
 import plantillas from './routes/plantilla.routes.js';
+import base from './routes/base.routes.js';
 
 const app = express();
 
@@ -58,5 +59,6 @@ app.use(potencialCliente);
 app.use(chatEstados);
 app.use(clientes);
 app.use(plantillas);
+app.use(base);
 
 export default app;
