@@ -477,6 +477,9 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                         <a class="dropdown-item" href="javascript: void(0);" onclick="viewProfle()">
                             <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
                         </a>
+                        <a class="dropdown-item" href="javascript: void(0);" onclick="editContact()">
+                            <i class="bi bi-person-circle fs-18 me-2"></i>Editar Contacto
+                        </a>
                         <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         ${asignar}
@@ -1794,31 +1797,34 @@ escogePlantilla.addEventListener('change', (e) =>  {
 
     const contentPlantilla = document.getElementById('contenidoPlantilla');
 
-    const html = `
-    <div class="col-md-12">
-        <div class="mb-3">
-            <label for="encabezado" class="col-form-label">Encabezado:</label>
-            <p>Video</p>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="mb-3">
-            <label for="cuerpo" class="col-form-label">Cuerpo:</label>
-            <p>¡!!_bienvenida_!! con excelentes noticias! 🎉</p>
-            <p>En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin.¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝</p>
-            <p>¡Contáctanos hoy mismo! 📚✨</p>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="input-group mb-3">
-            <label for="cuerpo" class="col-form-label">Variables:</label>
-            <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable>
-            <span class="input-group-text" id="basic-addon2">!!_bienvenida_!!</span>
-        </div>
-    </div>
-    `;
+    const id = e.target.value;
 
-    contentPlantilla.innerHTML = html;
+    let html = "";
+
+    if(id === "1") {
+        html += `
+    
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="cuerpo" class="col-form-label">Cuerpo:</label>
+                <p>¡!!_bienvenida_!! con excelentes noticias! 🎉</p>
+                <p>En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin.¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝</p>
+                <p>¡Contáctanos hoy mismo! 📚✨</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="input-group mb-3">
+                <label for="cuerpo" class="col-form-label">Variables:</label>
+                <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable>
+                <span class="input-group-text" id="basic-addon2">!!_bienvenida_!!</span>
+            </div>
+        </div>
+        `;
+
+        contentPlantilla.innerHTML = html;
+    } else {
+        contentPlantilla.innerHTML = html;
+    }
 
 });
 
@@ -1846,3 +1852,13 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
         console.log(data);
     })
 });
+
+function editContact() {
+    $("#modalNuevoContacto").modal('show');
+    const n = document.getElementById('whatsappNumber');
+    const nameCont = document.getElementById('nombreContacto');
+    const nueveDi = document.getElementById('nWhatsapp');
+
+    nueveDi.value = n.value;
+
+}

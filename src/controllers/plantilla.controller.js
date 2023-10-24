@@ -25,15 +25,25 @@ export const sendPlantilla = async (req, res) => {
             }
         });
 
-        const dataFile = {
-            messaging_product: "whatsapp",
-            to: numero,
-            type: "template",
-            template: {
-                name: plantilla.nombre,
-                language: {
-                    code: "es"
+        const mensajeJSON = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": numero,
+            "type": "template",
+            "template": {
+              "name": plantilla.nombre,
+              "language": { "code": "es" },
+              "components": [
+                {
+                  "type": "body",
+                  "parameters": [
+                    {
+                      "type": "text",
+                      "text": contentVariable
+                    }
+                  ]
                 }
+              ]
             }
         };
 
@@ -44,8 +54,21 @@ export const sendPlantilla = async (req, res) => {
             headers: { 
               'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
             },
-            data: dataFile
+            data: mensajeJSON
         };
+
+        try {
+            // Realizar una solicitud POST a la API con el JSON y el token de autenticación
+            const response = await axios(config);
+
+            const data = response.data;
+            
+        } catch (err) {
+            return res.status(400).json({ message: err.message });
+        }
+
+        
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
