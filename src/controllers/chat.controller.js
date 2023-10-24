@@ -347,6 +347,8 @@ export const numerosWhatsapp = async(req, res) => {
                     mensaje: ultimoChat.message,
                     estado: ultimoChat.estadoMessage,
                     time: ultimoChat.timestamp,
+                    type: ultimoChat.typeMessage,
+                    from: ultimoChat.from,
                     cantidad: chatCount,
                     asistente: nameAsistente,
                     idAsistente: idAsis,

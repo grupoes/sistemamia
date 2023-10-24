@@ -371,6 +371,34 @@ function viewContact(data) {
             asistente = `<p style="margin: 0;font-size: 12px;color: dodgerblue;">${contact.asistente}</p>`;
         }
 
+        let mensaje = ""
+
+        if(contact.type === 'text') {
+            mensaje = contact.mensaje;
+        }
+
+        if (contact.type === 'audio') {
+            mensaje = `<i class="bi bi-headphones"></i> Audio`;
+        }
+
+        if (contact.type === 'video') {
+            mensaje = `<i class="bi bi-camera-video-fill"></i> Video`;
+        }
+
+        if (contact.type === 'document') {
+            mensaje = `<i class="bi bi-file-earmark-fill"></i> Archivo`;
+        }
+
+        if (contact.type === 'image') {
+            mensaje = `<i class="bi bi-image-fill"></i> Imagen`;
+        }
+
+        let checkMessage = "";
+
+        if(contact.from === '51938669769') {
+            checkMessage = `<i class="bi bi-check2-all ms-1 text-success"></i>`;
+        }
+
         let nameContact = contact.contact;
         nameContact = nameContact.replace("'", "");
 
@@ -389,7 +417,7 @@ function viewContact(data) {
                     </h5>
                     <p class="mt-1 mb-0 text-muted fs-14">
                         ${countMessage}
-                        <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${contact.mensaje}</span>
+                        <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${checkMessage}${mensaje}</span>
                     </p>
                 </div>
             </div>
