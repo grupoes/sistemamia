@@ -1815,7 +1815,7 @@ escogePlantilla.addEventListener('change', (e) =>  {
         <div class="col-md-12">
             <div class="input-group mb-3">
                 <label for="cuerpo" class="col-form-label">Variables:</label>
-                <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable>
+                <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable">
                 <span class="input-group-text" id="basic-addon2">!!_bienvenida_!!</span>
             </div>
         </div>
