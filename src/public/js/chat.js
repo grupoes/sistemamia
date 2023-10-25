@@ -337,9 +337,16 @@ socket.on('audioReproducido', () => {
 });
 
 socket.on("messageContacts", data => {
-    if(data.rol == rol.value) {
-        viewContact(data);
+    if(data.rol == 2) {
+        if(data.id == iduser.value) {
+            viewContact(data);
+        }
+    } else {
+        if(data.rol == rol.value) {
+            viewContact(data);
+        }
     }
+
 });
 
 function loadContact() {
