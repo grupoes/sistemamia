@@ -1807,6 +1807,8 @@ const escogePlantilla = document.getElementById('escogePlantilla');
 function plantillaGet() {
     $("#modalPlantilla").modal("show");
 
+    document.getElementById('contenidoPlantilla').innerHTML = "";
+
     fetch('/getPlantillas')
     .then(res => res.json())
     .then(data => {
