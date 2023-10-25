@@ -1838,30 +1838,45 @@ escogePlantilla.addEventListener('change', (e) =>  {
 
     let html = "";
 
-    if(id === "1") {
+    if(id == "" || id == "3") {
+        contentPlantilla.innerHTML = html;
+        return;
+    }
+
+    fetch('/getPlantilla/'+id)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+
+        let inputVariable = "";
+
+        const variables = data.variables;
+
+        variables.forEach(variable => {
+            inputVariable += `
+            <input type="text" class="form-control input-content-variable" placeholder="Ingrese el contenido de la variable" value="" id="contentVariable">
+            <span class="input-group-text" id="basic-addon2">{{{${variable.nombre}}}}</span>
+            `;
+        });
+
         html += `
     
         <div class="col-md-12">
             <div class="mb-3">
                 <label for="cuerpo" class="col-form-label">Cuerpo:</label>
-                <p>¡!!_bienvenida_!! con excelentes noticias! 🎉</p>
-                <p>En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin.¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝</p>
-                <p>¡Contáctanos hoy mismo! 📚✨</p>
+                <p>${data.plantilla.contenido}</p>
             </div>
         </div>
         <div class="col-md-12">
+            <label for="cuerpo_" class="col-form-label">Variables:</label>
             <div class="input-group mb-3">
-                <label for="cuerpo_" class="col-form-label">Variables:</label>
-                <input type="text" class="form-control" placeholder="Ingrese el contenido de la variable" value="Finaliza octubre" id="contentVariable">
-                <span class="input-group-text" id="basic-addon2">!!_bienvenida_!!</span>
+                ${inputVariable}
             </div>
         </div>
         `;
 
         contentPlantilla.innerHTML = html;
-    } else {
-        contentPlantilla.innerHTML = html;
-    }
+    })
 
 });
 
@@ -1872,6 +1887,14 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
     const contentVariable = document.getElementById('contentVariable');
     const numberWhat = document.getElementById('whatsappNumber');
 
+    const inputs = document.querySelectorAll('.input-content-variable');
+
+    const inputVariables = [];
+
+    inputs.forEach(input => {
+        inputVariables.push(input.value);
+    });
+
     e.target.disabled = true;
 
     fetch('/sendPlantilla', {
@@ -1879,7 +1902,8 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
         body: JSON.stringify({
             idPlantilla: idPlantilla,
             contentVariable: contentVariable.value,
-            numero: numberWhat.value
+            numero: numberWhat.value,
+            variables: inputVariables
         }),
         headers: {
             'Content-Type': 'application/json',

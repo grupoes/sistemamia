@@ -1,5 +1,7 @@
 import { Plantilla } from "../models/plantilla.js";
 import { Chat } from "../models/chat.js";
+import { PlantillaVariable } from "../models/plantilla_variable.js";
+import { Variable } from "../models/variable.js";
 
 import axios from 'axios';
 
@@ -18,8 +20,48 @@ export const getPlantillas = async (req, res) => {
     }
 }
 
+export const getPlantilla = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const plantilla = await Plantilla.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        const plantVars = await PlantillaVariable.findAll({
+            where: {
+                platillaId: id
+            }
+        });
+
+        let variables = [];
+
+        for (const plantVar of plantVars) {
+            let variable = await Variable.findOne({
+                where: {
+                    id: plantVar.variableId
+                }
+            });
+
+            variables.push(variable);
+        }
+
+        return res.json({ message: 'ok', plantilla: plantilla, variables: variables });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+const reemplazarMarcadoresConArray = (str, array) => {
+    return str.replace(/\{\{\{(\w+)\}\}\}/g, (match, variable) => {
+        const valor = array.shift();
+        return valor || match; // Si no hay valor en el array, deja el marcador intacto
+    });
+}
+
 export const sendPlantilla = async (req, res) => {
-    const { idPlantilla, contentVariable, numero } = req.body;
+    const { idPlantilla, contentVariable, numero, variables } = req.body;
     try {
 
         const plantilla = await Plantilla.findOne({
@@ -27,6 +69,18 @@ export const sendPlantilla = async (req, res) => {
                 id: idPlantilla
             }
         });
+
+        let parametros_body = [];
+
+        for (let i = 0; i < variables.length; i++) {
+            let parametro = {
+                type: "text",
+                text: variables[i],
+            };
+
+            parametros_body.push(parametro);
+            
+        }
 
         const mensajeJSON = {
             "messaging_product": "whatsapp",
@@ -39,16 +93,15 @@ export const sendPlantilla = async (req, res) => {
               "components": [
                 {
                   "type": "body",
-                  "parameters": [
-                    {
-                      "type": "text",
-                      "text": contentVariable
-                    }
-                  ]
+                  "parameters": parametros_body
                 }
               ]
             }
         };
+
+        const messageSend = plantilla.contenido;
+
+        const contenido = reemplazarMarcadoresConArray(messageSend, variables);
 
         let config = {
             method: 'post',
@@ -67,12 +120,6 @@ export const sendPlantilla = async (req, res) => {
             const data = response.data;
 
             const messageStatus = data.messages[0].message_status;
-
-            const messageSend = `¡${contentVariable} con excelentes noticias! 🎉
-
-            En Grupo ES Consultores, estamos aquí para asesorarte en tu tesis de principio a fin. ¡Deja de preocuparte y disfruta del proceso! Estamos comprometidos en apoyarte hasta el último paso. 👩‍🎓🤝
-            
-            ¡Contáctanos hoy mismo! 📚✨`;
 
             if(messageStatus === 'accepted') {
 
