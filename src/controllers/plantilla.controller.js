@@ -126,7 +126,7 @@ export const sendPlantilla = async (req, res) => {
                 const newMessage = await Chat.create({
                     codigo: data.messages[0].id,
                     from: process.env.NUMERO_WHATSAPP,
-                    message: messageSend,
+                    message: contenido,
                     nameContact: "Grupo Es Consultores",
                     receipt: numero,
                     timestamp: Math.floor(Date.now() / 1000),
