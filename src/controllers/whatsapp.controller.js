@@ -367,6 +367,13 @@ export const editContact = async (req, res) => {
     }
 }
 
+const reemplazarMarcadoresConArray = (str, array) => {
+    return str.replace(/\{\{\{(\w+)\}\}\}/g, (match, variable) => {
+        const valor = array.shift();
+        return valor || match; // Si no hay valor en el array, deja el marcador intacto
+    });
+}
+
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})
 
 /*let array = {
