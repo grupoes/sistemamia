@@ -10,90 +10,6 @@ const token = localStorage.getItem('token');
 
 const dominio = document.getElementById('dominio').value;
 
-function listConversation(mensaje, numero) {
-    let html = `
-    <li class="clearfix odd">
-        <div class="conversation-text ms-0">
-            <div class="d-flex justify-content-end">
-                <div class="conversation-actions dropdown dropstart">
-                    <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-reply fs-18 me-2"></i>Reply
-                        </a>   
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-star fs-18 me-2"></i>Starred
-                        </a>   
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-trash fs-18 me-2"></i>Delete
-                        </a>   
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-files fs-18 me-2"></i>Copy
-                        </a>                                                                            
-                    </div>
-                </div>
-                <div class="ctext-wrap">
-                    <p>${mensaje}</p>
-                </div>
-            </div>
-            <p class="text-muted fs-12 mb-0 mt-1">8:27 am<i class="bi bi-check2-all ms-1 text-success"></i></p>
-        </div>
-    </li>
-    `;
-
-    $("#conversation-" + numero).append(html);
-
-}
-
-
-function getAllContactos() {
-    fetch('/all-clientes-potenciales')
-        .then(res => res.json())
-        .then(data => {
-            const datos = data.data;
-            let html = "";
-
-            datos.forEach(contact => {
-                html += `
-            <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.numero_whatsapp}, '${contact.nombres} ${contact.apellidos}')">
-                <div class="d-flex align-items-start p-2">
-                    <div class="position-relative">
-                        <span class="user-status"></span>
-                        <img src="assets/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="48"
-                            alt="Brandon Smith" />
-                    </div>
-                    <div class="w-100 overflow-hidden">
-                        <h5 class="mt-0 mb-0 fs-14">
-                            <span class="float-end text-muted fs-12">5:30am</span>
-                            ${contact.nombres} ${contact.apellidos}
-                        </h5>
-                        <p class="mt-1 mb-0 text-muted fs-14">
-                            <span class="float-end badge bg-danger text-white">3</span>
-                            <span class="w-75 text-dark">una consulta?</span>
-                        </p>
-                    </div>
-                </div>
-            </a>
-            `;
-            });
-
-            contactos.innerHTML = html;
-        })
-}
-
-function chatContacto(whatsapp, nameContacto) {
-    const nameContact = document.getElementById('nameContacto');
-    const numberWhatsapp = document.getElementById('numberWhatsapp');
-    const whatsappNumber = document.getElementById('whatsappNumber');
-
-    nameContact.textContent = nameContacto;
-    numberWhatsapp.textContent = whatsapp;
-    whatsappNumber.value = whatsapp;
-
-    mostrar_chat(whatsapp);
-
-}
-
 function mostrar_chat(numero) {
     fetch('/messageNumber/' + numero)
         .then(res => res.json())
@@ -169,51 +85,6 @@ function mostrar_chat(numero) {
             loadContact();
         })
 }
-
-function loadNumber() {
-    fetch('/numeroWhatsapp',{
-        headers: {
-            'Authorization': 'Bearer ' + token,
-        }
-    })
-        .then(res => res.json())
-        .then(data => {
-            let html = "";
-            data.forEach(contact => {
-
-
-                html += `
-            <a href="javascript:void(0);" class="text-body" onclick="chatContacto(${contact.from}, '')">
-                <div class="d-flex align-items-start p-2">
-                    <div class="position-relative">
-                        <span class="user-status"></span>
-                        <img src="assets/images/users/avatar-1.jpg" class="me-2 rounded-circle" height="48"
-                            alt="Brandon Smith" />
-                    </div>
-                    <div class="w-100 overflow-hidden">
-                        <h5 class="mt-0 mb-0 fs-14">
-                            <!--<span class="float-end text-muted fs-12">5:30am</span>-->
-                            ${contact.nameContact}
-                        </h5>
-                        <p class="mt-1 mb-0 text-muted fs-14">
-                            <!--<span class="float-end badge bg-danger text-white">3</span>-->
-                            <span class="w-75 text-dark">....</span>
-                        </p>
-                    </div>
-                </div>
-            </a>
-            `;
-            });
-
-            contactos.innerHTML = html;
-        })
-}
-
-
-
-/*document.querySelector("#fileWhatsapp").addEventListener("click", function () {
-    document.getElementById("fileInput").click();
-});*/
 
 let listenerFile = false;
 
@@ -954,7 +825,7 @@ function viewReceipText(data, fecha) {
                     <div class="conversation-actions dropdown dropstart">
                         <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}', '${data.message}')">
                                 <i class="bi bi-reply fs-18 me-2"></i>Responder
                             </a>   
                             <a class="dropdown-item" href="#">
