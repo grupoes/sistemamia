@@ -1043,3 +1043,19 @@ export const asignarAsistente = async (req, res) => {
         return res.json({message: error.message});
     }
 }
+
+//traer un chat de un codigo
+export const chatOne = async (req, res) => {
+    const codigo = req.params.id;
+    try {
+        const chat = await Chat.findOne({
+            where: {
+                codigo: codigo
+            }
+        });
+
+        return res.json({ message: 'ok', data: chat });
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}

@@ -595,7 +595,7 @@ function viewFromText(data, hora) {
                     <div class="conversation-actions dropdown dropend">
                         <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}', '${data.message}')">
+                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                 <i class="bi bi-reply fs-18 me-2"></i>Responder
                             </a>   
                             <a class="dropdown-item" href="#">
@@ -825,7 +825,7 @@ function viewReceipText(data, fecha) {
                     <div class="conversation-actions dropdown dropstart">
                         <a href="javascript: void(0);" class="text-dark pe-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}', '${data.message}')">
+                            <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                 <i class="bi bi-reply fs-18 me-2"></i>Responder
                             </a>   
                             <a class="dropdown-item" href="#">
@@ -1350,17 +1350,22 @@ function verRes(e,codigo) {
     
 }
 
-function responderFrom(e, codigo, mensaje) {
+function responderFrom(e, codigo) {
     e.preventDefault();
     const resm = document.getElementById('responderMessage');
 
-    resm.innerHTML = `
-    <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
-        <p style="margin-bottom: 0px;padding: 5px;">${mensaje}</p>
-        <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
-        <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
-    </div>
-    `;
+    fetch('/chatOne/'+codigo)
+    .then(res => res.json())
+    .then(data => {
+        const men = data.data.message;
+        resm.innerHTML = `
+        <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
+            <p style="margin-bottom: 0px;padding: 5px;">${men}</p>
+            <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
+            <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
+        </div>
+        `;
+    })
 }
 
 function cerrarRes() {
