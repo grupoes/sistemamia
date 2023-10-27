@@ -1675,6 +1675,11 @@ newContacto.addEventListener('click', (e) => {
     document.getElementById('dataPlantilla').innerHTML = "";
     document.getElementById('contentPlantilla').innerHTML = "";
 
+    document.getElementById('nombreContacto').value = "";
+    document.getElementById('nWhatsapp').value = "";
+    document.getElementById('plataforma_contacto').value = "";
+    document.getElementById('tipo_contacto').value = "";
+
 
     fetch('/getPlataformas')
     .then(res => res.json())
