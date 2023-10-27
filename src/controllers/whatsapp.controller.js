@@ -4,6 +4,7 @@ import { EtiquetaCliente } from "../models/etiquetaCliente.js";
 import { Etiqueta } from "../models/etiquetas.js";
 import { Asignacion } from "../models/asignacion.js";
 import { Plantilla } from "../models/plantilla.js";
+import { Chat } from "../models/chat.js";
 
 import { asignarAsistente } from "./base.controller.js";
 
