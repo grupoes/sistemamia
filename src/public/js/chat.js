@@ -1670,6 +1670,12 @@ newContacto.addEventListener('click', (e) => {
 
     $("#modalNuevoContacto").modal('show');
 
+    document.getElementById('contentContactNew').innerHTML = "";
+    document.getElementById('check_automatico').innerHTML = "";
+    document.getElementById('dataPlantilla').innerHTML = "";
+    document.getElementById('contentPlantilla').innerHTML = "";
+
+
     fetch('/getPlataformas')
     .then(res => res.json())
     .then(data => {
