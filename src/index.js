@@ -25,7 +25,7 @@ import './models/ubigeo.js';
 import './models/chat.js';
 import './models/estadosConversacion.js';
 import './models/numerosWhatsapp.js';*/
-//import './models/chat.js';
+//import './models/numerosWhatsapp.js';
 
 dotenv.config();
 

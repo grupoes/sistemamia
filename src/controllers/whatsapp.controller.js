@@ -2,6 +2,10 @@ import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { PotencialCliente } from "../models/potencialCliente.js";
 import { EtiquetaCliente } from "../models/etiquetaCliente.js";
 import { Etiqueta } from "../models/etiquetas.js";
+import { Asignacion } from "../models/asignacion.js";
+import { Plantilla } from "../models/plantilla.js";
+
+import { asignarAsistente } from "./base.controller.js";
 
 import { Op } from 'sequelize';
 
@@ -32,9 +36,10 @@ export const addWhatsapp = async(req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables } = req.body;
     try {
         const id = req.usuarioToken._id;
+        const rol = req.usuarioToken._role;
 
         const whatsapp = await NumeroWhatsapp.findOne({
             where: {
@@ -54,10 +59,25 @@ export const addContact = async (req, res) => {
             nameW = name;
         }
 
+        let asistente = "";
+
+        if(rol != 2) {
+            if(clickAsignar == 1) {
+                const asignar = await asignarAsistente();
+                asistente = asignar.id;
+            } else {
+                asistente = asignado;
+            }
+        } else {
+            asistente = id;
+        }
+
         const newWhatsapp = await NumeroWhatsapp.create({
             from: numero,
             nameContact: nameW,
-            asistente: id
+            asistente: asistente,
+            plataforma_id: plataforma_contacto,
+            tipo_contacto: tipo_contacto
         });
 
         const newPotencial = await PotencialCliente.create({
@@ -77,7 +97,121 @@ export const addContact = async (req, res) => {
             estado: 1
         });
 
-        return res.json({message: 'ok', data: newWhatsapp});
+        const newAsignacion = await Asignacion.create({
+            fecha_asignacion: new Date(),
+            estado: 1,  // o el estado que corresponda
+            trabajadoreId: asistente,
+            potencialClienteId: newPotencial.id
+            
+        });
+
+        //enviar la plantilla al numero
+
+        try {
+            let contenJson = "";
+            let contenido = "";
+
+            const plantilla = await Plantilla.findOne({
+                where: {
+                    id: idPlantilla
+                }
+            });
+
+            if(variables.length == 0) {
+                contenJson = {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": numero,
+                    "type": "template",
+                    "template": {
+                      "name": plantilla.nombre,
+                      "language": { "code": "es" }
+                    }
+                };
+
+                contenido = plantilla.contenido;
+            } else {
+                //aca validar cuando el id de la plantilla es 3, para sacar el nombre y el apellido dinamicamente
+
+                let parametros_body = [];
+
+                for (let i = 0; i < variables.length; i++) {
+                    let parametro = {
+                        type: "text",
+                        text: variables[i],
+                    };
+
+                    parametros_body.push(parametro);
+                    
+                }
+
+                contenJson = {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": numero,
+                    "type": "template",
+                    "template": {
+                      "name": plantilla.nombre,
+                      "language": { "code": "es" },
+                      "components": [
+                        {
+                          "type": "body",
+                          "parameters": parametros_body
+                        }
+                      ]
+                    }
+                };
+
+                const messageSend = plantilla.contenido;
+
+                contenido = reemplazarMarcadoresConArray(messageSend, variables);
+
+            }
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: process.env.URL_MESSAGES,
+                headers: { 
+                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                },
+                data: contenJson
+            };
+
+            const response = await axios(config);
+
+            const data = response.data;
+
+            const messageStatus = data.messages[0].message_status;
+
+            if(messageStatus === 'accepted') {
+
+                const newMessage = await Chat.create({
+                    codigo: data.messages[0].id,
+                    from: process.env.NUMERO_WHATSAPP,
+                    message: contenido,
+                    nameContact: "Grupo Es Consultores",
+                    receipt: numero,
+                    timestamp: Math.floor(Date.now() / 1000),
+                    typeMessage: "text",
+                    estadoMessage: "sent",
+                    documentId: "",
+                    id_document: "",
+                    filename: "",
+                    fromRes: "",
+                    idRes: ""
+                });
+
+                return res.json({ message: 'ok', data: newMessage });
+
+            } else {
+                return res.json({message: "No fue enviado la plantilla"});
+            }
+
+
+        } catch (error) {
+            return res.status(400).json({ message: error.message });
+        }
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

@@ -1663,10 +1663,27 @@ btnAsignar.addEventListener('click', (e) => {
 const newContacto = document.getElementById('newContact');
 const btnAgregar = document.getElementById('btnNuevoContacto');
 
+const plataforma = document.getElementById('plataforma_contacto');
+
 newContacto.addEventListener('click', (e) => {
     e.preventDefault();
 
     $("#modalNuevoContacto").modal('show');
+
+    fetch('/getPlataformas')
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            let html = `<option value="">Seleccione...</option>`;
+            const datos = data.data;
+
+            datos.forEach(platf => {
+                html += `<option value="${platf.id}">${platf.nombre}</option>`;
+            });
+
+            plataforma.innerHTML = html;
+        }
+    });
 });
 
 btnAgregar.addEventListener('click', (e) => {
@@ -1675,6 +1692,9 @@ btnAgregar.addEventListener('click', (e) => {
     const nameContacto = document.getElementById('nombreContacto');
     const codigopais = document.getElementById('codigopais');
     const nWhatsapp = document.getElementById('nWhatsapp');
+    const plataforma_contacto = document.getElementById('plataforma_contacto');
+    const type_contact = document.getElementById('tipo_contacto');
+    const asignar = document.getElementById('asignar_automaticamente');
 
     const numero = nWhatsapp.value;
 
@@ -1683,7 +1703,49 @@ btnAgregar.addEventListener('click', (e) => {
         return false;
     }
 
+    if(plataforma_contacto.value == "") {
+        alert('Seleccione una plataforma del contacto');
+        return false;
+    }
+
+    if(type_contact.value == "") {
+        alert('Seleccione el tipo de contacto');
+        return false;
+    }
+
     const numeroChat = codigopais.value+""+numero;
+
+    let clickAsignar = 1;
+    let asignado = 0;
+
+    if(rol.value != 2) {
+        if(type_contact.value == 1) {
+            if(!asignar.checked) {
+                clickAsignar = 0;
+                asignado = document.getElementById('asignarAgente').value;
+            }
+        } else {
+            clickAsignar = 0;
+            asignado = document.getElementById('asignarAgente').value;
+        }
+    }
+
+    const selectedPlantilla = document.getElementById('plantillaNuevo');
+
+    const inputs = document.querySelectorAll('.variables');
+
+    const inputVariables = [];
+
+    if(inputs) {
+        inputs.forEach(input => {
+            inputVariables.push(input.value);
+        });
+    }
+
+    if(selectedPlantilla.value == "") {
+        alert('Seleccione una plantilla');
+        return false;
+    }
 
     e.target.disabled = true;
 
@@ -1692,6 +1754,12 @@ btnAgregar.addEventListener('click', (e) => {
         body: JSON.stringify({
             numero: numeroChat,
             name: nameContacto.value,
+            plataforma_contacto: plataforma_contacto.value,
+            tipo_contacto: type_contact.value,
+            clickAsignar: clickAsignar,
+            asignado: asignado,
+            idPlantilla: selectedPlantilla.value,
+            variables: inputVariables
         }),
         headers: {
             'Content-Type': 'application/json',
@@ -1995,3 +2063,186 @@ editarContact.addEventListener('click', (e) => {
     })
     .catch((err) => console.log(err.message));
 });
+
+const tipo_contacto = document.getElementById('tipo_contacto');
+const contentContactNew = document.getElementById('contentContactNew');
+const check_automatico = document.getElementById('check_automatico');
+
+
+tipo_contacto.addEventListener('change', (e) => {
+    const option = e.target.value;
+    
+    let htmlOption = "";
+
+    if (option == "") {
+        document.getElementById('dataPlantilla').innerHTML = "";
+        document.getElementById('contentContactNew').innerHTML = "";
+        document.getElementById('check_automatico').innerHTML = "";
+        return;
+    }
+
+    if(rol.value != 2) {
+        if(option == 1) {
+            htmlOption += `
+            <div class="col-md-12">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="asignar_automaticamente" checked="" onchange="checkAsignar(event)">
+                    <label class="form-check-label" for="asignar_automaticamente">Asignar automáticamente</label>
+                </div>
+            </div>
+            `;
+
+            document.getElementById('check_automatico').innerHTML = "";
+
+        } else {
+            fetch('/getAgentes', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.message === 'ok') {
+                    selectHtmlAgente(data);
+                }
+            })
+        }
+    }
+    
+    contentContactNew.innerHTML = htmlOption;
+    document.getElementById('contentPlantilla').innerHTML = "";
+
+    fetch('/getPlantillas')
+    .then(res => res.json())
+    .then(data => {
+        const dataPlantilla = document.getElementById('dataPlantilla');
+
+        let optionPlantilla = "";
+
+        const datos = data.data;
+
+        datos.forEach(plantilla => {
+            optionPlantilla += `<option value="${plantilla.id}">${plantilla.nombre}</option>`;
+        });
+
+        let data_platilla = `
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="plantillaNuevo" class="col-form-label">Plantilla:</label>
+                <select name="plantillaNuevo" id="plantillaNuevo" onchange="plantillaSelect(event)" class="form-select">
+                    <option value="">Seleccione...</option>
+                    ${optionPlantilla}
+                </select>
+            </div>
+        </div>
+        `;
+
+        dataPlantilla.innerHTML = data_platilla;
+    })
+});
+
+
+function checkAsignar(e) {
+    if(!e.target.checked){
+        fetch('/getAgentes', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.message === 'ok') {
+                selectHtmlAgente(data);
+            }
+        })
+    } else {
+        check_automatico.innerHTML = "";
+    }
+}
+
+function selectHtmlAgente(data) {
+    const datos = data.data;
+
+    let option = "";
+
+    datos.forEach(agente => {
+        if(agente.id == data.id) {
+            option += `<option value="${agente.id}" selected="">${agente.nombres} ${agente.apellidos}</option>`;
+        } else {
+            option += `<option value="${agente.id}">${agente.nombres} ${agente.apellidos}</option>`;
+        }
+        
+    });
+
+    let html = `
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="asignarAgente" class="col-form-label">Agente:</label>
+                <select name="asignarAgente" id="asignarAgente" class="form-select">
+                    <option value="">Seleccione...</option>
+                    ${option}
+                </select>
+            </div>
+        </div>
+    `;
+
+    check_automatico.innerHTML = html;
+}
+
+function plantillaSelect(e) {
+    const id = e.target.value;
+
+    fetch('/getPlantilla/'+id)
+    .then(res => res.json())
+    .then(data => {
+
+        const variables = data.variables;
+
+        const contentPlantilla = document.getElementById('contentPlantilla');
+
+        let existeVariables = "";
+
+        if(variables.length > 0) {
+
+            let varian = "";
+
+            variables.forEach(variable => {
+                let dinamico = "";
+
+                if(data.plantilla.id == 3) {
+                    dinamico = `<input type="text" class="form-control variables" placeholder="Esto es dinamico" value="" id="cuerpo_variable" readonly>`;
+                } else {
+                    dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`;
+                }
+
+                varian += `
+                <div class="input-group mb-3">
+                    ${dinamico}
+                    <span class="input-group-text" id="basic-addon2">${variable.nombre}</span>
+                </div>
+                `;
+            });
+
+            existeVariables = `
+            <div class="col-md-12">
+                <label for="cuerpo_variable" class="col-form-label">Variables:</label>
+                ${varian}
+            </div>
+            `;
+        }
+        
+        const content = `
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="cuerpo_nuevo" class="col-form-label">Cuerpo:</label>
+                <p>${data.plantilla.contenido}</p>
+            </div>
+        </div>
+
+        ${existeVariables}
+        `;
+
+        contentPlantilla.innerHTML = content;
+
+    })
+}
