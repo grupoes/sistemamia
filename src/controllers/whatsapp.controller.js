@@ -9,6 +9,8 @@ import { asignarAsistente } from "./base.controller.js";
 
 import { Op } from 'sequelize';
 
+import axios from 'axios';
+
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
     try {
