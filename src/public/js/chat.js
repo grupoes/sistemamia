@@ -638,7 +638,7 @@ function viewFromImage(data, hora) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -684,7 +684,7 @@ function viewFromVideo(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/videos/archivos/${data.id_document}.mp4', '${data.id_document}.mp4')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -728,10 +728,10 @@ function viewFromAudio(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.id_document}.ogg', '${data.id_document}.ogg')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                    <i class="bi bi-reply fs-18 me-2"></i>responder
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-trash fs-18 me-2"></i>Delete
@@ -779,7 +779,7 @@ function viewFromDocument(data, fecha) {
                     <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/documentos/archivos/${data.filename}', '${data.filename}')">
-                            <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                            <i class="bi bi-download fs-18 me-2"></i>Descargar
                         </a>   
                         <a class="dropdown-item" href="#">
                             <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -867,7 +867,7 @@ function viewReceipImage(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/img/archivos/${data.filename}', '${data.filename}')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -908,7 +908,7 @@ function viewReceipVideo(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/videos/archivos/${data.filename}', '${data.filename}')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -953,7 +953,7 @@ function viewReceipDocument(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/documentos/archivos/${data.filename}', '${data.filename}')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
@@ -994,7 +994,7 @@ function viewReceipAudio(data, fecha) {
                                                 aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.filename}', '${data.filename}')">
-                                    <i class="bi bi-reply fs-18 me-2"></i>Descargar
+                                    <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-star fs-18 me-2"></i>Starred
