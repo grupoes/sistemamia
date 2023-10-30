@@ -93,6 +93,21 @@ export const addMessage = async (req, res) => {
     }
 }
 
+export const getChatCodigo = async(req, res) => {
+    const codigo = req.params.id;
+    try {
+        const chat = await Chat.findOne({
+            where: {
+                codigo: codigo
+            }
+        });
+
+        return res.json(chat);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 export const mensajes_numero = async (req, res) => {
     const numero = req.params.id;
 
