@@ -145,19 +145,20 @@ export const addContact = async (req, res) => {
 
                 let parametros_body = [];
 
-                if(idPlantilla === 3) {
-                    let parametro = [
-                        {
-                            type: "text",
-                            text: dataAsistente.nombres
-                        },
-                        {
-                            type: "text",
-                            text: dataAsistente.apellidos
-                        }
-                    ];
+                if(idPlantilla == 3) {
 
-                    parametros_body.push(parametro);
+                    let dataNombre = {
+                        type: "text",
+                        text: dataAsistente.nombres
+                    };
+
+                    let dataApellidos = {
+                        type: "text",
+                        text: dataAsistente.apellidos
+                    }
+
+                    parametros_body.push(dataNombre);
+                    parametros_body.push(dataApellidos);
                 } else {
                     for (let i = 0; i < variables.length; i++) {
                         let parametro = {
