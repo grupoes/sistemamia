@@ -11,6 +11,7 @@ import { asignarAsistente } from "./base.controller.js";
 import { Op } from 'sequelize';
 
 import axios from 'axios';
+import { Trabajadores } from "../models/trabajadores.js";
 
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
@@ -108,6 +109,12 @@ export const addContact = async (req, res) => {
             
         });
 
+        const dataAsistente = await Trabajadores.findOne({
+            where: {
+                id: asistente
+            }
+        });
+
         //enviar la plantilla al numero
 
         try {
@@ -138,14 +145,29 @@ export const addContact = async (req, res) => {
 
                 let parametros_body = [];
 
-                for (let i = 0; i < variables.length; i++) {
-                    let parametro = {
-                        type: "text",
-                        text: variables[i],
-                    };
+                if(idPlantilla === 3) {
+                    let parametro = [
+                        {
+                            type: "text",
+                            text: dataAsistente.nombres
+                        },
+                        {
+                            type: "text",
+                            text: dataAsistente.apellidos
+                        }
+                    ];
 
                     parametros_body.push(parametro);
-                    
+                } else {
+                    for (let i = 0; i < variables.length; i++) {
+                        let parametro = {
+                            type: "text",
+                            text: variables[i],
+                        };
+    
+                        parametros_body.push(parametro);
+                        
+                    }
                 }
 
                 contenJson = {
