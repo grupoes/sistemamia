@@ -7,6 +7,7 @@ import { Asignacion } from "../models/asignacion.js";
 import { EtiquetaCliente } from "../models/etiquetaCliente.js";
 import { Etiqueta } from "../models/etiquetas.js";
 import { Embudo } from "../models/embudo.js";
+import { Chat_estados } from "../models/estadosConversacion.js";
 
 import { Op } from 'sequelize';
 
@@ -142,6 +143,25 @@ export const mensajes_numero = async (req, res) => {
                     where: { id: mensaje.id }
                 });
             }
+
+            if(mensaje.from == process.env.NUMERO_WHATSAPP) {
+                const estadoMensaje = await Chat_estados.findOne({
+                    where: {
+                        codigo: mensaje.codigo
+                    },
+                    order: [
+                        ['timestamp', 'DESC'],
+                    ]
+                });
+
+                if(estadoMensaje) {
+                    let estadoObject = mensaje.get({ plain: true });
+                    // Agrega el mensajeIdRes como un nuevo campo 'mensajeRelacionado' en el objeto plainObject
+                    estadoObject.estadoMensaje = estadoMensaje.get({ plain: true });
+                }
+            }
+
+
         }
 
         return res.json({ message: 'ok', data: mensajes });
@@ -355,6 +375,28 @@ export const numerosWhatsapp = async(req, res) => {
                     }
                 });
 
+                //verificamos en que estado esta el mensaje: sent, delivired and read
+
+                let estadoMensaje = "";
+
+                if(ultimoChat.from === process.env.NUMERO_WHATSAPP) {
+                    const statusMessage = await Chat_estados.findOne({
+                        where: {
+                            codigo: ultimoChat.codigo
+                        },
+                        order: [
+                            ['timestamp', 'DESC'],
+                        ]
+                    });
+
+                    if(statusMessage) {
+                        estadoMensaje = statusMessage.status;
+                    } else {
+                        estadoMensaje = 'read';
+                    }
+                    
+                }
+
 
                 let array = {
                     numero: contacto.from,
@@ -370,7 +412,8 @@ export const numerosWhatsapp = async(req, res) => {
                     rol: rol,
                     etiqueta: eti.descripcion,
                     potencial_id: idpotencial,
-                    etiqueta_id: idetiqueta
+                    etiqueta_id: idetiqueta,
+                    statusMessage: estadoMensaje
                 }
 
                 array_.push(array);
@@ -1012,6 +1055,23 @@ export const socketMensaje = async (req, res) => {
                 let plainObject = chat.get({ plain: true });
                 // Agrega el mensajeIdRes como un nuevo campo 'mensajeRelacionado' en el objeto plainObject
                 plainObject.mensajeRelacionado = mensajeIdRes.get({ plain: true });
+            }
+        }
+
+        if(chat.from == process.env.NUMERO_WHATSAPP) {
+            const estadoMensaje = await Chat_estados.findOne({
+                where: {
+                    codigo: chat.codigo
+                },
+                order: [
+                    ['timestamp', 'DESC'],
+                ]
+            });
+
+            if(estadoMensaje) {
+                let estadoObject = chat.get({ plain: true });
+                // Agrega el mensajeIdRes como un nuevo campo 'mensajeRelacionado' en el objeto plainObject
+                estadoObject.estadoMensaje = estadoMensaje.get({ plain: true });
             }
         }
 

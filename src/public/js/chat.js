@@ -275,8 +275,22 @@ function viewContact(data) {
 
         let checkMessage = "";
 
-        if(contact.from === '51938669769') {
-            checkMessage = `<i class="bi bi-check2-all ms-1 text-success"></i>`;
+        if(contact.statusMessage != '') {
+
+            if(contact.statusMessage == 'sent') {
+                checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+            } else {
+                if(contact.statusMessage == 'delivered') {
+                    checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+                } else {
+                    if (contact.statusMessage == 'read') {
+                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                    } else {
+                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                    }
+                }
+            }
+
         }
 
         let nameContact = contact.contact;
@@ -802,6 +816,8 @@ function viewFromDocument(data, fecha) {
 }
 
 function viewReceipText(data, fecha) {
+
+    const iconoStatus = checkStateMessage(data);
     
     let resp = "";
 
@@ -844,7 +860,7 @@ function viewReceipText(data, fecha) {
                         <p id="${data.codigo}">${data.message}</p>
                     </div>  
                 </div>                                                          
-                <p class="text-muted fs-12 mb-0 mt-1">${fecha}<i class="bi bi-check2-all ms-1 text-success"></i></p>
+                <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
             </div>
         </li>`;
 
@@ -852,6 +868,9 @@ function viewReceipText(data, fecha) {
 }
 
 function viewReceipImage(data, fecha) {
+
+    const iconoStatus = checkStateMessage(data);
+
     let resp = "";
 
     if (data.mensajeRelacionado) {
@@ -891,7 +910,7 @@ function viewReceipImage(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
                 </div>
             </li>`;
 
@@ -899,6 +918,7 @@ function viewReceipImage(data, fecha) {
 }
 
 function viewReceipVideo(data, fecha) {
+    const iconoStatus = checkStateMessage(data);
     let html = `
             <li class="clearfix odd">
                 <div class="conversation-text ms-0">
@@ -936,7 +956,7 @@ function viewReceipVideo(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
                 </div>
             </li>`;
 
@@ -944,6 +964,7 @@ function viewReceipVideo(data, fecha) {
 }
 
 function viewReceipDocument(data, fecha) {
+    const iconoStatus = checkStateMessage(data);
     let html = `
             <li class="clearfix odd">
                 <div class="conversation-text ms-0">
@@ -977,7 +998,7 @@ function viewReceipDocument(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
                 </div>
             </li>`;
 
@@ -985,6 +1006,7 @@ function viewReceipDocument(data, fecha) {
 }
 
 function viewReceipAudio(data, fecha) {
+    const iconoStatus = checkStateMessage(data);
     let html = `
             <li class="clearfix odd">
                 <div class="conversation-text ms-0">
@@ -1020,7 +1042,7 @@ function viewReceipAudio(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
                 </div>
             </li>`;
 
@@ -2132,4 +2154,32 @@ function plantillaSelect(e) {
         contentPlantilla.innerHTML = content;
 
     })
+}
+
+function checkStateMessage(data) {
+
+    let icono = "";
+
+    const dataStatus = data.estadoMensaje;
+
+    if(dataStatus) {
+        if(dataStatus.status === 'sent') {
+            icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+        } else {
+            if (dataStatus.status === 'delivered') {
+                icono = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+            } else {
+                if (dataStatus.status === 'read') {
+                    icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                } else {
+                    icono = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                }
+            }
+        }
+
+    } else {
+        icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+    }
+
+    return icono;
 }

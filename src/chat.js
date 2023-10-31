@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
 });
 
 pubsub.addChannel('new_contact', async(data) => {
-    console.log('New contact added:', data);
+    //console.log('New contact added:', data);
 
     try {
         const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/socketMensaje/"+data.id);
@@ -106,7 +106,18 @@ pubsub.addChannel('new_contact', async(data) => {
     
 });
 
+pubsub.addChannel('new_status_chat', async(data) => {
+    try {
+        const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/getChatCodigo/"+data.codigo);
 
+        const datos = response.data;
+
+        io.emit("messageChat", datos);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+});
 
 server.listen(process.env.PUERTO_SOCKET, () => {
     console.log('listening on *:'+process.env.PUERTO_SOCKET);
