@@ -454,7 +454,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                             <input type="file" id="fileInput" style="display: none;" />
                             <audio id="audio" controls="" style="display: none"></audio>
                             <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
-                            <div class="dropdown">
+                            <div class="dropdown" style="padding: 7px;">
                                 <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="true">
                                     <i class="uil uil-ellipsis-v"></i>
                                 </a>
@@ -471,11 +471,11 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                                         <i class="uil-file-landscape-alt me-2"></i>Plantilla
                                     </a>
                                 </div>
-                                <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
-                                <div class="d-grid">
+                            </div>
+                            <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
+                            <div class="d-grid">
                                 <button type="submit" class="btn btn-success chat-send" id="sendChat"><i
                                         class='uil uil-message'></i></button>
-                                </div>
                             </div>
                         
                     </div>
