@@ -385,7 +385,7 @@ export const numerosWhatsapp = async(req, res) => {
                             codigo: ultimoChat.codigo
                         },
                         order: [
-                            ['timestamp', 'DESC'],
+                            ['id', 'DESC'],
                         ]
                     });
 
