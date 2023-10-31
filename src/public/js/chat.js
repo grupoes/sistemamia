@@ -207,6 +207,21 @@ socket.on('audioReproducido', () => {
     
 });
 
+socket.on("messageStatus", data => {
+
+    const icono = document.getElementById('chat-'+data.codigo);
+
+    if(icono) {
+        console.log("si existe el icono o el chat esta abierto");
+        const iconoUpdate = socketStateMessage(data);
+
+        icono.innerHTML = iconoUpdate;
+    }
+
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value });
+
+});
+
 socket.on("messageContacts", data => {
     if(data.rol == 2) {
         if(data.id == iduser.value) {
@@ -860,7 +875,7 @@ function viewReceipText(data, fecha) {
                         <p id="${data.codigo}">${data.message}</p>
                     </div>  
                 </div>                                                          
-                <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
+                <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
             </div>
         </li>`;
 
@@ -910,7 +925,7 @@ function viewReceipImage(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
                 </div>
             </li>`;
 
@@ -956,7 +971,7 @@ function viewReceipVideo(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
                 </div>
             </li>`;
 
@@ -998,7 +1013,7 @@ function viewReceipDocument(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
                 </div>
             </li>`;
 
@@ -1042,7 +1057,7 @@ function viewReceipAudio(data, fecha) {
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}${iconoStatus}</p>
+                    <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
                 </div>
             </li>`;
 
@@ -2179,6 +2194,25 @@ function checkStateMessage(data) {
 
     } else {
         icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+    }
+
+    return icono;
+}
+
+function socketStateMessage(data) {
+    let icono = "";
+    if(data.status === 'sent') {
+        icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+    } else {
+        if (data.status === 'delivered') {
+            icono = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+        } else {
+            if (data.status === 'read') {
+                icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+            } else {
+                icono = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+            }
+        }
     }
 
     return icono;
