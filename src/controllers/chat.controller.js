@@ -150,7 +150,7 @@ export const mensajes_numero = async (req, res) => {
                         codigo: mensaje.codigo
                     },
                     order: [
-                        ['timestamp', 'DESC'],
+                        ['id', 'DESC'],
                     ]
                 });
 
@@ -1064,7 +1064,7 @@ export const socketMensaje = async (req, res) => {
                     codigo: chat.codigo
                 },
                 order: [
-                    ['timestamp', 'DESC'],
+                    ['id', 'DESC'],
                 ]
             });
 
