@@ -2178,7 +2178,7 @@ function checkStateMessage(data) {
         }
 
     } else {
-        icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+        icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
     }
 
     return icono;
