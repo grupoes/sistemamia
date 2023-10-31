@@ -379,7 +379,7 @@ export const numerosWhatsapp = async(req, res) => {
 
                 let estadoMensaje = "";
 
-                if(ultimoChat.from === process.env.NUMERO_WHATSAPP) {
+                if(ultimoChat.from == process.env.NUMERO_WHATSAPP) {
                     const statusMessage = await Chat_estados.findOne({
                         where: {
                             codigo: ultimoChat.codigo
