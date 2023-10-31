@@ -150,7 +150,7 @@ export const mensajes_numero = async (req, res) => {
                         codigo: mensaje.codigo
                     },
                     order: [
-                        ['id', 'ASC'],
+                        ['id', 'DESC'],
                     ]
                 });
 
