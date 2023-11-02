@@ -29,7 +29,7 @@ export const getAgenteId = async (req, res) => {
     }
 }
 
-export const asignarAsistente = async () => {
+export const asignarAsistenteData = async () => {
     const totalTrabajadores = await Trabajadores.count({
         where: {
             area_id: 2
@@ -51,4 +51,33 @@ export const asignarAsistente = async () => {
     });
 
     return trabajador;
+}
+
+export const asignarAsistenteDataJson = async (req, res) => {
+    try {
+        const totalTrabajadores = await Trabajadores.count({
+            where: {
+                area_id: 2
+            }
+        });
+    
+        // 2. Obtiene cuántas asignaciones ya existen
+        const totalAsignaciones = await Asignacion.count();
+    
+        // 3. Usa el operador módulo para determinar el siguiente trabajador
+        const trabajadorAsignado = totalAsignaciones % totalTrabajadores;
+    
+        // 4. Obtiene el ID del trabajador al que se asignará el cliente
+        const trabajador = await Trabajadores.findOne({
+            where: {
+                area_id: 2
+            },
+            offset: trabajadorAsignado
+        });
+    
+        return res.json(trabajador);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+    
 }

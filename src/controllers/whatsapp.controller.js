@@ -6,7 +6,7 @@ import { Asignacion } from "../models/asignacion.js";
 import { Plantilla } from "../models/plantilla.js";
 import { Chat } from "../models/chat.js";
 
-import { asignarAsistente } from "./base.controller.js";
+import { asignarAsistenteData } from "./base.controller.js";
 
 import { Op } from 'sequelize';
 
@@ -67,7 +67,7 @@ export const addContact = async (req, res) => {
 
         if(rol != 2) {
             if(clickAsignar == 1) {
-                const asignar = await asignarAsistente();
+                const asignar = await asignarAsistenteData();
                 asistente = asignar.id;
             } else {
                 asistente = asignado;

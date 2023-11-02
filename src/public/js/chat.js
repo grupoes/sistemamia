@@ -2007,16 +2007,25 @@ tipo_contacto.addEventListener('change', (e) => {
 
     if(rol.value != 2) {
         if(option == 1) {
-            htmlOption += `
-            <div class="col-md-12">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="asignar_automaticamente" checked="" onchange="checkAsignar(event)">
-                    <label class="form-check-label" for="asignar_automaticamente">Asignar automáticamente</label>
-                </div>
-            </div>
-            `;
 
-            document.getElementById('check_automatico').innerHTML = "";
+            fetch('/getAsignationName')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+                htmlOption += `
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="asignar_automaticamente" checked="" onchange="checkAsignar(event)">
+                        <label class="form-check-label" for="asignar_automaticamente">Asignar automáticamente <span id="nameAsig">(${data.nombres} ${data.apellidos})</span></label>
+                    </div>
+                </div>
+                `;
+
+                document.getElementById('check_automatico').innerHTML = "";
+
+                contentContactNew.innerHTML = htmlOption;
+            })
 
         } else {
             fetch('/getAgentes', {
@@ -2080,6 +2089,14 @@ function checkAsignar(e) {
             }
         })
     } else {
+        fetch('/getAsignationName')
+        .then(res => res.json())
+        .then(data => {
+            const nameAsig =document.getElementById('nameAsig');
+
+            nameAsig.innerHTML = `${data.nombres} ${data.apellidos}`;
+        })
+
         check_automatico.innerHTML = "";
     }
 }

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta, enviar_mensaje_icono_whatsapp, socketMensaje, getEmpleadosAsignar, asignarAsistente, chatOne, getChatCodigo } from "../controllers/chat.controller.js";
 
-import { getAgenteId } from "../controllers/base.controller.js";
+import { getAgenteId, asignarAsistenteDataJson } from "../controllers/base.controller.js";
 
 import corsMiddleware from "../middlewares/cors.js";
 
@@ -30,6 +30,7 @@ router.get('/getEmpleadosAsignar', getEmpleadosAsignar);
 router.post('/asignarAsistente', asignarAsistente);
 router.get('/chatOne/:id', chatOne);
 router.get('/getChatCodigo/:id', getChatCodigo);
+router.get('/getAsignationName', asignarAsistenteDataJson);
 
 router.get('/getAgentes', checkAuth,getAgenteId);
 
