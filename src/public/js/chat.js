@@ -669,8 +669,8 @@ function viewFromImage(data, hora) {
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/img/archivos/${data.id_document}.jpg', '${data.id_document}.jpg')">
                                     <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Responder
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-trash fs-18 me-2"></i>Delete
@@ -1398,6 +1398,7 @@ function verRes(e,codigo) {
 function responderFrom(e, codigo) {
     e.preventDefault();
     const resm = document.getElementById('responderMessage');
+    const numWhat = document.getElementById('whatsappNumber');
 
     fetch('/chatOne/'+codigo)
     .then(res => res.json())
@@ -1419,6 +1420,26 @@ function responderFrom(e, codigo) {
             resm.innerHTML = `
             <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
                 <p style="margin-bottom: 0px;padding: 5px;"><i class="bi bi-headphones"></i> Audio</p>
+                <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
+                <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
+            </div>
+            `;
+        }
+
+        if (datos.typeMessage === 'image') {
+
+            let ruta = "";
+
+            if(numWhat.value == datos.from) {
+                ruta = `${dominio}/img/archivos/${data.id_document}.jpg`;
+            } else {
+                ruta = `${dominio}/img/archivos/${data.filename}`;
+            }
+
+            resm.innerHTML = `
+            <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
+                <p style="margin-bottom: 0px;padding: 5px;"><i class="bi bi-image-fill"></i> Imagen</p>
+                <img src="${ruta}" alt="Imagen" style="max-height: 24px;">
                 <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
                 <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
             </div>
