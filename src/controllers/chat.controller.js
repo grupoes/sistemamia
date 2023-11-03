@@ -933,7 +933,9 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 from: numero,
                 nameContact: nombre,
                 estado: 1,
-                asistente: trabajador.id
+                asistente: trabajador.id,
+                plataforma_id: 3,
+                tipo_contacto: 1
             });
 
             // 5. Crea una nueva asignación con el cliente y el trabajador determinado
