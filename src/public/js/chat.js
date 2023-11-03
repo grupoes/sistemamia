@@ -1052,7 +1052,7 @@ function viewReceipAudio(data, fecha) {
                             <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <audio controls id="${data.codigo}">
+                                        <audio controls>
                                             <source src="${dominio}/audios/archivos/${data.filename}" type="audio/ogg">
                                             Tu navegador no soporta la etiqueta de audio.
                                         </audio>
