@@ -1431,9 +1431,9 @@ function responderFrom(e, codigo) {
             let ruta = "";
 
             if(numWhat.value == datos.from) {
-                ruta = `${dominio}/img/archivos/${data.id_document}.jpg`;
+                ruta = `${dominio}/img/archivos/${datos.id_document}.jpg`;
             } else {
-                ruta = `${dominio}/img/archivos/${data.filename}`;
+                ruta = `${dominio}/img/archivos/${datos.filename}`;
             }
 
             resm.innerHTML = `
