@@ -918,7 +918,7 @@ function viewReceipImage(data, fecha) {
                             <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150">
+                                        <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150" onclick="openFullscreen(this)">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -1696,7 +1696,13 @@ btnAgregar.addEventListener('click', (e) => {
         e.target.disabled = false;
         if(data.message === 'ok') {
             $("#modalNuevoContacto").modal("hide");
-            alert('Se agrego correctamente');
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Se agrego correctamente',
+                showConfirmButton: false,
+                timer: 2000
+            })
         } else {
             if (data.message === 'existe') {
                 alert(data.data);
@@ -2094,7 +2100,7 @@ function checkAsignar(e) {
         .then(data => {
             const nameAsig =document.getElementById('nameAsig');
 
-            nameAsig.innerHTML = `${data.nombres} ${data.apellidos}`;
+            nameAsig.innerHTML = `(${data.nombres} ${data.apellidos})`;
         })
 
         check_automatico.innerHTML = "";
