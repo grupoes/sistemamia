@@ -744,7 +744,7 @@ function viewFromAudio(data, fecha) {
                                 <div class="row align-items-center">
                                     <div class="col-auto">
 
-                                        <audio controls>
+                                        <audio controls id="${data.codigo}">
                                             <source src="${dominio}/audios/archivos/${data.id_document}.ogg" type="audio/ogg">
                                             Tu navegador no soporta la etiqueta de audio.
                                         </audio>
@@ -759,7 +759,7 @@ function viewFromAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.id_document}.ogg', '${data.id_document}.ogg')">
                                     <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>responder
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -844,6 +844,10 @@ function viewReceipText(data, fecha) {
         
         if(data.mensajeRelacionado.typeMessage === 'image') {
             resp = mensajeRespondidoReceipImagen(data.mensajeRelacionado);
+        }
+
+        if(data.mensajeRelacionado.typeMessage === 'audio') {
+            resp = mensajeRespondidoReceipAudio(data.mensajeRelacionado);
         }
     } else {
         console.log("no llego hasta aca");
@@ -1033,8 +1037,8 @@ function viewReceipAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="descargarImagen('${dominio}/audios/archivos/${data.filename}', '${data.filename}')">
                                     <i class="bi bi-download fs-18 me-2"></i>Descargar
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-star fs-18 me-2"></i>Starred
+                                <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
+                                    <i class="bi bi-reply fs-18 me-2"></i>Responder
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-trash fs-18 me-2"></i>Delete
@@ -1048,7 +1052,7 @@ function viewReceipAudio(data, fecha) {
                             <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <audio controls>
+                                        <audio controls id="${data.codigo}">
                                             <source src="${dominio}/audios/archivos/${data.filename}" type="audio/ogg">
                                             Tu navegador no soporta la etiqueta de audio.
                                         </audio>
@@ -1371,6 +1375,10 @@ function mensajeRespondidoReceipImagen(data) {
     return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"><img src="https://esconsultoresyasesores.com:4000/img/archivos/${data.filename}" /></a> </p>`;
 }
 
+function mensajeRespondidoReceipAudio(data) {
+    return `<p style="padding: 5px 10px 5px 10px; background: #e3dddd;"><a href="#${data.codigo}" onclick="verRes(event,'${data.codigo}')"> <i class="bi bi-headphones"></i> Audio </a> </p>`;
+}
+
 function verRes(e,codigo) {
     e.preventDefault();
     const targetElement = document.getElementById(codigo);
@@ -1395,13 +1403,29 @@ function responderFrom(e, codigo) {
     .then(res => res.json())
     .then(data => {
         const men = data.data.message;
-        resm.innerHTML = `
-        <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
-            <p style="margin-bottom: 0px;padding: 5px;">${men}</p>
-            <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
-            <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
-        </div>
+        const datos = data.data;
+
+        if(datos.typeMessage === 'text') {
+            resm.innerHTML = `
+            <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
+                <p style="margin-bottom: 0px;padding: 5px;">${men}</p>
+                <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
+                <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
+            </div>
         `;
+        }
+
+        if (datos.typeMessage === 'audio') {
+            resm.innerHTML = `
+            <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
+                <p style="margin-bottom: 0px;padding: 5px;"><i class="bi bi-headphones"></i> Audio</p>
+                <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
+                <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
+            </div>
+            `;
+        }
+
+    
     })
 }
 
