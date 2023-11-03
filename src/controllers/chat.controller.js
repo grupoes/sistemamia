@@ -261,8 +261,10 @@ export const addMessageFirestore = async(req, res) => {
 
         if(!existe) {
             const addN = await NumeroWhatsapp.create({
-                from,
-                nameContact
+                from: from,
+                nameContact: nameContact,
+                plataforma_id: 1,
+                tipo_contacto: 1
             });
     
             const pot = await PotencialCliente.create({
