@@ -1440,7 +1440,7 @@ function responderFrom(e, codigo) {
             <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
                 <div class="d-flex justify-content-between align-items-center">
                     <p style="margin-bottom: 0px; padding: 5px;"><i class="bi bi-image-fill"></i> Imagen</p>
-                    <img src="${ruta}" alt="Imagen" style="max-height: 24px;">
+                    <img src="${ruta}" alt="Imagen" style="max-height: 35px;margin-right: 25px;">
                 </div>
                 
                 <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
