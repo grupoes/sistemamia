@@ -218,7 +218,7 @@ socket.on("messageStatus", data => {
         icono.innerHTML = iconoUpdate;
     }
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false });
 
 });
 
@@ -514,7 +514,7 @@ socket.on("messageChat", data => {
     audio.volume = 0.5;
     audio.play();*/
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true });
     console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
@@ -1438,8 +1438,11 @@ function responderFrom(e, codigo) {
 
             resm.innerHTML = `
             <div class="resCustom" style="position: relative;border: 1px solid #ccc;padding: 5px;margin-bottom: 5px;">
-                <p style="margin-bottom: 0px;padding: 5px;"><i class="bi bi-image-fill"></i> Imagen</p>
-                <img src="${ruta}" alt="Imagen" style="max-height: 24px;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p style="margin-bottom: 0px; padding: 5px;"><i class="bi bi-image-fill"></i> Imagen</p>
+                    <img src="${ruta}" alt="Imagen" style="max-height: 24px;">
+                </div>
+                
                 <input type="hidden" name="codigoRes" id="codigoRes" value="${codigo}" />
                 <span class="close-btn" style="position: absolute;top: 5px;right: 10px;cursor: pointer;font-size: 20px;" onclick="cerrarRes()">&times;</span>
             </div>

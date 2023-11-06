@@ -72,15 +72,17 @@ io.on('connection', (socket) => {
     
             io.emit('messageContacts', datos);
 
-            if(data.from != process.env.NUMERO_WHATSAPP) {
-                if(data.rol == 2) {
-                    if(data.id == datos.id) {
+            if(data.sonido === true) {
+                if(data.from != process.env.NUMERO_WHATSAPP) {
+                    if(data.rol == 2) {
+                        if(data.id == datos.id) {
+                            io.emit('audioReproducido');
+                        }
+                    } else {
                         io.emit('audioReproducido');
                     }
-                } else {
-                    io.emit('audioReproducido');
+                    
                 }
-                
             }
 
         } catch (error) {
