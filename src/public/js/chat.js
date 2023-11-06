@@ -1937,6 +1937,12 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
 
     const inputs = document.querySelectorAll('.input-content-variable');
 
+    let contenidoVariable = "";
+
+    if(contentVariable) {
+        contenidoVariable = contentVariable.value;
+    }
+
     const inputVariables = [];
 
     inputs.forEach(input => {
@@ -1949,7 +1955,7 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
         method: 'POST',
         body: JSON.stringify({
             idPlantilla: idPlantilla,
-            contentVariable: contentVariable.value,
+            contentVariable: contenidoVariable,
             numero: numberWhat.value,
             variables: inputVariables
         }),
