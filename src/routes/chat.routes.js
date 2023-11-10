@@ -15,7 +15,7 @@ router.get('/chat', chatView);
 router.post('/addMessageChat', addMessage);
 router.get('/messageNumber/:id', mensajes_numero);
 router.post('/messageFirestore', addMessageFirestore);
-router.get('/numeroWhatsapp', checkAuth, numerosWhatsapp);
+router.post('/numeroWhatsapp', checkAuth, numerosWhatsapp);
 router.get('/ultimoMensaje/:id', traer_ultimo_mensaje);
 router.post('/subir_imagen', uploadImage);
 router.post('/actualizarEtiqueta', actualizarEtiqueta);

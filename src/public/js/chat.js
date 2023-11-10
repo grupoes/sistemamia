@@ -235,11 +235,24 @@ socket.on("messageContacts", data => {
 
 });
 
+const filterEtiqueta = document.getElementById('filtroEtiqueta');
+
+filterEtiqueta.addEventListener('change', (e) => {
+    loadContact();
+})
+
 function loadContact() {
+    const post = {
+        etiqueta: filterEtiqueta.value
+    };
+
     fetch("/numeroWhatsapp", {
+        method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + token,
-        }
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
     })
         .then(res => res.json())
         .then(data => {
@@ -2294,3 +2307,26 @@ function socketStateMessage(data) {
 
     return icono;
 }
+
+//filtro de etiqueta del contacto
+const filtroEmbudo = document.getElementById('filtroEmbudo');
+
+filtroEmbudo.addEventListener('change', (e) => {
+    const valor = e.target.value;
+
+    fetch('/getEtiquetaEmbudo/'+valor)
+    .then(res => res.json())
+    .then(data => {
+        const eti = data.etiquetas;
+        let html = `<option value="0">TODOS</option>`;
+
+        const filtroEtiqueta = document.getElementById('filtroEtiqueta');
+
+        eti.forEach(etiqueta => {
+            html += `<option value="${etiqueta.id}">${etiqueta.descripcion}</option>`;
+        });
+
+        filtroEtiqueta.innerHTML = html;
+    })
+
+});

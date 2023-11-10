@@ -46,7 +46,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-export const chatView = (req, res) => {
+export const chatView = async (req, res) => {
     const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
     const dominio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED;
     const js = [
@@ -59,7 +59,9 @@ export const chatView = (req, res) => {
         'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css'
     ];
 
-    res.render('chat/index', { layout: 'partials/main', css, js, urlchat: url_chat, dominio: dominio });
+    const embudo = await Embudo.findAll();
+
+    res.render('chat/index', { layout: 'partials/main', css, js, urlchat: url_chat, dominio: dominio, embudo: embudo });
 }
 
 const execAsync = promisify(exec);
@@ -310,11 +312,12 @@ export const addMessageFirestore = async(req, res) => {
 }
 
 export const numerosWhatsapp = async(req, res) => {
+    const { etiqueta } = req.body;
     try { 
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        const contactos = await NumeroWhatsapp.findAll();
+        let contactos = await NumeroWhatsapp.findAll();
 
         let array_ = [];
 
@@ -429,7 +432,15 @@ export const numerosWhatsapp = async(req, res) => {
             return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
 
-        return res.json({message: "ok",data: sortedData, rol: rol, id:id });
+        let resultados = sortedData;
+
+        if(etiqueta != '0') {
+            resultados = sortedData.filter(objeto => {
+                return objeto.etiqueta_id == etiqueta; 
+            });
+        }
+
+        return res.json({message: "ok",data: resultados, rol: rol, id:id });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

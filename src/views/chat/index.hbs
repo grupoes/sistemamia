@@ -100,6 +100,36 @@
                             <li class="list-inline-item fs-18 dropdown">
                                 <a href="javascript: void(0);" class="dropdown-toggle text-dark"
                                     data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end">
+
+                                    <div class="row" style="padding: 8px;">
+                                        <div class="mb-2">
+                                            <label for="">Embudo</label>
+                                            <select name="filtroEmbudo" id="filtroEmbudo" class="form-select">
+                                                <option value="0">TODOS</option>
+                                                {{#each embudo}}
+                                                    <option value="{{ this.id }}">{{this.descripcion}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-1">
+                                            <label for="">Etiqueta</label>
+                                            <select name="filtroEtiqueta" id="filtroEtiqueta" class="form-select">
+                                                <option value="0">Todos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+
+                            <li class="list-inline-item fs-18 dropdown">
+                                <a href="javascript: void(0);" class="dropdown-toggle text-dark"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -125,6 +155,7 @@
 
                 <!-- start searchbar -->
                 <div>
+                    
                     <form class="chat-search">
                         <div class="chat-search-box">
                             <div class="input-group">
