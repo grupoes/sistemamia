@@ -76,7 +76,7 @@ io.on('connection', (socket) => {
                 data: post 
             };
 
-            const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", requestConfig);
+            const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", requestConfig);
     
             const datos = response.data;
     
