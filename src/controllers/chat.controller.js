@@ -428,7 +428,14 @@ export const numerosWhatsapp = async(req, res) => {
         const sortedData = array_.sort((a, b) => parseInt(b.time) - parseInt(a.time));
 
         if(rol === 2 || rol === 6) {
-            const filterData = sortedData.filter(item => item.idAsistente === id);
+            let filterData = sortedData.filter(item => item.idAsistente === id);
+
+            if(etiqueta != '0') {
+                filterData = filterData.filter(objeto => {
+                    return objeto.etiqueta_id == etiqueta; 
+                });
+            }
+
             return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
 
