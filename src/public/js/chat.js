@@ -10,6 +10,8 @@ const token = localStorage.getItem('token');
 
 const dominio = document.getElementById('dominio').value;
 
+const filterEtiqueta = document.getElementById('filtroEtiqueta');
+
 function mostrar_chat(numero) {
     fetch('/messageNumber/' + numero)
         .then(res => res.json())
@@ -235,7 +237,6 @@ socket.on("messageContacts", data => {
 
 });
 
-const filterEtiqueta = document.getElementById('filtroEtiqueta');
 
 filterEtiqueta.addEventListener('change', (e) => {
     loadContact();
@@ -527,7 +528,7 @@ socket.on("messageChat", data => {
     audio.volume = 0.5;
     audio.play();*/
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value });
     console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
