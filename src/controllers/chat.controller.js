@@ -430,24 +430,24 @@ export const numerosWhatsapp = async(req, res) => {
         if(rol === 2 || rol === 6) {
             let filterData = sortedData.filter(item => item.idAsistente === id);
 
-            /*if(etiqueta != '0') {
+            if(etiqueta != '0') {
                 filterData = filterData.filter(objeto => {
                     return objeto.etiqueta_id == etiqueta; 
                 });
-            }*/
+            }
 
             return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
 
-        /*let resultados = sortedData;
+        let resultados = sortedData;
 
         if(etiqueta != '0') {
             resultados = sortedData.filter(objeto => {
                 return objeto.etiqueta_id == etiqueta; 
             });
-        }*/
+        }
 
-        return res.json({message: "ok",data: sortedData, rol: rol, id:id });
+        return res.json({message: "ok",data: resultados, rol: rol, id:id });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
