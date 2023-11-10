@@ -68,13 +68,15 @@ io.on('connection', (socket) => {
                 etiqueta: etiqueta
             };
 
-            const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", {
+            const requestConfig = {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`  // <-- Agrega el token en el header de autorización
+                  'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(post)
-            });
+                data: post 
+            };
+
+            const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", requestConfig);
     
             const datos = response.data;
     
