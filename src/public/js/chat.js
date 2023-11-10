@@ -220,7 +220,7 @@ socket.on("messageStatus", data => {
         icono.innerHTML = iconoUpdate;
     }
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value });
 
 });
 
