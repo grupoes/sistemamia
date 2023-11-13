@@ -8,6 +8,7 @@ import { EtiquetaCliente } from "../models/etiquetaCliente.js";
 import { Etiqueta } from "../models/etiquetas.js";
 import { Embudo } from "../models/embudo.js";
 import { Chat_estados } from "../models/estadosConversacion.js";
+import { Plataforma } from "../models/plataforma.js";
 
 import { Op } from 'sequelize';
 
@@ -60,8 +61,9 @@ export const chatView = async (req, res) => {
     ];
 
     const embudo = await Embudo.findAll();
+    const plataforma = await Plataforma.findAll();
 
-    res.render('chat/index', { layout: 'partials/main', css, js, urlchat: url_chat, dominio: dominio, embudo: embudo });
+    res.render('chat/index', { layout: 'partials/main', css, js, urlchat: url_chat, dominio: dominio, embudo: embudo, plataforma: plataforma });
 }
 
 const execAsync = promisify(exec);
@@ -312,12 +314,22 @@ export const addMessageFirestore = async(req, res) => {
 }
 
 export const numerosWhatsapp = async(req, res) => {
-    const { etiqueta } = req.body;
+    const { etiqueta, plataforma_id } = req.body;
     try { 
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        let contactos = await NumeroWhatsapp.findAll();
+        let contactos = "";
+
+        if(plataforma_id == 0) {
+            contactos = await NumeroWhatsapp.findAll();
+        } else {
+            contactos = await NumeroWhatsapp.findAll({
+                where: {
+                    plataforma_id: plataforma_id
+                }
+            });
+        }
 
         let array_ = [];
 

@@ -63,9 +63,11 @@ io.on('connection', (socket) => {
         try {
             const token = data.token;
             const etiqueta = data.etiqueta;
+            const plataforma_id = data.plataforma_id;
 
             const post = {
-                etiqueta: etiqueta
+                etiqueta: etiqueta,
+                plataforma_id: plataforma_id
             };
 
             const requestConfig = {

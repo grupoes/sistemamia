@@ -11,6 +11,7 @@ const token = localStorage.getItem('token');
 const dominio = document.getElementById('dominio').value;
 
 const filterEtiqueta = document.getElementById('filtroEtiqueta');
+const plataforma_id = document.getElementById('plataforma_id');
 
 function mostrar_chat(numero) {
     fetch('/messageNumber/' + numero)
@@ -220,7 +221,7 @@ socket.on("messageStatus", data => {
         icono.innerHTML = iconoUpdate;
     }
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value });
 
 });
 
@@ -240,11 +241,16 @@ socket.on("messageContacts", data => {
 
 filterEtiqueta.addEventListener('change', (e) => {
     loadContact();
-})
+});
+
+plataforma_id.addEventListener('change', (e) => {
+    loadContact();
+});
 
 function loadContact() {
     const post = {
-        etiqueta: filterEtiqueta.value
+        etiqueta: filterEtiqueta.value,
+        plataforma_id: plataforma_id.value
     };
 
     fetch("/numeroWhatsapp", {
@@ -528,7 +534,7 @@ socket.on("messageChat", data => {
     audio.volume = 0.5;
     audio.play();*/
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value });
+    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value });
     console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);

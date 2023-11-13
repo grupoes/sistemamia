@@ -100,6 +100,30 @@
                             <li class="list-inline-item fs-18 dropdown">
                                 <a href="javascript: void(0);" class="dropdown-toggle text-dark"
                                     data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-journal-text"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end">
+
+                                    <div class="row" style="padding: 8px;">
+                                        <div class="mb-2">
+                                            <label for="plataforma_id">Plataforma</label>
+                                            <select name="plataforma_id" id="plataforma_id" class="form-select">
+                                                <option value="0">TODOS</option>
+                                                {{#each plataforma}}
+                                                    <option value="{{ this.id }}">{{this.nombre}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    
+                                </div>
+                            </li>
+
+                            <li class="list-inline-item fs-18 dropdown">
+                                <a href="javascript: void(0);" class="dropdown-toggle text-dark"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-filter"></i>
                                 </a>
 
