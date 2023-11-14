@@ -638,8 +638,25 @@ function viewFromText(data, hora) {
 
     if(data.media_type != "" && data.media_type != null) {
         publicidad = `
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="${data.media_url}" allowfullscreen></iframe>
+        <div class="card">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-2 relative-position">
+                    <img src="${data.thumbnail_url}" class="card-img" alt="...">
+
+                    <!-- Icono de reproductor -->
+                    <a href="${data.media_url}" target="_blank" class="play-icon">
+                        <i class="bi bi-play-circle-fill" style="font-size: 30px"></i>  
+                    </a>
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h6 class="card-title fs-16">${data.headline}</h6>
+                        <p class="card-text text-muted">
+                            ${data.body}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
         `;
     }
