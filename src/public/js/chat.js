@@ -637,16 +637,25 @@ function viewFromText(data, hora) {
     let publicidad = "";
 
     if(data.media_type != "" && data.media_type != null) {
+
+        let icono_video = "";
+
+        if(data.media_type === 'video') {
+            icono_video = `
+            <!-- Icono de reproductor -->
+            <a href="${data.media_url}" target="_blank" class="play-icon">
+                <i class="bi bi-play-circle-fill" style="font-size: 30px"></i>  
+            </a>
+            `;
+        }
+
         publicidad = `
         <div class="card">
             <div class="row g-0 align-items-center">
                 <div class="col-md-2 relative-position">
                     <img src="${data.thumbnail_url}" class="card-img" alt="...">
 
-                    <!-- Icono de reproductor -->
-                    <a href="${data.media_url}" target="_blank" class="play-icon">
-                        <i class="bi bi-play-circle-fill" style="font-size: 30px"></i>  
-                    </a>
+                    ${icono_video}
                 </div>
                 <div class="col-md-10">
                     <div class="card-body">
