@@ -50,6 +50,33 @@ export const Chat = sequelize.define('chat', {
     },
     idRes: {
         type: DataTypes.STRING
+    },
+    source_url: {
+        type: DataTypes.STRING
+    },
+    source_id: {
+        type: DataTypes.STRING
+    },
+    source_type: {
+        type: DataTypes.STRING
+    },
+    body: {
+        type: DataTypes.TEXT
+    },
+    headline: {
+        type: DataTypes.STRING
+    },
+    media_type: {
+        type: DataTypes.STRING
+    },
+    media_url: {
+        type: DataTypes.STRING
+    },
+    thumbnail_url: {
+        type: DataTypes.TEXT
+    },
+    ctwa_clid: {
+        type: DataTypes.STRING
     }
 }, {
     freezeTableName: true,

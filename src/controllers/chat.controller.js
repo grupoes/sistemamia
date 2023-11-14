@@ -177,7 +177,7 @@ export const mensajes_numero = async (req, res) => {
 };
 
 export const addMessageFirestore = async(req, res) => {
-    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename, description, fromRes, idRes} = req.body;
+    const {from, id, message, nameContact, receipt, timestamp, type, documentId, id_document, filename, description, fromRes, idRes, source_url, source_id, source_type, body, headline, media_type, media_url, thumbnail_url, ctwa_clid} = req.body;
     try {
 
         console.log(req.body);
@@ -303,7 +303,16 @@ export const addMessageFirestore = async(req, res) => {
             filename: filename,
             description: description,
             fromRes: fromRes,
-            idRes: idRes
+            idRes: idRes,
+            source_url: source_url, 
+            source_id: source_id, 
+            source_type: source_type, 
+            body: body, 
+            headline: headline, 
+            media_type: media_type, 
+            media_url: media_url, 
+            thumbnail_url: thumbnail_url, 
+            ctwa_clid: ctwa_clid
         });
 
         return res.json(newMessage);
