@@ -607,6 +607,8 @@ socket.on("messageChat", data => {
 
 function viewFromText(data, hora) {
 
+    console.log(data);
+
     let responseData = "";
 
     if(data.mensajeRelacionado) {
@@ -632,12 +634,23 @@ function viewFromText(data, hora) {
         }
     }
 
+    let publicidad = "";
+
+    if(data.media_type != "" && data.media_type != null) {
+        publicidad = `
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="${data.media_url}" allowfullscreen></iframe>
+        </div>
+        `;
+    }
+
     let html = `
         <li class="clearfix">
             <div class="conversation-text ms-0">
                 <div class="d-flex">
                     
                     <div class="ctext-wrap" style="padding: 0;">
+                        ${publicidad}
                         ${responseData}
                         <p id="${data.codigo}" style="padding: 5px 10px 5px 10px;">${data.message}</p>                                
                     </div>                                                                    
