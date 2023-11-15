@@ -1684,6 +1684,27 @@ const newContacto = document.getElementById('newContact');
 const btnAgregar = document.getElementById('btnNuevoContacto');
 
 const plataforma = document.getElementById('plataforma_contacto');
+const platform = document.getElementById('platform');
+
+renderOptionPlataforma(platform);
+
+function renderOptionPlataforma(docPlataforma) {
+    fetch('/getPlataformas')
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            let html = `<option value="">Seleccione...</option>`;
+            const datos = data.data;
+
+            datos.forEach(platf => {
+                html += `<option value="${platf.id}">${platf.nombre}</option>`;
+            });
+
+            docPlataforma.innerHTML = html;
+
+        }
+    });
+}
 
 newContacto.addEventListener('click', (e) => {
     e.preventDefault();
@@ -1700,21 +1721,8 @@ newContacto.addEventListener('click', (e) => {
     document.getElementById('plataforma_contacto').value = "";
     document.getElementById('tipo_contacto').value = "";
 
-
-    fetch('/getPlataformas')
-    .then(res => res.json())
-    .then(data => {
-        if(data.message === 'ok') {
-            let html = `<option value="">Seleccione...</option>`;
-            const datos = data.data;
-
-            datos.forEach(platf => {
-                html += `<option value="${platf.id}">${platf.nombre}</option>`;
-            });
-
-            plataforma.innerHTML = html;
-        }
-    });
+    renderOptionPlataforma(plataforma);
+    
 });
 
 btnAgregar.addEventListener('click', (e) => {
@@ -2376,3 +2384,12 @@ filtroEmbudo.addEventListener('change', (e) => {
     })
 
 });
+
+//filter contacto
+const filterContacto = document.getElementById('filterContacto');
+
+filterContacto.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    $('#offcanvasLeft').offcanvas('show');
+})

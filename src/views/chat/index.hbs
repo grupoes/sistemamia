@@ -125,13 +125,13 @@
                                             <select name="plataforma_id" id="plataforma_id" class="form-select">
                                                 <option value="0">TODOS</option>
                                                 {{#each plataforma}}
-                                                    <option value="{{ this.id }}">{{this.nombre}}</option>
+                                                <option value="{{ this.id }}">{{this.nombre}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
 
                                     </div>
-                                    
+
                                 </div>
                             </li>
 
@@ -149,7 +149,7 @@
                                             <select name="filtroEmbudo" id="filtroEmbudo" class="form-select">
                                                 <option value="0">TODOS</option>
                                                 {{#each embudo}}
-                                                    <option value="{{ this.id }}">{{this.descripcion}}</option>
+                                                <option value="{{ this.id }}">{{this.descripcion}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
@@ -161,7 +161,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </li>
 
@@ -171,20 +171,13 @@
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-people fs-18 me-2"></i>New Group</a>-->
-                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-person-lines-fill fs-18 me-2"></i>Contacts</a>
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-bookmark fs-18 me-2"></i>Saved Message</a>-->
+
                                     <a class="dropdown-item" href="javascript: void(0);" id="newContact"><i
                                             class="bi bi-person-plus fs-18 me-2"></i>Nuevo Contacto</a>
                                     <a class="dropdown-item" href="javascript: void(0);" id="misContactos"><i
                                             class="bi bi-person-lines-fill fs-18 me-2"></i>Contactos</a>
-                                    <!--<a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-question-circle fs-18 me-2"></i>Help</a>
-                                    <a class="dropdown-item" href="javascript: void(0);"><i
-                                            class="bi bi-gear fs-18 me-2"></i>Setting</a>-->
+                                    <a class="dropdown-item" href="javascript: void(0);" id="filterContacto"><i
+                                            class="bi bi-person-check-fill fs-18 me-2"></i>Filtro</a>
                                 </div>
                             </li>
                         </ul>
@@ -193,7 +186,7 @@
 
                 <!-- start searchbar -->
                 <div>
-                    
+
                     <form class="chat-search">
                         <div class="chat-search-box">
                             <div class="input-group">
@@ -410,7 +403,7 @@
                         <div class="mb-3">
                             <label for="plataforma_contacto" class="col-form-label">Plataforma:</label>
                             <select name="plataforma_contacto" id="plataforma_contacto" class="form-select">
-                                
+
                             </select>
                         </div>
                     </div>
@@ -453,11 +446,11 @@
                 </div>
 
                 <div class="row" id="dataPlantilla">
-                    
+
                 </div>
 
                 <div class="row" id="contentPlantilla">
-                    
+
                 </div>
 
             </div>
@@ -566,5 +559,45 @@
                 <button type="button" class="btn btn-primary" id="btnEditarContacto">Editar</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasTopLabel">
+    <div class="offcanvas-header">
+        <h4 id="offcanvasLeftLabel">Plataforma - filtrar contacto</h4>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" style="padding-top: 0px;">
+        <div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-1">
+                        <label class="form-label" for="dateInit">Fecha Inicio</label>
+                        <input type="date" class="form-control" id="dateInit">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-1">
+                        <label class="form-label" for="dateEnd">Fecha Fin</label>
+                        <input type="date" class="form-control" id="dateEnd">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-1">
+                        <label class="form-label" for="platform">Plataforma</label>
+                        <select name="platform" id="platform" class="form-select">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-1">
+                        <button type="button" class="btn btn-primary mt-3">Consultar</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
     </div>
 </div>

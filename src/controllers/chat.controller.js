@@ -268,7 +268,8 @@ export const addMessageFirestore = async(req, res) => {
                 from: from,
                 nameContact: nameContact,
                 plataforma_id: 1,
-                tipo_contacto: 1
+                tipo_contacto: 1,
+                user_register: 0
             });
     
             const pot = await PotencialCliente.create({
@@ -976,7 +977,8 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 estado: 1,
                 asistente: trabajador.id,
                 plataforma_id: 3,
-                tipo_contacto: 1
+                tipo_contacto: 1,
+                user_register: 0
             });
 
             // 5. Crea una nueva asignación con el cliente y el trabajador determinado
