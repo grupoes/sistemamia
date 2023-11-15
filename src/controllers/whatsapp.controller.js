@@ -1,3 +1,5 @@
+import { sequelize } from "../database/database.js";
+
 import { NumeroWhatsapp } from "../models/numerosWhatsapp.js";
 import { PotencialCliente } from "../models/potencialCliente.js";
 import { EtiquetaCliente } from "../models/etiquetaCliente.js";
@@ -388,6 +390,40 @@ export const editContact = async (req, res) => {
         return res.json({ message: 'ok', data:contacto, datos: datos });
 
 
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+export const FiltroContact = async (req, res) => {
+    const { dateInit, dateEnd, plataforma } = req.body;
+    try {
+
+        let contactos = "";
+
+        if(plataforma == 0) {
+            contactos = await NumeroWhatsapp.findAll({
+                where: {
+                    [Op.and]: [
+                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                    ]
+                }
+            });
+        } else {
+            contactos = await NumeroWhatsapp.findAll({
+                where: {
+                    plataforma_id: plataforma,
+                    [Op.and]: [
+                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                    ]
+                }
+            });
+        }
+
+        return res.json({ message: 'ok', data: contactos });
+        
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }

@@ -1686,14 +1686,22 @@ const btnAgregar = document.getElementById('btnNuevoContacto');
 const plataforma = document.getElementById('plataforma_contacto');
 const platform = document.getElementById('platform');
 
-renderOptionPlataforma(platform);
+renderOptionPlataforma(platform, 0);
 
-function renderOptionPlataforma(docPlataforma) {
+function renderOptionPlataforma(docPlataforma, type) {
     fetch('/getPlataformas')
     .then(res => res.json())
     .then(data => {
         if(data.message === 'ok') {
-            let html = `<option value="">Seleccione...</option>`;
+
+            let html = "";
+
+            if(type == 0) {
+                html = `<option value="0">Todos</option>`;
+            } else {
+                html = `<option value="">Seleccione...</option>`;
+            }
+            
             const datos = data.data;
 
             datos.forEach(platf => {
@@ -1721,7 +1729,7 @@ newContacto.addEventListener('click', (e) => {
     document.getElementById('plataforma_contacto').value = "";
     document.getElementById('tipo_contacto').value = "";
 
-    renderOptionPlataforma(plataforma);
+    renderOptionPlataforma(plataforma, 1);
     
 });
 
@@ -2387,9 +2395,85 @@ filtroEmbudo.addEventListener('change', (e) => {
 
 //filter contacto
 const filterContacto = document.getElementById('filterContacto');
+const consultarFiltro = document.getElementById('consultarFiltro');
 
 filterContacto.addEventListener('click', (e) => {
     e.preventDefault();
 
     $('#offcanvasLeft').offcanvas('show');
 })
+
+consultarFiltro.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const dateInit = document.getElementById('dateInit');
+    const dateEnd = document.getElementById('dateEnd');
+    const platf = document.getElementById('platform');
+
+    const post = {
+        dateInit: dateInit.value,
+        dateEnd: dateEnd.value,
+        plataforma: platf.value
+    };
+
+    fetch("/filtroContact", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            viewFilterContacts(data);
+        } else {
+            alert('ocurrio un error');
+        }
+    })
+});
+
+function viewFilterContacts(data) {
+    const content_filtro = document.getElementById('content_filtro');
+
+    let tbody = "";
+
+    const datos = data.data;
+
+    datos.forEach(contact => {
+        let register = "";
+
+        if(contact.user_register == 0) {
+            register = "Software";
+        }
+
+        tbody += `
+        <tr>
+            <td>${contact.nameContact}</td>
+            <td>${contact.from}</td>
+            <td>${contact.createdAt}</td>
+            <td>${register}</td>
+        </tr>
+        `;
+    });
+
+    let htmlTable = `
+    <div class="table-responsive table-nowrap mt-3">
+        <table class="table table-sm table-centered mb-0 fs-13">
+            <thead class="table-light">
+                <tr>
+                    <th>Contacto</th>
+                    <th style="width: 30%;">Whatsapp</th>
+                    <th style="width: 30%;">Fecha</th>
+                    <th>Registrado</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${tbody}
+            </tbody>
+        </table>
+    </div>
+    `;
+
+    content_filtro.innerHTML = htmlTable;
+}
