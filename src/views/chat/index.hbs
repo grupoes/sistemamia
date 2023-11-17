@@ -626,12 +626,15 @@
                 <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje a</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="contentModalReenvio">
-                
+            <div class="modal-body">
+                <input type="search" id="buscarContacto" placeholder="Buscar contacto" class="form-control mb-2" onkeyup="searchContacto(event)">
+                <input type="hidden" id="codigoMensaje" value="">
+
+                <div id="contentModalReenvio"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Enviar</button>
             </div>
         </div>
     </div>

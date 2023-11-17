@@ -14,6 +14,7 @@ import { Op } from 'sequelize';
 
 import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
+import { numerosWhatsapp } from "./chat.controller.js";
 
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
@@ -430,11 +431,27 @@ export const FiltroContact = async (req, res) => {
 }
 
 export const getContactos = async (req, res) => {
+    const buscar = req.params.id;
     try {
-        const contactos = await NumeroWhatsapp.findAll();
+        const contactos = await NumeroWhatsapp.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                      nameContact: {
+                        [Op.iLike]: `%${buscar}%`
+                      }
+                    },
+                    {
+                      from: {
+                        [Op.like]: `%${buscar}%`
+                      }
+                    }
+                ]
+            }
+        });
 
         return res.json({ message: 'ok', data: contactos });
-        
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
