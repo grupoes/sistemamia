@@ -5,6 +5,6 @@ import { FiltroContact, getContactos } from "../controllers/whatsapp.controller.
 const router = Router();
 
 router.post('/filtroContact', FiltroContact);
-router.get('/obtenerContactos', getContactos);
+router.post('/obtenerContactos', getContactos);
 
 export default router;
