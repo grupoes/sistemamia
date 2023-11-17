@@ -13,6 +13,8 @@ const dominio = document.getElementById('dominio').value;
 const filterEtiqueta = document.getElementById('filtroEtiqueta');
 const plataforma_id = document.getElementById('plataforma_id');
 
+const contentOffcanvas = document.getElementById('contentOffcanvas');
+
 function mostrar_chat(numero) {
     fetch('/messageNumber/' + numero)
         .then(res => res.json())
@@ -2483,6 +2485,40 @@ function reenviarMensaje(e, codigo) {
     e.preventDefault();
 
     $('#offcanvasReenvio').offcanvas('show');
+
+    fetch('/obtenerContactos')
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        viewContactosReenvio(data);
+    })
+}
+
+function viewContactosReenvio(data){
+    let contactos = data.data;
+
+    let viewContactos = "";
+
+    contactos.forEach(contacto => {
+        viewContactos += `
+        <div class="d-flex border-top pt-2">
+            <input type="radio" id="contact-${contacto.from}" class="form-check-input" value="${contacto.from}" style="margin-right: 20px;">
+            <div class="flex-grow-1">
+                <h5 class="mt-1 mb-0 fs-15">${contacto.nameContact}</h5>
+                <h6 class="text-muted fw-normal mt-1 mb-2">${contacto.from}</h6>
+            </div>
+            
+        </div>
+        `;
+    });
+
+    let view = `
+        <h6 class="header-title mb-3">Elige un contacto</h6>
+        <input type="hidden" id="codigoMensaje" value="">
+        ${viewContactos}
+    `;
+
+    contentOffcanvas.innerHTML = view;
 }
 
 //'20607393711', 'LA FINCA REGIONAL S.A.C.', 'JR. ALFONSO UGARTE  NRO. C9   SAN MARTíN -  SAN MARTíN  -  TARAPOTO', '942815322', 'lafincatarapoto@gmail.com', '1', '20607393711.png', '76', 'LA FINCA REGIONAL S.A.C.', NULL, NULL, 'LAFINCAR', 'Lafinca21', 'FINCA2021', '1', '1', '1', NULL, '0', NULL, '0', NULL, NULL, '1', '220901', NULL, '2023-11-15 15:47:43'

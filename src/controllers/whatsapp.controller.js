@@ -429,6 +429,17 @@ export const FiltroContact = async (req, res) => {
     }
 }
 
+export const getContactos = async (req, res) => {
+    try {
+        const contactos = await NumeroWhatsapp.findAll();
+
+        return res.json({ message: 'ok', data: contactos });
+        
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 const reemplazarMarcadoresConArray = (str, array) => {
     return str.replace(/\{\{\{(\w+)\}\}\}/g, (match, variable) => {
         const valor = array.shift();
