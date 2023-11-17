@@ -472,6 +472,8 @@ export const reenviarMensaje = async (req, res) => {
 
         const typeMessage = mensaje.typeMessage;
 
+        const timestamp = Date.now();
+
         if(typeMessage === 'audio') {
             const inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
 
