@@ -2514,7 +2514,7 @@ function viewContactosReenvio(data){
     });
 
     let view = `
-        <h6 class="header-title mb-3">Elige un contacto</h6>
+        <input type="search" id="buscarContacto" placeholder="Buscar contacto">
         <input type="hidden" id="codigoMensaje" value="">
         ${viewContactos}
     `;
