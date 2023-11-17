@@ -2502,7 +2502,7 @@ function viewContactosReenvio(data){
     contactos.forEach(contacto => {
         viewContactos += `
         <div class="d-flex border-top pt-2">
-            <input type="radio" id="contact-${contacto.from}" class="form-check-input" value="${contacto.from}" style="margin-right: 20px;">
+            <input type="radio" id="contact-${contacto.from}" name="getContacto" class="form-check-input" value="${contacto.from}" style="margin-right: 20px;">
             <div class="flex-grow-1">
                 <h5 class="mt-1 mb-0 fs-15">${contacto.nameContact}</h5>
                 <h6 class="text-muted fw-normal mt-1 mb-2">${contacto.from}</h6>
