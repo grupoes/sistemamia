@@ -13,6 +13,8 @@ import { asignarAsistenteData } from "./base.controller.js";
 import path from 'path';
 import fs from 'fs';
 
+import { promisify } from 'util';
+
 import { exec } from 'child_process';
 
 import { Op } from 'sequelize';
@@ -460,6 +462,8 @@ export const getContactos = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 }
+
+const execAsync = promisify(exec);
 
 export const reenviarMensaje = async (req, res) => {
     const { codigo, contacto } = req.body;
