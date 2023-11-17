@@ -821,8 +821,8 @@ function viewFromAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>responder
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}')">
+                                    <i class="bi bi-reply-all fs-18 me-2"></i>Reenviar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-files fs-18 me-2"></i>Copy
@@ -2476,6 +2476,13 @@ function viewFilterContacts(data) {
     `;
 
     content_filtro.innerHTML = htmlTable;
+}
+
+//reenviar mensajes
+function reenviarMensaje(e, codigo) {
+    e.preventDefault();
+
+    $('#offcanvasReenvio').offcanvas('show');
 }
 
 //'20607393711', 'LA FINCA REGIONAL S.A.C.', 'JR. ALFONSO UGARTE  NRO. C9   SAN MARTíN -  SAN MARTíN  -  TARAPOTO', '942815322', 'lafincatarapoto@gmail.com', '1', '20607393711.png', '76', 'LA FINCA REGIONAL S.A.C.', NULL, NULL, 'LAFINCAR', 'Lafinca21', 'FINCA2021', '1', '1', '1', NULL, '0', NULL, '0', NULL, NULL, '1', '220901', NULL, '2023-11-15 15:47:43'
