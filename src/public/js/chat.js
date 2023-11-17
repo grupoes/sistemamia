@@ -2539,7 +2539,7 @@ function searchContacto(e) {
 
 const reenviar_mensaje_contacto = document.getElementById('reenviar_mensaje_contacto');
 
-reenviar_mensaje_contacto.addEventListener('click', () => {
+reenviar_mensaje_contacto.addEventListener('click', (e) => {
     const radios = document.querySelectorAll('input[name="getContacto"]');
 
     let seleccionado = "";
@@ -2556,6 +2556,9 @@ reenviar_mensaje_contacto.addEventListener('click', () => {
 
     const codigoMensaje = document.getElementById('codigoMensaje');
 
+    e.target.disabled = true;
+    e.target.textContent = 'Enviando...';
+
     const post = {
         codigo: codigoMensaje.value,
         contacto: seleccionado
@@ -2570,7 +2573,20 @@ reenviar_mensaje_contacto.addEventListener('click', () => {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+        e.target.disabled = false;
+        e.target.textContent = 'Enviar';
+
+        $('#modalReenvio').modal('show');
+
+        if(data.message === 'ok') {
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Se reenvio correctamente el mensaje',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
     })
 
 });
