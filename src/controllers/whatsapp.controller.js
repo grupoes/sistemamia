@@ -431,7 +431,7 @@ export const FiltroContact = async (req, res) => {
 }
 
 export const getContactos = async (req, res) => {
-    const buscar = req.params.id;
+    const { buscar } = req.body;
     try {
         const contactos = await NumeroWhatsapp.findAll({
             where: {

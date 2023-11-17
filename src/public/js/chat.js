@@ -2493,7 +2493,13 @@ function reenviarMensaje(e, codigo) {
 }
 
 function obtenerContactosReenviar(buscar) {
-    fetch('/obtenerContactos/'+buscar)
+    fetch('/obtenerContactos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ buscar: buscar })
+    })
     .then(res => res.json())
     .then(data => {
         console.log(data);
