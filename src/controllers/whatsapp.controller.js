@@ -10,11 +10,15 @@ import { Chat } from "../models/chat.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
 
+import path from 'path';
+import fs from 'fs';
+
+import { exec } from 'child_process';
+
 import { Op } from 'sequelize';
 
 import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
-import { numerosWhatsapp } from "./chat.controller.js";
 
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
@@ -460,7 +464,70 @@ export const getContactos = async (req, res) => {
 export const reenviarMensaje = async (req, res) => {
     const { codigo, contacto } = req.body;
     try {
-        return res.json(codigo);
+        const mensaje = await Chat.findOne({
+            where: {
+                codigo: codigo
+            }
+        });
+
+        const typeMessage = mensaje.typeMessage;
+
+        if(typeMessage === 'audio') {
+            const inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
+
+            // Definir la ruta de salida
+            const outputPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+
+            // Ejecutar el comando ffmpeg
+            await execAsync(`ffmpeg -i ${inputPath} ${outputPath}`);
+
+            const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
+
+            const dataFile = {
+                messaging_product: "whatsapp",
+                to: contacto,
+                type: 'audio',
+                audio: {
+                    link: url_audio
+                }
+            };
+    
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: process.env.URL_MESSAGES,
+                headers: { 
+                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                },
+                data: dataFile
+            };
+    
+            try {
+                const response = await axios(config);
+                const datos = response.data;
+    
+                const new_message = await Chat.create({
+                    codigo: datos.messages[0].id,
+                    from: process.env.NUMERO_WHATSAPP,
+                    message: "",
+                    nameContact: "",
+                    receipt: contacto,
+                    timestamp: Math.floor(Date.now() / 1000),
+                    typeMessage: "audio",
+                    estadoMessage: "sent",
+                    documentId: "",
+                    id_document: Math.floor(Date.now() / 1000),
+                    filename: timestamp + '.mp3'
+                });
+    
+                return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
+            }
+              catch (error) {
+                console.error("Error in making request:", error.response.data || error.message);
+                return res.json({message: error.message});
+            }
+        }
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
