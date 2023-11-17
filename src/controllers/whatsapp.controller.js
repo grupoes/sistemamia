@@ -457,6 +457,15 @@ export const getContactos = async (req, res) => {
     }
 }
 
+export const reenviarMensaje = async (req, res) => {
+    const { codigo, contacto } = req.body;
+    try {
+        return res.json(codigo);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 const reemplazarMarcadoresConArray = (str, array) => {
     return str.replace(/\{\{\{(\w+)\}\}\}/g, (match, variable) => {
         const valor = array.shift();

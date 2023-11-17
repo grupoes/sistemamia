@@ -2486,6 +2486,9 @@ function reenviarMensaje(e, codigo) {
     e.preventDefault();
 
     const buscarContacto = document.getElementById('buscarContacto');
+    const codigoMensaje = document.getElementById('codigoMensaje');
+
+    codigoMensaje.value = codigo;
 
     $('#modalReenvio').modal('show');
 
@@ -2533,5 +2536,43 @@ function searchContacto(e) {
 
     obtenerContactosReenviar(buscar);
 }
+
+const reenviar_mensaje_contacto = document.getElementById('reenviar_mensaje_contacto');
+
+reenviar_mensaje_contacto.addEventListener('click', () => {
+    const radios = document.querySelectorAll('input[name="getContacto"]');
+
+    let seleccionado = "";
+    radios.forEach(radio => {
+        if (radio.checked) {
+            seleccionado = radio.value; 
+        }
+    });
+
+    if(seleccionado === "") {
+        alert('Seleccione un contacto para reenviar el mensaje');
+        return;
+    }
+
+    const codigoMensaje = document.getElementById('codigoMensaje');
+
+    const post = {
+        codigo: codigoMensaje.value,
+        contacto: seleccionado
+    }
+
+    fetch('/reenviarMensaje', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+    })
+
+});
 
 //'20607393711', 'LA FINCA REGIONAL S.A.C.', 'JR. ALFONSO UGARTE  NRO. C9   SAN MARTíN -  SAN MARTíN  -  TARAPOTO', '942815322', 'lafincatarapoto@gmail.com', '1', '20607393711.png', '76', 'LA FINCA REGIONAL S.A.C.', NULL, NULL, 'LAFINCAR', 'Lafinca21', 'FINCA2021', '1', '1', '1', NULL, '0', NULL, '0', NULL, NULL, '1', '220901', NULL, '2023-11-15 15:47:43'
