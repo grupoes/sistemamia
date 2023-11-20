@@ -2576,7 +2576,7 @@ reenviar_mensaje_contacto.addEventListener('click', (e) => {
         e.target.disabled = false;
         e.target.textContent = 'Enviar';
 
-        $('#modalReenvio').modal('show');
+        $('#modalReenvio').modal('hide');
 
         if(data.mensaje === 'ok') {
             Swal.fire({
