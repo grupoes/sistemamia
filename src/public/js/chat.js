@@ -1102,8 +1102,8 @@ function viewReceipAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Responder
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}')">
+                                    <i class="bi bi-reply-all fs-18 me-2"></i>Reenviar
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="bi bi-files fs-18 me-2"></i>Copy
