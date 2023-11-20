@@ -483,7 +483,7 @@ export const reenviarMensaje = async (req, res) => {
             if(sendType === 0) {
                 inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
             } else {
-                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.mp3');
+                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.filename);
             }
 
             // Definir la ruta de salida
