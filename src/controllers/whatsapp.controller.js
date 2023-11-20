@@ -480,20 +480,31 @@ export const reenviarMensaje = async (req, res) => {
 
         if(typeMessage === 'audio') {
             let inputPath = "";
+            let fileName = "";
             if(sendType === 0) {
                 inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
+
+                // Definir la ruta de salida
+                const outputPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+
+                // Ejecutar el comando ffmpeg
+                await execAsync(`ffmpeg -i ${inputPath} ${outputPath}`);
+
+                fileName = timestamp+".mp3";
             } else {
                 inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.filename);
+                fileName = mensaje.filename;
             }
 
-            // Definir la ruta de salida
-            const outputPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+            let url_audio = "";
 
-            // Ejecutar el comando ffmpeg
-            await execAsync(`ffmpeg -i ${inputPath} ${outputPath}`);
+            if(sendType === 0) {
+                url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
+            } else {
+                url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+mensaje.filename;
+            }
 
-            const url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
-
+        
             const dataFile = {
                 messaging_product: "whatsapp",
                 to: contacto,
@@ -528,7 +539,7 @@ export const reenviarMensaje = async (req, res) => {
                     estadoMessage: "sent",
                     documentId: "",
                     id_document: Math.floor(Date.now() / 1000),
-                    filename: timestamp + '.mp3'
+                    filename: fileName
                 });
     
                 return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
