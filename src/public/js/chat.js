@@ -824,7 +824,7 @@ function viewFromAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>responder
                                 </a>
-                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}')">
+                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}', 0)">
                                     <i class="bi bi-reply-all fs-18 me-2"></i>Reenviar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -1102,7 +1102,7 @@ function viewReceipAudio(data, fecha) {
                                 <a class="dropdown-item" href="#" onclick="responderFrom(event, '${data.codigo}')">
                                     <i class="bi bi-reply fs-18 me-2"></i>Responder
                                 </a>
-                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}')">
+                                <a class="dropdown-item" href="#" onclick="reenviarMensaje(event, '${data.codigo}', 1)">
                                     <i class="bi bi-reply-all fs-18 me-2"></i>Reenviar
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -2482,17 +2482,19 @@ function viewFilterContacts(data) {
 }
 
 //reenviar mensajes
-function reenviarMensaje(e, codigo) {
+function reenviarMensaje(e, codigo, from) {
     e.preventDefault();
 
     const buscarContacto = document.getElementById('buscarContacto');
     const codigoMensaje = document.getElementById('codigoMensaje');
+    const sendType = document.getElementById('sendType');
 
     codigoMensaje.value = codigo;
+    sendType.value = from;
 
     $('#modalReenvio').modal('show');
 
-    obtenerContactosReenviar(buscarContacto.value);
+    obtenerContactosReenviar(buscarContacto.value, from);
 }
 
 function obtenerContactosReenviar(buscar) {
@@ -2555,13 +2557,15 @@ reenviar_mensaje_contacto.addEventListener('click', (e) => {
     }
 
     const codigoMensaje = document.getElementById('codigoMensaje');
+    const sendType = document.getElementById('sendType');
 
     e.target.disabled = true;
     e.target.textContent = 'Enviando...';
 
     const post = {
         codigo: codigoMensaje.value,
-        contacto: seleccionado
+        contacto: seleccionado,
+        sendType: sendType
     }
 
     fetch('/reenviarMensaje', {

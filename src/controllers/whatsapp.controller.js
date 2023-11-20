@@ -466,7 +466,7 @@ export const getContactos = async (req, res) => {
 const execAsync = promisify(exec);
 
 export const reenviarMensaje = async (req, res) => {
-    const { codigo, contacto } = req.body;
+    const { codigo, contacto, sendType } = req.body;
     try {
         const mensaje = await Chat.findOne({
             where: {
@@ -479,7 +479,12 @@ export const reenviarMensaje = async (req, res) => {
         const timestamp = Date.now();
 
         if(typeMessage === 'audio') {
-            const inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
+            let inputPath = "";
+            if(sendType === 0) {
+                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
+            } else {
+                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.mp3');
+            }
 
             // Definir la ruta de salida
             const outputPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
