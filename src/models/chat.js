@@ -43,7 +43,7 @@ export const Chat = sequelize.define('chat', {
         defaultValue: ""
     },
     description: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     fromRes: {
         type: DataTypes.STRING

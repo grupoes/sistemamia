@@ -2622,3 +2622,28 @@ reenviar_mensaje_contacto.addEventListener('click', (e) => {
 });
 
 //'20607393711', 'LA FINCA REGIONAL S.A.C.', 'JR. ALFONSO UGARTE  NRO. C9   SAN MARTíN -  SAN MARTíN  -  TARAPOTO', '942815322', 'lafincatarapoto@gmail.com', '1', '20607393711.png', '76', 'LA FINCA REGIONAL S.A.C.', NULL, NULL, 'LAFINCAR', 'Lafinca21', 'FINCA2021', '1', '1', '1', NULL, '0', NULL, '0', NULL, NULL, '1', '220901', NULL, '2023-11-15 15:47:43'
+
+Notification.requestPermission().then(resultado => {
+    console.log('Respuesta: ', resultado);
+})
+
+setInterval(() => {
+    socket.emit('mensajes_no_respondidos', { token });
+}, 300000);
+
+socket.on('mostrar_notificaciones_chat', data => {
+    if(Notification.permission === 'granted') {
+        const datos = data.data;
+
+        datos.forEach(contacto => {
+            //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
+            new Notification(contacto.nameContacto, {
+                icon: './img/logos/icon.png',
+                body: `Responde por favor, ya paso ${contacto.dias} dias con ${contacto.minutos} minutos`
+            });
+
+        });
+    
+    }
+})
+

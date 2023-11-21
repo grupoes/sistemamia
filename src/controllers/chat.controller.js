@@ -51,13 +51,15 @@ export const chatView = async (req, res) => {
     const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
     const dominio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED;
     const js = [
+        'https://cdn.jsdelivr.net/npm/toastify-js',
         url_chat+'/socket.io/socket.io.js',
         url_chat+'/js/chat.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
     ];
 
     const css = [
-        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css'
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css',
+        'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
     ];
 
     const embudo = await Embudo.findAll();
@@ -1243,4 +1245,90 @@ export const chatOne = async (req, res) => {
     } catch (error) {
         return res.json({message: error.message});
     }
+}
+
+//traer todos los contactos que no fueron respondidos a lo lapso de 3 min (configurable)
+export const contactosNoContestados = async(req, res) => {
+    try {
+        const rol = req.usuarioToken._role;
+        const id = req.usuarioToken._id;
+
+        const contactos = await NumeroWhatsapp.findAll();
+
+        let arrayContactos = [];
+
+        for (let contacto of contactos) {
+            const numero = contacto.from; 
+
+            const lastId = await Chat.max('id', { 
+                where: {
+                  [Op.or]: [
+                    { from: numero },  
+                    { receipt: numero }
+                  ]
+                }
+            });
+
+            if(lastId) {
+                const chat = await Chat.findOne({
+                    where: {
+                      id: lastId 
+                    }
+                });
+
+                if(chat.from == numero) {
+                    const tiempo = dias_minutos(chat.timestamp);
+
+                    if(tiempo.dias > 0 || tiempo.minutos > 3) {
+                        let datos = {
+                            nameContacto: contacto.nameContact,
+                            contacto: contacto.from,
+                            fecha: chat.timestamp,
+                            dias: tiempo.dias,
+                            minutos: tiempo.minutos
+                        }
+            
+                        arrayContactos.push(datos);
+                    }
+                }
+                
+            }
+
+        }
+
+        return res.json({ message: 'ok', data: arrayContactos });
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+function dias_minutos(timestamp) {
+    // Fechas
+    const fechaPasada = new Date(timestamp * 1000);  
+    const ahora = new Date();
+
+    // Diferencia en milisegundos
+    const diff = ahora - fechaPasada;   
+
+    // Calcular días
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    // Calcular minutos
+    const minutos = Math.round(diff / 1000 / 60) % 60;
+
+    const datos = {
+        dias: dias,
+        minutos: minutos
+    }
+
+    return datos;
+
+    if(dias > 0 || minutos > 3) {
+        return 1;
+    } else {
+        
+        return 0;
+    }
+
 }

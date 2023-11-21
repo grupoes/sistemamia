@@ -101,6 +101,28 @@ io.on('connection', (socket) => {
             console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error
         }
     });
+
+    socket.on('mensajes_no_respondidos', async data => {
+        try {
+            const token = data.token;
+
+            const requestConfig = {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
+            };
+
+            const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/contactosNoContestados", requestConfig);
+
+            const datos = response.data;
+
+            io.emit('mostrar_notificaciones_chat', datos);
+
+        } catch (error) {
+            console.error("Hubo un error al hacer la solicitud:", error);
+        }
+    });
     
 });
 
