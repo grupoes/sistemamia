@@ -137,16 +137,72 @@ export const addContact = async (req, res) => {
             });
 
             if(variables.length == 0) {
-                contenJson = {
-                    "messaging_product": "whatsapp",
-                    "recipient_type": "individual",
-                    "to": numero,
-                    "type": "template",
-                    "template": {
-                      "name": plantilla.nombre,
-                      "language": { "code": "es" }
+
+                if(plantilla.cabecera === 'si') {
+                    if(plantilla.tipoCabecera === 'video') {
+                        contenJson = {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": numero,
+                            "type": "template",
+                            "template": {
+                              "name": plantilla.nombre,
+                              "language": { "code": "es" },
+                              "components" : [
+                                {
+                                    "type": "header",
+                                    "parameters": [
+                                        {
+                                            "type": "video",
+                                            "video": {
+                                                "link": plantilla.url_cabecera
+                                            }
+                                        }
+                                    ]
+                                }
+                              ]
+                            }
+                        };
                     }
-                };
+
+                    if(plantilla.tipoCabecera === 'image') {
+                        contenJson = {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": numero,
+                            "type": "template",
+                            "template": {
+                              "name": plantilla.nombre,
+                              "language": { "code": "es" },
+                              "components" : [
+                                {
+                                    "type": "header",
+                                    "parameters": [
+                                        {
+                                            "type": "image",
+                                            "image": {
+                                                "link": plantilla.url_cabecera
+                                            }
+                                        }
+                                    ]
+                                }
+                              ]
+                            }
+                        };
+                    }
+
+                } else {
+                    contenJson = {
+                        "messaging_product": "whatsapp",
+                        "recipient_type": "individual",
+                        "to": numero,
+                        "type": "template",
+                        "template": {
+                          "name": plantilla.nombre,
+                          "language": { "code": "es" }
+                        }
+                    };
+                }
 
                 contenido = plantilla.contenido;
             } else {
@@ -180,22 +236,86 @@ export const addContact = async (req, res) => {
                     }
                 }
 
-                contenJson = {
-                    "messaging_product": "whatsapp",
-                    "recipient_type": "individual",
-                    "to": numero,
-                    "type": "template",
-                    "template": {
-                      "name": plantilla.nombre,
-                      "language": { "code": "es" },
-                      "components": [
-                        {
-                          "type": "body",
-                          "parameters": parametros_body
+                if(plantilla.cabecera === 'no') {
+                    contenJson = {
+                        "messaging_product": "whatsapp",
+                        "recipient_type": "individual",
+                        "to": numero,
+                        "type": "template",
+                        "template": {
+                          "name": plantilla.nombre,
+                          "language": { "code": "es" },
+                          "components": [
+                            {
+                              "type": "body",
+                              "parameters": parametros_body
+                            }
+                          ]
                         }
-                      ]
+                    };
+                } else {
+                    if(plantilla.cabecera === 'video') {
+                        contenJson = {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": numero,
+                            "type": "template",
+                            "template": {
+                              "name": plantilla.nombre,
+                              "language": { "code": "es" },
+                              "components": [
+                                {
+                                    "type": "header",
+                                    "parameters": [
+                                        {
+                                            "type": "video",
+                                            "video": {
+                                                "link": plantilla.url_cabecera
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                  "type": "body",
+                                  "parameters": parametros_body
+                                }
+                              ]
+                            }
+                        };
                     }
-                };
+
+                    if(plantilla.cabecera === 'image') {
+                        contenJson = {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": numero,
+                            "type": "template",
+                            "template": {
+                              "name": plantilla.nombre,
+                              "language": { "code": "es" },
+                              "components": [
+                                {
+                                    "type": "header",
+                                    "parameters": [
+                                        {
+                                            "type": "image",
+                                            "image": {
+                                                "link": plantilla.url_cabecera
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                  "type": "body",
+                                  "parameters": parametros_body
+                                }
+                              ]
+                            }
+                        };
+                    }
+                }
+
+                
 
                 const messageSend = plantilla.contenido;
 

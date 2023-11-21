@@ -1982,7 +1982,7 @@ escogePlantilla.addEventListener('change', (e) =>  {
                 cabecera = `
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <video width="640" height="360" controls>
+                        <video width="440" height="260" controls>
                             <source src="${data.plantilla.url_cabecera}" type="video/mp4">
                             Tu navegador no soporta el elemento de video.
                         </video>

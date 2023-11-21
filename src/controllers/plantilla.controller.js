@@ -82,22 +82,88 @@ export const sendPlantilla = async (req, res) => {
             
         }
 
-        const mensajeJSON = {
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": numero,
-            "type": "template",
-            "template": {
-              "name": plantilla.nombre,
-              "language": { "code": "es" },
-              "components": [
-                {
-                  "type": "body",
-                  "parameters": parametros_body
-                }
-              ]
+        let mensajeJSON = "";
+
+        if(plantilla.cabecera === 'si') {
+
+            if(plantilla.tipoCabecera === 'video') {
+                mensajeJSON = {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": numero,
+                    "type": "template",
+                    "template": {
+                      "name": plantilla.nombre,
+                      "language": { "code": "es" },
+                      "components": [
+                        {
+                            "type": "header",
+                            "parameters": [
+                                {
+                                    "type": "video",
+                                    "video": {
+                                        "link": plantilla.url_cabecera
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                          "type": "body",
+                          "parameters": parametros_body
+                        }
+                      ]
+                    }
+                };
             }
-        };
+
+            if(plantilla.tipoCabecera === 'image') {
+                mensajeJSON = {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": numero,
+                    "type": "template",
+                    "template": {
+                      "name": plantilla.nombre,
+                      "language": { "code": "es" },
+                      "components": [
+                        {
+                            "type": "header",
+                            "parameters": [
+                                {
+                                    "type": "image",
+                                    "image": {
+                                        "link": plantilla.url_cabecera
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                          "type": "body",
+                          "parameters": parametros_body
+                        }
+                      ]
+                    }
+                };
+            }
+
+        } else {
+            mensajeJSON = {
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": numero,
+                "type": "template",
+                "template": {
+                  "name": plantilla.nombre,
+                  "language": { "code": "es" },
+                  "components": [
+                    {
+                      "type": "body",
+                      "parameters": parametros_body
+                    }
+                  ]
+                }
+            };
+        }
 
         const messageSend = plantilla.contenido;
 
