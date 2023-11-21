@@ -562,6 +562,24 @@ const reemplazarMarcadoresConArray = (str, array) => {
     });
 }
 
+const eliminarContacto = async(req, res) => {
+    const id = req.params.id;
+    try {
+        const contacto = await NumeroWhatsapp.findByPk(id);
+
+        // Verificar que el usuario exista antes de eliminar
+        if (!contacto) {
+            throw new Error('Contacto no existe'); 
+        }
+
+        // Eliminar el registro
+        await contacto.destroy();
+
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})
 
 /*let array = {

@@ -1975,6 +1975,32 @@ escogePlantilla.addEventListener('change', (e) =>  {
         console.log(data);
 
         let inputVariable = "";
+        let cabecera = "";
+
+        if(data.plantilla.cabecera === 'si') {
+            if(data.plantilla.tipoCabecera === 'video') {
+                cabecera = `
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <video width="640" height="360" controls>
+                            <source src="${data.plantilla.url_cabecera}" type="video/mp4">
+                            Tu navegador no soporta el elemento de video.
+                        </video>
+                    </div>
+                </div>
+                `;
+            }
+
+            if(data.plantilla.tipoCabecera === 'image') {
+                cabecera = `
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <img src="${data.plantilla.url_cabecera}" />
+                    </div>
+                </div>
+                `;
+            }
+        }
 
         const variables = data.variables;
 
@@ -1986,7 +2012,7 @@ escogePlantilla.addEventListener('change', (e) =>  {
         });
 
         html += `
-    
+        ${cabecera}
         <div class="col-md-12">
             <div class="mb-3">
                 <label for="cuerpo" class="col-form-label">Cuerpo:</label>

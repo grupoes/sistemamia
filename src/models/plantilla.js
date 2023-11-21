@@ -19,6 +19,9 @@ export const Plantilla = sequelize.define('plantilla', {
     tipoCabecera: {
         type: DataTypes.STRING
     },
+    url_cabecera: {
+        type: DataTypes.STRING
+    },
     estado: {
         type: DataTypes.STRING
     },
