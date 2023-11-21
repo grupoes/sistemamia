@@ -136,6 +136,8 @@ export const addContact = async (req, res) => {
                 }
             });
 
+            let tipoMensaje = "";
+
             if(variables.length == 0) {
 
                 if(plantilla.cabecera === 'si') {
@@ -163,6 +165,8 @@ export const addContact = async (req, res) => {
                               ]
                             }
                         };
+
+                        tipoMensaje = 'video';
                     }
 
                     if(plantilla.tipoCabecera === 'image') {
@@ -189,6 +193,8 @@ export const addContact = async (req, res) => {
                               ]
                             }
                         };
+
+                        tipoMensaje = 'image';
                     }
 
                 } else {
@@ -202,6 +208,8 @@ export const addContact = async (req, res) => {
                           "language": { "code": "es" }
                         }
                     };
+
+                    tipoMensaje = 'text';
                 }
 
                 contenido = plantilla.contenido;
@@ -253,6 +261,8 @@ export const addContact = async (req, res) => {
                           ]
                         }
                     };
+
+                    tipoMensaje = 'text';
                 } else {
                     if(plantilla.cabecera === 'video') {
                         contenJson = {
@@ -282,6 +292,8 @@ export const addContact = async (req, res) => {
                               ]
                             }
                         };
+
+                        tipoMensaje = 'video';
                     }
 
                     if(plantilla.cabecera === 'image') {
@@ -312,6 +324,8 @@ export const addContact = async (req, res) => {
                               ]
                             }
                         };
+
+                        tipoMensaje = 'image';
                     }
                 }
 
@@ -348,7 +362,7 @@ export const addContact = async (req, res) => {
                     nameContact: "Grupo Es Consultores",
                     receipt: numero,
                     timestamp: Math.floor(Date.now() / 1000),
-                    typeMessage: "text",
+                    typeMessage: tipoMensaje,
                     estadoMessage: "sent",
                     documentId: "",
                     id_document: "",
