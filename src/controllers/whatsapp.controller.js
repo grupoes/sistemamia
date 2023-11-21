@@ -355,15 +355,24 @@ export const addContact = async (req, res) => {
 
             if(messageStatus === 'accepted') {
 
+                let descripcionChat = "";
+                let contenidoChat = contenido;
+
+                if(plantilla.cabecera === 'si') {
+                    descripcionChat = contenido;
+                    contenidoChat = "";
+                }
+
                 const newMessage = await Chat.create({
                     codigo: data.messages[0].id,
                     from: process.env.NUMERO_WHATSAPP,
-                    message: contenido,
+                    message: contenidoChat,
                     nameContact: "Grupo Es Consultores",
                     receipt: numero,
                     timestamp: Math.floor(Date.now() / 1000),
                     typeMessage: tipoMensaje,
                     estadoMessage: "sent",
+                    description: descripcionChat,
                     documentId: "",
                     id_document: "",
                     filename: "",

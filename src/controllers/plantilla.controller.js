@@ -83,6 +83,7 @@ export const sendPlantilla = async (req, res) => {
         }
 
         let mensajeJSON = "";
+        let tipoMensaje = "";
 
         if(plantilla.cabecera === 'si') {
 
@@ -114,6 +115,8 @@ export const sendPlantilla = async (req, res) => {
                       ]
                     }
                 };
+
+                tipoMensaje = 'video';
             }
 
             if(plantilla.tipoCabecera === 'image') {
@@ -144,6 +147,8 @@ export const sendPlantilla = async (req, res) => {
                       ]
                     }
                 };
+
+                tipoMensaje = 'image';
             }
 
         } else {
@@ -163,6 +168,8 @@ export const sendPlantilla = async (req, res) => {
                   ]
                 }
             };
+
+            tipoMensaje = 'text';
         }
 
         const messageSend = plantilla.contenido;
@@ -189,14 +196,23 @@ export const sendPlantilla = async (req, res) => {
 
             if(messageStatus === 'accepted') {
 
+                let descriptionChat = "";
+                let contenidoChat = contenido;
+
+                if(plantilla.cabecera === 'si') {
+                    descriptionChat = contenido,
+                    contenidoChat = "";
+                }
+
                 const newMessage = await Chat.create({
                     codigo: data.messages[0].id,
                     from: process.env.NUMERO_WHATSAPP,
-                    message: contenido,
+                    message: contenidoChat,
                     nameContact: "Grupo Es Consultores",
                     receipt: numero,
                     timestamp: Math.floor(Date.now() / 1000),
-                    typeMessage: "text",
+                    typeMessage: tipoMensaje,
+                    description: descriptionChat,
                     estadoMessage: "sent",
                     documentId: "",
                     id_document: "",
