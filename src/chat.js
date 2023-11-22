@@ -117,7 +117,13 @@ io.on('connection', (socket) => {
 
             const datos = response.data;
 
-            io.emit('mostrar_notificaciones_chat', datos);
+            console.log(datos);
+
+            if(process.env.ENVIRONMENT === 'PRODUCCION') {
+                io.emit('mostrar_notificaciones_chat', datos);
+            } else {
+                io.emit('mostrar_notificaciones_chat', {});
+            }
 
         } catch (error) {
             console.error("Hubo un error al hacer la solicitud:", error);

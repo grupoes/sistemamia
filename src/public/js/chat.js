@@ -339,7 +339,7 @@ function viewContact(data) {
             <div class="d-flex align-items-start p-2">
                 <div class="position-relative">
                     <span class="user-status"></span>
-                    <img src="assets/images/users/avatar-6.jpg" class="me-2 rounded-circle" height="48" alt="Michael H" />
+                    <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Michael H" />
                 </div>
                 <div class="w-100 overflow-hidden">
                     ${asistente}
@@ -2625,7 +2625,7 @@ reenviar_mensaje_contacto.addEventListener('click', (e) => {
 
 Notification.requestPermission().then(resultado => {
     console.log('Respuesta: ', resultado);
-})
+});
 
 setInterval(() => {
     socket.emit('mensajes_no_respondidos', { token });
@@ -2639,7 +2639,7 @@ socket.on('mostrar_notificaciones_chat', data => {
             //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
             new Notification(contacto.nameContacto, {
                 icon: './img/logos/icon.png',
-                body: `Responde por favor, ya paso ${contacto.dias} dias con ${contacto.minutos} minutos`
+                body: `Responde por favor, ya paso ${contacto.dias} dias, ${contacto.horas} horas y ${contacto.minutos} minutos`
             });
 
         });

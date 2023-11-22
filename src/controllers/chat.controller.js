@@ -1253,7 +1253,11 @@ export const contactosNoContestados = async(req, res) => {
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        const contactos = await NumeroWhatsapp.findAll();
+        const contactos = await NumeroWhatsapp.findAll({
+            where: {
+                asistente: id
+            }
+        });
 
         let arrayContactos = [];
 
@@ -1280,12 +1284,41 @@ export const contactosNoContestados = async(req, res) => {
                     const tiempo = dias_minutos(chat.timestamp);
 
                     if(tiempo.dias > 0 || tiempo.minutos > 3) {
+
+                        //let other = redireccionar_chat(numero);
+
+                        const potencial = await PotencialCliente.findOne({
+                            where: {
+                                numero_whatsapp: numero
+                            }
+                        });
+                    
+                        const etiquetaCliente = await EtiquetaCliente.findOne({
+                            where: {
+                                cliente_id: potencial.id
+                            }
+                        });
+                    
+                        const idetiqueta = etiquetaCliente.etiqueta_id;
+                    
+                        const etiqueta = await Etiqueta.findOne({
+                            where: {
+                                id: idetiqueta
+                            }
+                        });
+
                         let datos = {
                             nameContacto: contacto.nameContact,
                             contacto: contacto.from,
                             fecha: chat.timestamp,
                             dias: tiempo.dias,
-                            minutos: tiempo.minutos
+                            minutos: tiempo.minutos,
+                            horas: tiempo.horas,
+                            etiquetaName: etiqueta.descripcion,
+                            potencial_id: potencial.id,
+                            etiqueta_id: idetiqueta,
+                            rol: rol,
+                            asistente: contacto.asistente
                         }
             
                         arrayContactos.push(datos);
@@ -1311,24 +1344,17 @@ function dias_minutos(timestamp) {
     // Diferencia en milisegundos
     const diff = ahora - fechaPasada;   
 
-    // Calcular días
+    // Calcular días, horas y minutos
     const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    // Calcular minutos
-    const minutos = Math.round(diff / 1000 / 60) % 60;
+    const horas = Math.floor(diff / (1000 * 60 * 60)) % 24;
+    const minutos = Math.floor(diff / (1000 * 60)) % 60;
 
     const datos = {
         dias: dias,
-        minutos: minutos
+        minutos: minutos,
+        horas: horas
     }
 
     return datos;
-
-    if(dias > 0 || minutos > 3) {
-        return 1;
-    } else {
-        
-        return 0;
-    }
 
 }
