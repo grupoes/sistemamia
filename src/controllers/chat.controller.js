@@ -1271,21 +1271,20 @@ export const contactosNoContestados = async(req, res) => {
         for (let contacto of contactos) {
             const numero = contacto.from; 
 
-            const lastId = await Chat.max('id', { 
+            const chat = await Chat.findOne({
                 where: {
                   [Op.or]: [
-                    { from: numero },  
+                    { from: numero }, 
                     { receipt: numero }
                   ]
-                }
+                },
+                order: [
+                  ['timestamp', 'DESC']
+                ],
+                limit: 1
             });
 
-            if(lastId) {
-                const chat = await Chat.findOne({
-                    where: {
-                      id: lastId 
-                    }
-                });
+            if(chat) {
 
                 if (chat.typeMessage === 'text') {
                     if(chat.from === numero) {
