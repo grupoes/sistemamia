@@ -1884,31 +1884,13 @@ function contactosLista(buscar) {
         datos.forEach(contact => {
             html += `
             <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente}, '${contact.nameAsistente}')">
-                <img src="assets/images/users/avatar-7.jpg" class="avatar rounded me-3" alt="shreyu">
+                <img src="img/logos/icon.png" class="avatar rounded me-3" alt="shreyu">
                 <div class="flex-grow-1">
                     <h5 class="mt-1 mb-0 fs-15">${contact.name}</h5>
                     <h6 class="text-muted fw-normal mt-1 mb-2">${contact.numero}</h6>
                 </div>
                 <div class="dropdown align-self-center float-end">
-                    <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="uil uil-ellipsis-v"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <i class="uil uil-edit-alt me-2"></i>Edit
-                        </a>
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <i class="uil uil-exit me-2"></i>Remove from Team
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item text-danger">
-                            <i class="uil uil-trash me-2"></i>Delete
-                        </a>
-                    </div>
+                    <span class="text-primary">${contact.nameAsistente}</span>
                 </div>
             </div>
             `;
