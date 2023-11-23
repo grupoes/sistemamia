@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
             if(process.env.ENVIRONMENT === 'PRODUCCION') {
                 io.emit('mostrar_notificaciones_chat', datos);
             } else {
-                io.emit('mostrar_notificaciones_chat', datos);
+                io.emit('mostrar_notificaciones_chat', []);
             }
 
         } catch (error) {

@@ -1320,6 +1320,20 @@ export const contactosNoContestados = async(req, res) => {
                                         id: idetiqueta
                                     }
                                 });
+
+                                let nameAsistente = "";
+
+                                if(contacto.asistente == null) {
+
+                                } else {
+                                    const usuario = await Trabajadores.findOne({
+                                        where: {
+                                            id: contacto.asistente
+                                        }
+                                    });
+
+                                    nameAsistente = usuario.nombres+" "+usuario.apellidos;
+                                }
         
                                 let datos = {
                                     nameContacto: contacto.nameContact,
@@ -1332,7 +1346,8 @@ export const contactosNoContestados = async(req, res) => {
                                     potencial_id: potencial.id,
                                     etiqueta_id: idetiqueta,
                                     rol: rol,
-                                    asistente: contacto.asistente
+                                    asistente: contacto.asistente,
+                                    nameAsistente: nameAsistente
                                 }
                     
                                 arrayContactos.push(datos);

@@ -335,7 +335,7 @@ function viewContact(data) {
         nameContact = nameContact.replace("'", "");
 
         html += `
-        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})">
+        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
             <div class="d-flex align-items-start p-2">
                 <div class="position-relative">
                     <span class="user-status"></span>
@@ -395,13 +395,15 @@ function chatPrincipalView() {
 
 chatPrincipalView();
 
-function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado) {
+function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado, asistente) {
 
     let asignar = "";
+    let asist = ""
 
     if(rol === 1 || rol === 3) {
         asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${potencial}, ${asignado})"><i
         class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
+        asist = `<span class="text-primary">${asistente}</span>`;
     }
 
     let html = `
@@ -410,6 +412,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
         <div>
             <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${name}</h5>
             <p class="mb-0" id="numberWhatsapp">${numero}</p>
+            ${asist}
             <input type="hidden" id="whatsappNumber" value="${numero}">
             <input type="hidden" id="potencialId" value="${potencial}">
         </div>
@@ -538,7 +541,6 @@ socket.on("messageChat", data => {
     audio.play();*/
 
     socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value });
-    console.log(data);
 
     let fecha_y_hora = convertTimestampToDate(data.timestamp);
 
@@ -609,8 +611,6 @@ socket.on("messageChat", data => {
 });
 
 function viewFromText(data, hora) {
-
-    console.log(data);
 
     let responseData = "";
 
@@ -899,7 +899,7 @@ function viewReceipText(data, fecha) {
     let resp = "";
 
     if (data.mensajeRelacionado) {
-        console.log(data.mensajeRelacionado.typeMessage);
+
         if(data.mensajeRelacionado.typeMessage === 'text') {
             resp = mensajeRespondidoReceipText(data.mensajeRelacionado);
         }
@@ -912,7 +912,7 @@ function viewReceipText(data, fecha) {
             resp = mensajeRespondidoReceipAudio(data.mensajeRelacionado);
         }
     } else {
-        console.log("no llego hasta aca");
+        
     }
 
     let html = `
@@ -1883,7 +1883,7 @@ function contactosLista(buscar) {
 
         datos.forEach(contact => {
             html += `
-            <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente})">
+            <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente}, '${contact.nameAsistente}')">
                 <img src="assets/images/users/avatar-7.jpg" class="avatar rounded me-3" alt="shreyu">
                 <div class="flex-grow-1">
                     <h5 class="mt-1 mb-0 fs-15">${contact.name}</h5>
@@ -1918,12 +1918,12 @@ function contactosLista(buscar) {
     })
 }
 
-function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente) {
+function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente) {
     console.log('hola');
 
     $("#modalContacts").modal('hide');
 
-    chatDetail(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente);
+    chatDetail(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente);
 }
 
 const escogePlantilla = document.getElementById('escogePlantilla');
@@ -2138,7 +2138,7 @@ editarContact.addEventListener('click', (e) => {
                 timer: 2000
             })
 
-            chatDetail(data.data.from,data.data.nameContact, data.datos.etiqueta, data.datos.potencial_id, data.datos.etiqueta_id, data.datos.rol, data.datos.idAsistente);
+            chatDetail(data.data.from,data.data.nameContact, data.datos.etiqueta, data.datos.potencial_id, data.datos.etiqueta_id, data.datos.rol, data.datos.idAsistente, data.datos.nameAsistente);
 
         } else {
             Swal.fire({

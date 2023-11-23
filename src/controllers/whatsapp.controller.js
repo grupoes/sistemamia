@@ -465,6 +465,19 @@ export const getContacts = async (req, res) => {
                     id: etiqueta.etiqueta_id
                 }
             });
+            let nombreAsistente = "";
+
+            if(contacto.asistente == null) {
+                
+            } else {
+                const nameUsuario = await Trabajadores.findOne({
+                    where: {
+                        id: contacto.asistente
+                    }
+                });
+
+                nombreAsistente = nameUsuario.nombres+" "+nameUsuario.apellidos;
+            }
 
             let array = {
                 numero: contacto.from,
@@ -473,7 +486,8 @@ export const getContacts = async (req, res) => {
                 potencial: idp,
                 etiqueta_id: etiqueta.etiqueta_id,
                 rol: rol,
-                asistente: contacto.asistente
+                asistente: contacto.asistente,
+                nameAsistente: nombreAsistente
 
             };
 
@@ -529,12 +543,27 @@ export const editContact = async (req, res) => {
             }
         });
 
+        let nombreAsistente = "";
+
+        if (contacto.asistente == null) {
+            
+        } else {
+            const usuario = await Trabajadores.findOne({
+                where: {
+                    id: contacto.asistente
+                }
+            });
+
+            nombreAsistente = usuario.nombres + " " + usuario.apellidos;
+        }
+
         const datos = {
             potencial_id: idpotencial,
             etiqueta: etiqueta.descripcion,
             etiqueta_id: etiqueta.id,
             rol: rol,
-            idAsistente: contacto.asistente
+            idAsistente: contacto.asistente,
+            nameAsistente: nombreAsistente
         };
 
         return res.json({ message: 'ok', data:contacto, datos: datos });

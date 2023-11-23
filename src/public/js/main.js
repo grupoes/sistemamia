@@ -38,7 +38,6 @@ function getNotificationNotContest(token) {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
 
         const datos = data.data;
 
@@ -54,9 +53,9 @@ function getNotificationNotContest(token) {
 
         datos.forEach(contacto => {
             noti +=`
-            <a href="javascript:void(0);" class="dropdown-item notify-item border-bottom" onclick="chatDetail('${contacto.contacto}', '${contacto.nameContacto}', '${contacto.etiquetaName}', ${contacto.potencial_id}, ${contacto.etiqueta_id}, ${contacto.rol}, ${contacto.asistente})">
+            <a href="javascript:void(0);" class="dropdown-item notify-item border-bottom" onclick="chatDetail('${contacto.contacto}', '${contacto.nameContacto}', '${contacto.etiquetaName}', ${contacto.potencial_id}, ${contacto.etiqueta_id}, ${contacto.rol}, ${contacto.asistente}, '${contacto.nameAsistente}')">
                 <div class="notify-icon">
-                            <img src="img/logos/icon.png" class="img-fluid rounded-circle" alt="" />
+                    <img src="img/logos/icon.png" class="img-fluid rounded-circle" alt="" />
                 </div>
                 <p class="notify-details">${contacto.nameContacto}</p>
                 <p class="text-muted mb-0 user-msg">
