@@ -2634,21 +2634,16 @@ setInterval(() => {
 socket.on('mostrar_notificaciones_chat', data => {
     if(Notification.permission === 'granted') {
 
-        if(data.length > 0) {
-            console.log('es mayor a cero')
-            const datos = data.data;
+        const datos = data.data;
 
-            datos.forEach(contacto => {
-                //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
-                new Notification(contacto.nameContacto, {
-                    icon: './img/logos/icon.png',
-                    body: `Responde por favor, ya paso ${contacto.dias} dias, ${contacto.horas} horas y ${contacto.minutos} minutos`
-                });
-
+        datos.forEach(contacto => {
+            //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
+             new Notification(contacto.nameContacto, {
+                icon: './img/logos/icon.png',
+                body: `Responde por favor, ya paso ${contacto.dias} dias, ${contacto.horas} horas y ${contacto.minutos} minutos`
             });
-        } else {
-            console.log('no es mayor a cero');
-        }
+
+        });
     
     }
 })
