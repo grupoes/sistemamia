@@ -9,6 +9,7 @@ import { Etiqueta } from "../models/etiquetas.js";
 import { Embudo } from "../models/embudo.js";
 import { Chat_estados } from "../models/estadosConversacion.js";
 import { Plataforma } from "../models/plataforma.js";
+import { FraseFinChat } from "../models/fraseFinChat.js";
 
 import { Op } from 'sequelize';
 
@@ -1253,11 +1254,17 @@ export const contactosNoContestados = async(req, res) => {
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        const contactos = await NumeroWhatsapp.findAll({
-            where: {
-                asistente: id
-            }
-        });
+        let contactos = "";
+
+        if(rol != 2 || rol != 6) {
+            contactos = await NumeroWhatsapp.findAll({
+                where: {
+                    asistente: id
+                }
+            });
+        } else {
+            contactos = await NumeroWhatsapp.findAll();
+        }
 
         let arrayContactos = [];
 
@@ -1280,48 +1287,60 @@ export const contactosNoContestados = async(req, res) => {
                     }
                 });
 
-                if(chat.from == numero) {
-                    const tiempo = dias_minutos(chat.timestamp);
-
-                    if(tiempo.dias > 0 || tiempo.minutos > 3) {
-
-                        //let other = redireccionar_chat(numero);
-
-                        const potencial = await PotencialCliente.findOne({
-                            where: {
-                                numero_whatsapp: numero
-                            }
-                        });
+                if (chat.typeMessage === 'text') {
+                    if(chat.from === numero) {
+                        const tiempo = dias_minutos(chat.timestamp);
+    
+                        if(tiempo.dias > 0 || tiempo.minutos > 3) {
+    
+                            //let other = redireccionar_chat(numero);
+    
+                            const frases = await FraseFinChat.findAll();
+    
+                            const arrayDeContenidos = frases.map(frase => frase.descripcion);
+    
+                            const verificado = contienePalabra(chat.message, arrayDeContenidos);
+    
+                            if(verificado === false) {
+                                const potencial = await PotencialCliente.findOne({
+                                    where: {
+                                        numero_whatsapp: numero
+                                    }
+                                });
+                            
+                                const etiquetaCliente = await EtiquetaCliente.findOne({
+                                    where: {
+                                        cliente_id: potencial.id
+                                    }
+                                });
+                            
+                                const idetiqueta = etiquetaCliente.etiqueta_id;
+                            
+                                const etiqueta = await Etiqueta.findOne({
+                                    where: {
+                                        id: idetiqueta
+                                    }
+                                });
+        
+                                let datos = {
+                                    nameContacto: contacto.nameContact,
+                                    contacto: contacto.from,
+                                    fecha: chat.timestamp,
+                                    dias: tiempo.dias,
+                                    minutos: tiempo.minutos,
+                                    horas: tiempo.horas,
+                                    etiquetaName: etiqueta.descripcion,
+                                    potencial_id: potencial.id,
+                                    etiqueta_id: idetiqueta,
+                                    rol: rol,
+                                    asistente: contacto.asistente
+                                }
                     
-                        const etiquetaCliente = await EtiquetaCliente.findOne({
-                            where: {
-                                cliente_id: potencial.id
+                                arrayContactos.push(datos);
                             }
-                        });
-                    
-                        const idetiqueta = etiquetaCliente.etiqueta_id;
-                    
-                        const etiqueta = await Etiqueta.findOne({
-                            where: {
-                                id: idetiqueta
-                            }
-                        });
-
-                        let datos = {
-                            nameContacto: contacto.nameContact,
-                            contacto: contacto.from,
-                            fecha: chat.timestamp,
-                            dias: tiempo.dias,
-                            minutos: tiempo.minutos,
-                            horas: tiempo.horas,
-                            etiquetaName: etiqueta.descripcion,
-                            potencial_id: potencial.id,
-                            etiqueta_id: idetiqueta,
-                            rol: rol,
-                            asistente: contacto.asistente
+    
+                           
                         }
-            
-                        arrayContactos.push(datos);
                     }
                 }
                 
@@ -1357,4 +1376,16 @@ function dias_minutos(timestamp) {
 
     return datos;
 
+}
+
+function contienePalabra(frase, palabras) {
+
+    const palabrasFrase = new Set(
+      frase.toLowerCase().split(' ')  
+    );
+    
+    return palabras.some(palabra => 
+        palabrasFrase.has(palabra)  
+    );
+  
 }

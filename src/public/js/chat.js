@@ -2633,16 +2633,19 @@ setInterval(() => {
 
 socket.on('mostrar_notificaciones_chat', data => {
     if(Notification.permission === 'granted') {
-        const datos = data.data;
 
-        datos.forEach(contacto => {
-            //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
-            new Notification(contacto.nameContacto, {
-                icon: './img/logos/icon.png',
-                body: `Responde por favor, ya paso ${contacto.dias} dias, ${contacto.horas} horas y ${contacto.minutos} minutos`
+        if(data.length > 0) {
+            const datos = data.data;
+
+            datos.forEach(contacto => {
+                //console.log(`Responde por favor, ya paso ${contacto.dias} con ${contacto.minutos}`);
+                new Notification(contacto.nameContacto, {
+                    icon: './img/logos/icon.png',
+                    body: `Responde por favor, ya paso ${contacto.dias} dias, ${contacto.horas} horas y ${contacto.minutos} minutos`
+                });
+
             });
-
-        });
+        }
     
     }
 })

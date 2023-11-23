@@ -19,6 +19,7 @@ import plantillas from './routes/plantilla.routes.js';
 import base from './routes/base.routes.js';
 import plataforma from './routes/plataforma.routes.js';
 import contactos from './routes/contactos.routes.js';
+import fraseFin from './routes/fraseFin.routes.js';
 
 const app = express();
 
@@ -64,5 +65,6 @@ app.use(plantillas);
 app.use(base);
 app.use(plataforma);
 app.use(contactos);
+app.use(fraseFin);
 
 export default app;
