@@ -408,7 +408,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
     let html = `
     <div class="d-flex pb-2 border-bottom align-items-center">
-        <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded-circle" height="48" alt="Cliente" />
+        <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Cliente" />
         <div>
             <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${name}</h5>
             <p class="mb-0" id="numberWhatsapp">${numero}</p>
