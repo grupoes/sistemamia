@@ -2635,6 +2635,7 @@ socket.on('mostrar_notificaciones_chat', data => {
     if(Notification.permission === 'granted') {
 
         if(data.length > 0) {
+            console.log('es mayor a cero')
             const datos = data.data;
 
             datos.forEach(contacto => {
@@ -2645,6 +2646,8 @@ socket.on('mostrar_notificaciones_chat', data => {
                 });
 
             });
+        } else {
+            console.log('no es mayor a cero');
         }
     
     }

@@ -117,8 +117,6 @@ io.on('connection', (socket) => {
 
             const datos = response.data;
 
-            console.log(datos);
-
             if(process.env.ENVIRONMENT === 'PRODUCCION') {
                 io.emit('mostrar_notificaciones_chat', datos);
             } else {
