@@ -637,6 +637,10 @@ function viewFromText(data, hora) {
         }
     }
 
+    let messageReceipt = data.message;
+
+    messageReceipt = messageReceipt.replace(/\r\n|\n/g, "<br>");
+
     let publicidad = "";
 
     if(data.media_type != "" && data.media_type != null) {
@@ -681,7 +685,7 @@ function viewFromText(data, hora) {
                     <div class="ctext-wrap" style="padding: 0;">
                         ${publicidad}
                         ${responseData}
-                        <p id="${data.codigo}" style="padding: 5px 10px 5px 10px;">${data.message}</p>                                
+                        <p id="${data.codigo}" style="padding: 5px 10px 5px 10px;">${messageReceipt}</p>                                
                     </div>                                                                    
                     <div class="conversation-actions dropdown dropend">
                         <a href="javascript: void(0);" class="text-dark ps-1" data-bs-toggle="dropdown" aria-expanded="false"><i class='bi bi-three-dots-vertical fs-14'></i></a>                
@@ -915,6 +919,10 @@ function viewReceipText(data, fecha) {
         
     }
 
+    let messageReceipt = data.message;
+
+    messageReceipt = messageReceipt.replace(/\r\n|\n/g, "<br>");
+
     let html = `
         <li class="clearfix odd">
             <div class="conversation-text ms-0">
@@ -938,7 +946,7 @@ function viewReceipText(data, fecha) {
                     </div>  
                     <div class="ctext-wrap">
                         ${resp}
-                        <p id="${data.codigo}">${data.message}</p>
+                        <p id="${data.codigo}" style="text-align: left;">${messageReceipt}</p>
                     </div>  
                 </div>                                                          
                 <p class="text-muted fs-12 mb-0 mt-1">${fecha}<span id="chat-${data.codigo}">${iconoStatus}</span></p>
