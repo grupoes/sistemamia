@@ -1461,10 +1461,7 @@ enviarImagen.addEventListener('click', (e) => {
 
     fetch('subir_imagen', {
         method: 'POST',
-        body: formData,
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        body: formData
     })
     .then(res => res.json())
     .then(data => {
