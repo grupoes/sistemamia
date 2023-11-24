@@ -90,7 +90,8 @@ export const addContact = async (req, res) => {
             nameContact: nameW,
             asistente: asistente,
             plataforma_id: plataforma_contacto,
-            tipo_contacto: tipo_contacto
+            tipo_contacto: tipo_contacto,
+            user_register: id
         });
 
         const newPotencial = await PotencialCliente.create({
