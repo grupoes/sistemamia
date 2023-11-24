@@ -1882,6 +1882,17 @@ function contactosLista(buscar) {
         let html = "";
 
         datos.forEach(contact => {
+
+            let separacion = "";
+
+            if(contact.rol != 2 && contact.rol != 6) {
+                separacion = `
+                <div class="dropdown align-self-center float-end">
+                    <span class="text-primary">${contact.nameAsistente}</span>
+                </div>
+                `;
+            }
+
             html += `
             <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente}, '${contact.nameAsistente}')">
                 <img src="img/logos/icon.png" class="avatar rounded me-3" alt="shreyu">
@@ -1889,9 +1900,7 @@ function contactosLista(buscar) {
                     <h5 class="mt-1 mb-0 fs-15">${contact.name}</h5>
                     <h6 class="text-muted fw-normal mt-1 mb-2">${contact.numero}</h6>
                 </div>
-                <div class="dropdown align-self-center float-end">
-                    <span class="text-primary">${contact.nameAsistente}</span>
-                </div>
+                ${separacion}
             </div>
             `;
         });
