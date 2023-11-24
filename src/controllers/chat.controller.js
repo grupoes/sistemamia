@@ -41,6 +41,7 @@ dotenv.config();
 
 import admin from 'firebase-admin';
 import serviceAccount from '../api_firestore_data.json' assert { type: 'json' };
+import { log } from "console";
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -662,109 +663,10 @@ export const uploadImage = async (req, res, next) => {
     
         });
 
-        return false;
+};
 
-    if(req.file) {
-        const uploadSingle = upload.single('imagen');
-        uploadSingle(req, res, async (error) => {
-            const { numero, description } = req.body;
-            if (error) {
-                // Handle error
-                return res.status(500).send(error.message);
-            }
-    
-            console.log(req.file);
-    
-            let url_imagen;
-            let typeFile;
-            let dataFile;
-    
-            const ar = req.file;
-    
-            if(ar.mimetype == 'video/mp4' || ar.mimetype === 'video/webm') {
-                url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/videos/archivos/"+req.file.filename;
-                typeFile = "video";
-    
-                dataFile = {
-                    messaging_product: "whatsapp",
-                    to: numero,
-                    type: typeFile,
-                    video: {
-                        link: url_imagen,
-                        caption: description
-                    }
-                };
-            }
-    
-            if(ar.mimetype == 'image/jpeg' || ar.mimetype == 'image/png' || ar.mimetype == 'image/gif' || ar.mimetype == 'image/webp' || ar.mimetype == 'image/svg+xml') {
-                url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/img/archivos/"+req.file.filename;
-                typeFile = "image";
-    
-                dataFile = {
-                    messaging_product: "whatsapp",
-                    to: numero,
-                    type: typeFile,
-                    image: {
-                        link: url_imagen,
-                        caption: description
-                    }
-                };
-            }
-    
-            if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain') {
-                url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/documentos/archivos/"+req.file.filename;
-                typeFile = "document";
-    
-                dataFile = {
-                    messaging_product: "whatsapp",
-                    to: numero,
-                    type: typeFile,
-                    document: {
-                        link: url_imagen,
-                        caption: description
-                    }
-                };
-            }
-    
-            let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: process.env.URL_MESSAGES,
-                headers: { 
-                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
-                },
-                data: dataFile
-            };
-    
-            try {
-                const response = await axios(config);
-                const datos = response.data;
-    
-                const new_message = await Chat.create({
-                    codigo: datos.messages[0].id,
-                    from: process.env.NUMERO_WHATSAPP,
-                    message: "",
-                    nameContact: "",
-                    receipt: numero,
-                    timestamp: Math.floor(Date.now() / 1000),
-                    typeMessage: typeFile,
-                    estadoMessage: "sent",
-                    documentId: "",
-                    id_document: Math.floor(Date.now() / 1000),
-                    filename: req.file.filename,
-                    description: description
-                });
-    
-                return res.json({message: 'ok', data: new_message, datos: dataFile, api: datos});
-            }
-              catch (error) {
-                console.error("Error in making request:", error.response.data || error.message);
-                return res.json({message: error.message});
-            }
-    
-        });
-
-    } else {
+export const uploadImagePaste = async (req, res) => {
+    try {
         const { numero, description, imagen } = req.body;
 
         const resultado = imagen.match(/^data:image\/(\w+);base64,([\s\S]+)/);
@@ -835,10 +737,10 @@ export const uploadImage = async (req, res, next) => {
             console.error("Error in making request:", error.response.data || error.message);
             return res.json({message: error.message});
         }
-
+    } catch (error) {
+        return res.json({message: error});
     }
-
-};
+}
 
 const guardarImagen = async (ruta, imagenBuffer) => {
 

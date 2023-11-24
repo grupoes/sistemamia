@@ -1433,53 +1433,77 @@ enviarImagen.addEventListener('click', (e) => {
 
     const imgBase64 = document.querySelector("#offcanvas-body img").src;
 
-    let envio_base = "";
-
-    if (file) {
-        envio_base = file;
-    } else {
-        envio_base = imgBase64;
-    }
-
-    console.log(envio_base);
-
     e.target.disabled = true;
     e.target.textContent = 'Enviando Mensaje...';
 
     let formData = new FormData();
-    formData.append('imagen', envio_base);
-    formData.append('numero', numero.value);
-    formData.append('description', fileDescription.value);
 
-    /* const formDataObj = {};
+    if (file) {
 
-    formData.forEach((value, key) => {
-        formDataObj[key] = value;
-    }); */
+        formData.append('imagen', file);
+        formData.append('numero', numero.value);
+        formData.append('description', fileDescription.value);
 
-    //console.log(file.type);
+        fetch('subir_imagen', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            //console.log(data);
+    
+            e.target.disabled = false;
+            e.target.textContent = 'Enviar';
+    
+            if (data.message == 'ok') {
+                $('#myOffcanvas').offcanvas('hide');
+    
+                const conversation = document.getElementById('conversation-'+numero.value);
+                conversation.scrollTop = conversation.scrollHeight;
+    
+            } else {
+                alert(data.message);
+            }
+        })
 
-    fetch('subir_imagen', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        //console.log(data);
+    } else {
 
-        e.target.disabled = false;
-        e.target.textContent = 'Enviar';
+        formData.append('imagen', imgBase64);
+        formData.append('numero', numero.value);
+        formData.append('description', fileDescription.value);
 
-        if (data.message == 'ok') {
-            $('#myOffcanvas').offcanvas('hide');
+        const formDataObj = {};
 
-            const conversation = document.getElementById('conversation-'+numero.value);
-            conversation.scrollTop = conversation.scrollHeight;
+        formData.forEach((value, key) => {
+            formDataObj[key] = value;
+        });
 
-        } else {
-            alert(data.message);
-        }
-    })
+        fetch('subir_imagen_paste', {
+            method: 'POST',
+            body: JSON.stringify(formDataObj),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            //console.log(data);
+    
+            e.target.disabled = false;
+            e.target.textContent = 'Enviar';
+    
+            if (data.message == 'ok') {
+                $('#myOffcanvas').offcanvas('hide');
+    
+                const conversation = document.getElementById('conversation-'+numero.value);
+                conversation.scrollTop = conversation.scrollHeight;
+    
+            } else {
+                alert(data.message);
+            }
+        })
+    }
+
 });
 
 function descargarImagen(url, filename) {
@@ -2846,7 +2870,15 @@ function pegarImagenInput(e) {
     const datosPegados = e.clipboardData.items[0];
 
     if(datosPegados.type.includes('image')) {
-        const img = e.clipboardData.items[0].getAsFile();
+
+        fileInput.value = null;
+        // Acceder a la propiedad files
+        fileInput.files[0] = null;
+
+        // O reiniciar la lista
+        fileInput.files.length = 0;
+
+        const img = e.clipboardData.items[0].getAsFile();  
 
         if(img){
             console.log(img.name); // nombre del archivo

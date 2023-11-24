@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta, enviar_mensaje_icono_whatsapp, socketMensaje, getEmpleadosAsignar, asignarAsistente, chatOne, getChatCodigo, contactosNoContestados } from "../controllers/chat.controller.js";
+import { chatView, addMessage, mensajes_numero, addMessageFirestore, numerosWhatsapp, traer_ultimo_mensaje, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta, enviar_mensaje_icono_whatsapp, socketMensaje, getEmpleadosAsignar, asignarAsistente, chatOne, getChatCodigo, contactosNoContestados, uploadImagePaste } from "../controllers/chat.controller.js";
 
 import { getAgenteId, asignarAsistenteDataJson } from "../controllers/base.controller.js";
 
@@ -18,6 +18,7 @@ router.post('/messageFirestore', addMessageFirestore);
 router.post('/numeroWhatsapp', checkAuth, numerosWhatsapp);
 router.get('/ultimoMensaje/:id', traer_ultimo_mensaje);
 router.post('/subir_imagen', uploadImage);
+router.post('/subir_imagen_paste', uploadImagePaste);
 router.post('/actualizarEtiqueta', actualizarEtiqueta);
 router.get('/welcome/:id', asignarClienteAUnTrabajador);
 router.post('/insertChat', insertChat);
