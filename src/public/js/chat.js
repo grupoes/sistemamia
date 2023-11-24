@@ -1451,17 +1451,17 @@ enviarImagen.addEventListener('click', (e) => {
     formData.append('numero', numero.value);
     formData.append('description', fileDescription.value);
 
-    const formDataObj = {};
+    /* const formDataObj = {};
 
     formData.forEach((value, key) => {
         formDataObj[key] = value;
-    });
+    }); */
 
     //console.log(file.type);
 
     fetch('subir_imagen', {
         method: 'POST',
-        body: JSON.stringify(formDataObj),
+        body: formData,
         headers: {
             'Content-Type': 'application/json',
         },
