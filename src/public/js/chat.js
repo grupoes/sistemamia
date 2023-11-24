@@ -115,11 +115,11 @@ function fileWhatsapp() {
                 reader.onload = function (event) {
                     // Mostrar la vista previa de la imagen dentro del div
                     if (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif' || file.type == 'image/webp' || file.type == 'image/svg+xml') {
-                        $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;"> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
+                        $("#offcanvas-body").html('<img src="' + event.target.result + '" alt="Image Preview" style="max-width:100%; max-height: 300px;"> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" /> <input type="hidden" id="typeArchive" value="1" />');
                     }
     
                     if (file.type == 'video/mp4' || file.type === 'video/webm') {
-                        $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="'+file.type+'">Your browser does not support the video tag.</video> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
+                        $("#offcanvas-body").html('<video controls style="max-width:100%; max-height: 300px;"><source src="' + event.target.result + '" type="'+file.type+'">Your browser does not support the video tag.</video> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" /> <input type="hidden" id="typeArchive" value="2" />');
                     }
     
                 }
@@ -141,7 +141,7 @@ function documentoFile() {
     document.getElementById("fileInput").click();
 
     const $offcanvas = $('#myOffcanvas').offcanvas({
-        backdrop: false
+        backdrop: true
     });
 
     if (!listenerAttached) {
@@ -168,6 +168,7 @@ function documentoFile() {
                     </div>
     
                     <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />
+                    <input type="hidden" id="typeArchive" value="3" />
                     `;
                     $("#offcanvas-body").html(vista);
     
@@ -1406,32 +1407,11 @@ const enviarImagen = document.getElementById("enviarImagen");
 
 enviarImagen.addEventListener('click', (e) => {
 
-    /* const imgBase64 = document.querySelector("#offcanvas-body img").src;
-
-    const numeros = document.getElementById("whatsappNumber");
-    const fileDescriptions = document.getElementById('fileDescription');
-
-    let formData = new FormData();
-    formData.append('imagen', imgBase64);
-    formData.append('numero', numeros.value);
-    formData.append('description', fileDescriptions.value);
-
-    fetch('subir_imagen', {
-        method: 'POST',
-        body: formData
-    })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        })
-
-    return; */
     let file = fileInput.files[0];
 
     const numero = document.getElementById("whatsappNumber");
     const fileDescription = document.getElementById('fileDescription');
-
-    const imgBase64 = document.querySelector("#offcanvas-body img").src;
+    const typeArchive = document.getElementById('typeArchive');
 
     e.target.disabled = true;
     e.target.textContent = 'Enviando Mensaje...';
@@ -1467,6 +1447,8 @@ enviarImagen.addEventListener('click', (e) => {
         })
 
     } else {
+
+        const imgBase64 = document.querySelector("#offcanvas-body img").src;
 
         formData.append('imagen', imgBase64);
         formData.append('numero', numero.value);
