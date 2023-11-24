@@ -98,15 +98,15 @@ function fileWhatsapp() {
     document.getElementById("fileInput").click();
 
     const $offcanvas = $('#myOffcanvas').offcanvas({
-        backdrop: false
+        backdrop: true
     });
 
     if(!listenerFile) {
-        fileInput.addEventListener('change', (event) => {
+        fileInput.addEventListener('change', (e) => {
         
             $offcanvas.offcanvas('show');
     
-            let file = event.target.files[0];
+            let file = e.target.files[0];
             console.log(file.type);
     
             if (file) {
@@ -460,7 +460,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
         </ul>
         <div class="mt-2 bg-light p-3 rounded">
             
-            <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">
+            <form class="needs-validation" novalidate="" name="chat-form" id="chat-form" method="post" onsubmit="envioFormulario(event)">
                 <input type="hidden" name="numberWhat" value="${numero}">
                 <div id="responderMessage">
                     
@@ -469,7 +469,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                     <div class="col mb-2 mb-sm-0">
                         <!--<input type="text" class="form-control border-0" name="mensaje_form"
                             placeholder="Ingrese el mensaje" required="" id="contentMensaje">-->
-                        <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)"></textarea>
+                        <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)" onpaste="pegarImagenInput(event)"></textarea>
                         <ul id="listaSugerencias"></ul>
                         <div class="" id="horas_transcurridas" style="display:none; text-align:center;">
                             <span class="hora-estilo">01:45:30 H </span>
@@ -518,7 +518,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
     mostrar_chat(numero);
 
-    formMessage();
+    //formMessage();
 }
 
 function chatMessage(numero) {
@@ -1139,6 +1139,130 @@ function viewReceipAudio(data, fecha) {
         return html;
 }
 
+function envioFormulario(e) {
+    e.preventDefault();
+
+    const form_envio = document.getElementById('chat-form');
+    const contentMensaje = document.getElementById('contentMensaje');
+    const whatsappNumber = document.getElementById('whatsappNumber');
+    const sendChat = document.getElementById('sendChat');
+
+    let rescod = "";
+
+        if(document.getElementById('codigoRes')) {
+            rescod = document.getElementById('codigoRes').value;
+        }
+
+        if (contentMensaje.value === "") {
+            return false;
+        }
+
+        sendChat.disabled = true;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", "Bearer EAALqfu5fdToBO4ZChxiynoV99ZARXPrkiDIfZA3fi1TRfeujYI2YlPzH9fUB8PF6BbWJAEowNhCprGP2LqZA9MhWcLcxgImVkk8LKKASpN23vtHVZA4JZC9z15pDLFe1AwXDIaLNAZA75PN4f9Ji25tGC5ue8ZA7jWEfHgo2oYZCSrIAFZAzJ3Nj86iCfJToOhZB83jZCvVheSZBOyuc04zxE");
+
+        if(rescod === "") {
+            var raw = JSON.stringify({
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": whatsappNumber.value,
+                "type": "text",
+                "text": {
+                    "preview_url": false,
+                    "body": contentMensaje.value
+                }
+            });
+        } else {
+            var raw = JSON.stringify({
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "context": {
+                    "message_id": rescod
+                },
+                "to": whatsappNumber.value,
+                "type": "text",
+                "text": {
+                    "preview_url": false,
+                    "body": contentMensaje.value
+                }
+            });
+        }
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("https://graph.facebook.com/v17.0/149168884944344/messages", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                //console.log(result);
+                //console.log(result.messages[0].id);
+
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+
+                var raw = JSON.stringify({
+                    "text": contentMensaje.value,
+                    "messageId": result.messages[0].id,
+                    "numberWhatsapp": whatsappNumber.value
+                });
+
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+
+                fromRes = whatsappNumber.value;
+                idRes = rescod;
+
+                let datos = {
+                    id: result.messages[0].id,
+                    from: "51938669769",
+                    message: contentMensaje.value,
+                    nameContact: "Grupo Es consultores",
+                    receipt: whatsappNumber.value,
+                    timestamp: Math.floor(Date.now() / 1000),
+                    type: "text",
+                    estadoMessage: "sent",
+                    documentId: "",
+                    id_document: "",
+                    filename: "",
+                    fromRes: fromRes,
+                    idRes: idRes
+                };
+
+                fetch(dominio+"/insertChat", {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                })
+                .then(r => r.json())
+                .then(resp => {
+                    //console.log(resp)
+                    const conversation = document.getElementById('conversation-'+whatsappNumber.value);
+                    conversation.scrollTop = conversation.scrollHeight;
+                })
+
+            })
+            .catch(error => console.log('error', error))
+            .finally(() => {
+                contentMensaje.value = "";
+                document.getElementById('responderMessage').innerHTML = "";
+                sendChat.disabled = false;
+            });
+
+
+}
+
 function formMessage() {
     const form_envio = document.getElementById('chat-form');
     const contentMensaje = document.getElementById('contentMensaje');
@@ -1220,13 +1344,6 @@ function formMessage() {
                     redirect: 'follow'
                 };
 
-                /*fetch("http://157.230.239.170:4000/addMessageChat", requestOptions)
-                    .then(response => response.text())
-                    .then(result => console.log(result))
-                    .catch(error => console.log('error', error));
-
-                listConversation(contentMensaje.value, whatsappNumber.value);*/
-
                 fromRes = whatsappNumber.value;
                 idRes = rescod;
 
@@ -1270,6 +1387,17 @@ function formMessage() {
     })
 }
 
+function envioFormularioMensaje() {
+    const form_envio = document.getElementById('chat-form');
+    const contentMensaje = document.getElementById('contentMensaje');
+    const whatsappNumber = document.getElementById('whatsappNumber');
+    const sendChat = document.getElementById('sendChat');
+
+    form_envio.addEventListener('submit', (e) => { 
+        
+    });
+}
+
 function viewProfle() {
     $("#viewProfile").modal("show");
 }
@@ -1277,44 +1405,84 @@ function viewProfle() {
 const enviarImagen = document.getElementById("enviarImagen");
 
 enviarImagen.addEventListener('click', (e) => {
+
+    /* const imgBase64 = document.querySelector("#offcanvas-body img").src;
+
+    const numeros = document.getElementById("whatsappNumber");
+    const fileDescriptions = document.getElementById('fileDescription');
+
+    let formData = new FormData();
+    formData.append('imagen', imgBase64);
+    formData.append('numero', numeros.value);
+    formData.append('description', fileDescriptions.value);
+
+    fetch('subir_imagen', {
+        method: 'POST',
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+
+    return; */
     let file = fileInput.files[0];
 
     const numero = document.getElementById("whatsappNumber");
     const fileDescription = document.getElementById('fileDescription');
 
+    const imgBase64 = document.querySelector("#offcanvas-body img").src;
+
+    let envio_base = "";
+
     if (file) {
-        e.target.disabled = true;
-        e.target.textContent = 'Enviando Mensaje...';
-
-        let formData = new FormData();
-        formData.append('imagen', file);
-        formData.append('numero', numero.value);
-        formData.append('description', fileDescription.value);
-
-        //console.log(file.type);
-
-        fetch('subir_imagen', {
-            method: 'POST',
-            body: formData
-        })
-            .then(res => res.json())
-            .then(data => {
-                //console.log(data);
-
-                e.target.disabled = false;
-                e.target.textContent = 'Enviar';
-
-                if (data.message == 'ok') {
-                    $('#myOffcanvas').offcanvas('hide');
-
-                    const conversation = document.getElementById('conversation-'+numero.value);
-                    conversation.scrollTop = conversation.scrollHeight;
-
-                } else {
-                    alert(data.message);
-                }
-            })
+        envio_base = file;
+    } else {
+        envio_base = imgBase64;
     }
+
+    console.log(envio_base);
+
+    e.target.disabled = true;
+    e.target.textContent = 'Enviando Mensaje...';
+
+    let formData = new FormData();
+    formData.append('imagen', envio_base);
+    formData.append('numero', numero.value);
+    formData.append('description', fileDescription.value);
+
+    const formDataObj = {};
+
+    formData.forEach((value, key) => {
+        formDataObj[key] = value;
+    });
+
+    //console.log(file.type);
+
+    fetch('subir_imagen', {
+        method: 'POST',
+        body: JSON.stringify(formDataObj),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        //console.log(data);
+
+        e.target.disabled = false;
+        e.target.textContent = 'Enviar';
+
+        if (data.message == 'ok') {
+            $('#myOffcanvas').offcanvas('hide');
+
+            const conversation = document.getElementById('conversation-'+numero.value);
+            conversation.scrollTop = conversation.scrollHeight;
+
+        } else {
+            alert(data.message);
+        }
+    })
 });
 
 function descargarImagen(url, filename) {
@@ -2660,11 +2828,51 @@ function detectarAltoInputMensaje(textarea) {
     textarea.style.height = textarea.scrollHeight + 'px';
 }
 
-function detectarEnterEnElTextArea(event) {
+function restablecerAltoTextarea(textarea) {
+    const alturaNormal = '36px';  // Cambia esto por la altura inicial deseada
+    textarea.style.height = alturaNormal;
+}
+
+function detectarEnterEnElTextArea(event, textarea) {
     if (event.key === 'Enter' && !event.shiftKey) {
         // Previene el comportamiento predeterminado (insertar salto de línea)
         event.preventDefault();
         // Envía el formulario
-        document.getElementById('chat-form').submit();
+        envioFormulario(event);
+        //formMessage();
+
+        restablecerAltoTextarea(textarea);
     }
+}
+
+function pegarImagenInput(e) {
+    const datosPegados = e.clipboardData.items[0];
+
+    if(datosPegados.type.includes('image')) {
+        const img = e.clipboardData.items[0].getAsFile();
+
+        if(img){
+            console.log(img.name); // nombre del archivo
+            console.log(img.lastModifiedDate); // fecha de modificación
+            console.log(img.type); // tipo MIME
+            console.log(img.size); // tamaño en bytes
+
+            const $offcanvas = $('#myOffcanvas').offcanvas({
+                backdrop: true
+            });
+
+            $offcanvas.offcanvas('show');
+
+            // Previsualizar la imagen
+            const reader = new FileReader();
+            reader.onload = function() {
+
+                $("#offcanvas-body").html('<img src="' + reader.result + '" alt="Image Preview" name="imagenCargada" style="max-width:100%; max-height: 300px;" id="imagenCargada"> <input type="text" class="form-control" name="fileDescription" id="fileDescription" placeholder="Añade un comentario" style="margin-top: 15px" />');
+            }
+
+            reader.readAsDataURL(img);
+        }
+    } 
+
+    console.log(datosPegados);
 }
