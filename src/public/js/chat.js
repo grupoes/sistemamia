@@ -1867,9 +1867,7 @@ const newContacto = document.getElementById('newContact');
 const btnAgregar = document.getElementById('btnNuevoContacto');
 
 const plataforma = document.getElementById('plataforma_contacto');
-const platform = document.getElementById('platform');
 
-renderOptionPlataforma(platform, 0);
 
 function renderOptionPlataforma(docPlataforma, type) {
     fetch('/getPlataformas')
@@ -2597,15 +2595,75 @@ filtroEmbudo.addEventListener('change', (e) => {
 const filterContacto = document.getElementById('filterContacto');
 const consultarFiltro = document.getElementById('consultarFiltro');
 
+const contentChatWhatsapp = document.getElementById('contentChatWhatsapp');
+const contentFiltros = document.getElementById('contentFiltros');
+
+const contentFilterContact = document.getElementById('contentFilterContact');
+
 filterContacto.addEventListener('click', (e) => {
     e.preventDefault();
 
-    $('#offcanvasLeft').offcanvas('show');
-})
+    contentChatWhatsapp.classList.remove("col-xl-9");
+    contentChatWhatsapp.classList.add('col-xl-5');
 
-consultarFiltro.addEventListener('click', (e) => {
-    e.preventDefault();
+    contentFiltros.style.display = "block";
 
+    // Agregar transición
+    contentFiltros.style.transition = "opacity 0.5s ease";
+    contentFiltros.style.opacity = 0;
+
+    // Se muestra suavemente
+    setTimeout(() => {
+        contentFiltros.style.opacity = 1; 
+    }, 50);
+
+    viewFilterPlataformaContacto();
+});
+
+function viewFilterPlataformaContacto() {
+    let view = `
+    <h4 class="mb-3">Plataforma - Filtro de Contactos</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-1">
+                    <label class="form-label" for="dateInit">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="dateInit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-1">
+                    <label class="form-label" for="dateEnd">Fecha Fin</label>
+                    <input type="date" class="form-control" id="dateEnd">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-1">
+                <label class="form-label" for="platform">Plataforma</label>
+                <select name="platform" id="platform" class="form-select">
+
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-1">
+                <button type="button" class="btn btn-primary mt-3" id="consultarFiltro" onclick="consultarFiltroPlataforma()">Consultar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="content_filtro">
+
+    </div>
+    `;
+
+    contentFilterContact.innerHTML = view;
+
+    const platform = document.getElementById('platform');
+
+    renderOptionPlataforma(platform, 0);
+}
+
+function consultarFiltroPlataforma() {
     const dateInit = document.getElementById('dateInit');
     const dateEnd = document.getElementById('dateEnd');
     const platf = document.getElementById('platform');
@@ -2631,7 +2689,7 @@ consultarFiltro.addEventListener('click', (e) => {
             alert('ocurrio un error');
         }
     })
-});
+}
 
 function viewFilterContacts(data) {
     const content_filtro = document.getElementById('content_filtro');
@@ -2886,4 +2944,11 @@ function pegarImagenInput(e) {
     } 
 
     console.log(datosPegados);
+}
+
+function cerrar_ventana_chat() {
+    contentChatWhatsapp.classList.remove("col-xl-5");
+    contentChatWhatsapp.classList.add('col-xl-9');
+
+    contentFiltros.style.display = "none";
 }

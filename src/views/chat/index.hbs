@@ -100,12 +100,11 @@
 
 <input type="hidden" value="{{ urlchat }}" id="chaturl">
 <div class="row">
-    <div class="col-xl-3 col-lg-5">
+    <div class="col-xl-3 col-lg-5 p-0">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex pb-2 border-bottom align-items-center">
-                    <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48"
-                        alt="Brandon Smith" />
+                    <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Brandon Smith" />
                     <div>
                         <h5 class="my-0 fs-14" id="nameUser">MI CHAT</h5>
                     </div>
@@ -209,13 +208,29 @@
             </div> <!-- End card-body -->
         </div> <!-- End card -->
     </div> <!-- End col -->
-    <div class="col-xl-9 col-lg-7">
+    <div class="col-xl-9 col-lg-7" id="contentChatWhatsapp">
         <div class="card">
             <div class="card-body" id="cardBody">
 
             </div>
-        </div> <!-- End card -->
+        </div>
+
     </div> <!-- End col -->
+
+    <div class="col-xl-4 p-0" style="display: none;" id="contentFiltros">
+        <div class="card" style="height: 620px">
+            <div class="card-body">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_chat()"></button>
+
+                <div id="contentFilterContact">
+                    
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -562,50 +577,6 @@
     </div>
 </div>
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasTopLabel">
-    <div class="offcanvas-header">
-        <h4 id="offcanvasLeftLabel">Plataforma - filtrar contacto</h4>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body" style="padding-top: 0px;">
-        <div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-1">
-                        <label class="form-label" for="dateInit">Fecha Inicio</label>
-                        <input type="date" class="form-control" id="dateInit">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-1">
-                        <label class="form-label" for="dateEnd">Fecha Fin</label>
-                        <input type="date" class="form-control" id="dateEnd">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-1">
-                        <label class="form-label" for="platform">Plataforma</label>
-                        <select name="platform" id="platform" class="form-select">
-
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-1">
-                        <button type="button" class="btn btn-primary mt-3" id="consultarFiltro">Consultar</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row" id="content_filtro">
-
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReenvio" aria-labelledby="offcanvasTopLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel">Reenviar Mensaje</h5>
@@ -618,8 +589,8 @@
 
 <!-- aca mostramos el contaco a enviar -->
 <!-- Long Content Scroll Modal -->
-<div class="modal fade" id="modalReenvio" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal fade" id="modalReenvio" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -627,7 +598,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="search" id="buscarContacto" placeholder="Buscar contacto" class="form-control mb-2" onkeyup="searchContacto(event)">
+                <input type="search" id="buscarContacto" placeholder="Buscar contacto" class="form-control mb-2"
+                    onkeyup="searchContacto(event)">
                 <input type="hidden" id="codigoMensaje" value="">
                 <input type="hidden" id="sendType" value="">
 
