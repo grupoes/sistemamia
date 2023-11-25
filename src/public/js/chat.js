@@ -2716,7 +2716,7 @@ function viewFilterContacts(data) {
     });
 
     let htmlTable = `
-    <div class="table-responsive table-nowrap mt-3">
+    <div class="table-responsive table-nowrap mt-3" style="height: 370px; overflow-y: scroll">
         <table class="table table-sm table-centered mb-0 fs-13">
             <thead class="table-light">
                 <tr>
