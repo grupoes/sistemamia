@@ -61,7 +61,7 @@ const reemplazarMarcadoresConArray = (str, array) => {
 }
 
 export const sendPlantilla = async (req, res) => {
-    const { idPlantilla, contentVariable, numero, variables } = req.body;
+    const { idPlantilla, numero, variables } = req.body;
     try {
 
         const plantilla = await Plantilla.findOne({

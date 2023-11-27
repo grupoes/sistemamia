@@ -2190,7 +2190,7 @@ escogePlantilla.addEventListener('change', (e) =>  {
         variables.forEach(variable => {
             inputVariable += `
 
-            <textarea class="form-control" rows="1" style="resize: none" oninput="detectarAltoInputMensaje(this)" id="contentVariable"></textarea>
+            <textarea class="form-control input-content-variable" rows="1" style="resize: none" oninput="detectarAltoInputMensaje(this)" id="contentVariable"></textarea>
             <span class="input-group-text" id="basic-addon2">{{{${variable.nombre}}}}</span>
             `;
         });
@@ -2225,16 +2225,9 @@ const btnEnviarPlatilla = document.getElementById('btnEnviarPlatilla');
 
 btnEnviarPlatilla.addEventListener('click', (e) => {
     const idPlantilla = escogePlantilla.value;
-    const contentVariable = document.getElementById('contentVariable');
     const numberWhat = document.getElementById('whatsappNumber');
 
     const inputs = document.querySelectorAll('.input-content-variable');
-
-    let contenidoVariable = "";
-
-    if(contentVariable) {
-        contenidoVariable = contentVariable.value;
-    }
 
     const inputVariables = [];
 
@@ -2248,7 +2241,6 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
         method: 'POST',
         body: JSON.stringify({
             idPlantilla: idPlantilla,
-            contentVariable: contenidoVariable,
             numero: numberWhat.value,
             variables: inputVariables
         }),
