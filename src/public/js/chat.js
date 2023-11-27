@@ -2646,7 +2646,7 @@ function viewFilterPlataformaContacto() {
         </div>
         <div class="col-md-6">
             <div class="mb-1">
-                <button type="button" class="btn btn-primary mt-3" id="consultarFiltro" onclick="consultarFiltroPlataforma()">Consultar</button>
+                <button type="button" class="btn btn-primary mt-3" id="consultarFiltro" onclick="consultarFiltroPlataforma(event)">Consultar</button>
             </div>
         </div>
     </div>
@@ -2663,10 +2663,22 @@ function viewFilterPlataformaContacto() {
     renderOptionPlataforma(platform, 0);
 }
 
-function consultarFiltroPlataforma() {
+function consultarFiltroPlataforma(e) {
+
     const dateInit = document.getElementById('dateInit');
     const dateEnd = document.getElementById('dateEnd');
     const platf = document.getElementById('platform');
+
+    if(dateInit.value == "") {
+        return alert('Ingrese una fecha de Inicio por favor');
+    }
+
+    if(dateEnd.value == "") {
+        return alert('Ingrese una fecha de Fin por favor');
+    }
+
+    e.target.disabled = true;
+    e.target.textContent = 'Consultando...';
 
     const post = {
         dateInit: dateInit.value,
@@ -2677,12 +2689,16 @@ function consultarFiltroPlataforma() {
     fetch("/filtroContact", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(post)
     })
     .then(res => res.json())
     .then(data => {
+        e.target.disabled = false;
+        e.target.textContent = 'Consultar';
+
         if(data.message === 'ok') {
             viewFilterContacts(data);
         } else {
@@ -2703,11 +2719,15 @@ function viewFilterContacts(data) {
 
         if(contact.user_register == 0) {
             register = "Software";
+        } else {
+            register = contact.arrayExtra.user_register;
         }
+
+        //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')
 
         tbody += `
         <tr>
-            <td>${contact.nameContact}</td>
+            <td> <a href="javascript:void(0);" onclick="chatDetail('${contact.from}', '${contact.nameContact}','${contact.arrayExtra.nameEtiqueta}',${contact.arrayExtra.potencial_id}, ${contact.arrayExtra.etiqueta_id}, ${contact.arrayExtra.rol}, ${contact.asistente}, '${contact.arrayExtra.asistente}')">${contact.nameContact}</a> </td>
             <td>${contact.from}</td>
             <td>${contact.createdAt}</td>
             <td>${register}</td>

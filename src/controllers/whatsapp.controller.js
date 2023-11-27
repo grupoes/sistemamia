@@ -21,6 +21,7 @@ import { Op } from 'sequelize';
 
 import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
+import { Usuario } from "../models/usuario.js";
 
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
@@ -579,6 +580,8 @@ export const FiltroContact = async (req, res) => {
     const { dateInit, dateEnd, plataforma } = req.body;
     try {
 
+        const rol = req.usuarioToken._role;
+        
         let contactos = "";
 
         if(plataforma == 0) {
@@ -600,6 +603,80 @@ export const FiltroContact = async (req, res) => {
                     ]
                 }
             });
+        }
+
+        let datos = [];
+
+        for(const contacto of contactos) {
+            const potencial = await PotencialCliente.findOne({
+                where: {
+                    numero_whatsapp: contacto.from
+                }
+            });
+
+            const idPotencial = potencial.id;
+
+            const etiPotencial = await EtiquetaCliente.findOne({
+                where: {
+                    cliente_id: idPotencial,
+                    estado: 1
+                }
+            });
+
+            const idEtiqueta = etiPotencial.etiqueta_id;
+
+            const etiqueta = await Etiqueta.findOne({
+                where: {
+                    id: idEtiqueta
+                }
+            });
+            
+            let nombreAsistente;
+
+            if(contacto.asistente == null || contacto.asistente == "") {
+                nombreAsistente = "";
+            } else {
+                const asistente = await Trabajadores.findOne({
+                    where: {
+                        id: contacto.asistente
+                    }
+                });
+
+                nombreAsistente = asistente.nombres+" "+asistente.apellidos;
+            }
+
+            let usuario_register;
+
+            if(contacto.user_register == null || contacto.user_register == "") {
+                usuario_register = "";
+            } else {
+                const usuario = await Usuario.findOne({
+                    where: {
+                        id: contacto.user_register
+                    }
+                });
+
+                const tra = await Trabajadores.findOne({
+                    where: {
+                        id: usuario.trabajador_id
+                    }
+                });
+
+                usuario_register = tra.nombres+" "+tra.apellidos;
+            }
+
+            const arrayExtra = {
+                nameEtiqueta: etiqueta.descripcion,
+                potencial_id: idPotencial,
+                etiqueta_id: idEtiqueta,
+                rol: rol,
+                asistente: nombreAsistente,
+                user_register: usuario_register
+            };
+
+            let estadoObject = contacto.get({ plain: true });
+
+            estadoObject.arrayExtra = arrayExtra;
         }
 
         return res.json({ message: 'ok', data: contactos });
