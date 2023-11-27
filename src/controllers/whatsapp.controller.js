@@ -587,7 +587,7 @@ export const FiltroContact = async (req, res) => {
         
         let contactos = "";
 
-        const user = await Usuario.find({
+        const user = await Usuario.findOne({
             where: {
                 id: id
             }
