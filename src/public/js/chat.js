@@ -461,11 +461,14 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
         </ul>
         
         <div class="mt-2 bg-light p-3 rounded" style="position: relative">
-            <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
-            <div id="emojis" class="card-body p-0" style="height: 130px; display: none; overflow-x: scroll; margin-top: 7px" >
-                
-                <div id="list-emojis">
+
+            <div id="emojis" style="display: none;">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
+                <div class="card-body p-0" style="height: 130px; overflow-x: scroll; margin-top: 7px" >
                     
+                    <div id="list-emojis">
+                        
+                    </div>
                 </div>
             </div>
 
@@ -1267,6 +1270,9 @@ function envioFormulario(e) {
                 contentMensaje.value = "";
                 document.getElementById('responderMessage').innerHTML = "";
                 sendChat.disabled = false;
+
+                const emojis = document.getElementById('emojis');
+                emojis.style.display = 'none';
             });
 
 
