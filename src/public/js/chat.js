@@ -2189,7 +2189,8 @@ escogePlantilla.addEventListener('change', (e) =>  {
 
         variables.forEach(variable => {
             inputVariable += `
-            <input type="text" class="form-control input-content-variable" placeholder="Ingrese el contenido de la variable" value="" id="contentVariable">
+
+            <textarea class="form-control" rows="1" style="resize: none" oninput="detectarAltoInputMensaje(this)" id="contentVariable"></textarea>
             <span class="input-group-text" id="basic-addon2">{{{${variable.nombre}}}}</span>
             `;
         });
@@ -2203,7 +2204,12 @@ escogePlantilla.addEventListener('change', (e) =>  {
             </div>
         </div>
         <div class="col-md-12">
-            <label for="cuerpo_" class="col-form-label">Variables:</label>
+            <label for="cuerpo_" class="col-form-label">Variables:</label> <a href="javascript:void(0);" onclick="showItemsEmojis(event)"> <i class="bi bi-emoji-smile fs-18"></i> </a> <span id="closeTemplate"> </span>
+
+            <div id="listaEmojisTemplate" style="display:none;height: 75px; overflow-y: scroll; overflow-x: hidden">
+            
+            </div>
+
             <div class="input-group mb-3">
                 ${inputVariable}
             </div>
@@ -2503,7 +2509,7 @@ function plantillaSelect(e) {
                     /* dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`; */
 
                     dinamico = `
-                        <textarea rows="1" id="cuerpo_variable" class="form-control" style="resize: none;" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)"></textarea>
+                        <textarea rows="1" id="cuerpo_variable" class="form-control" style="resize: none;" oninput="detectarAltoInputMensaje(this)"></textarea>
                     `;
                 }
 
@@ -2517,7 +2523,12 @@ function plantillaSelect(e) {
 
             existeVariables = `
             <div class="col-md-12">
-                <label for="cuerpo_variable" class="col-form-label">Variables:</label>
+                <label for="cuerpo_variable" class="col-form-label">Variables: </label> <a href="javascript:void(0);" id="emojis_add_contact" onclick="showEmojisAddContact(event)"><i class="bi bi-emoji-smile fs-18"></i></a> <span id="deletex">  </span>
+
+                <div style="height: 75px; overflow-y: scroll; display: none; overflow-x: hidden" id="addContactEmojis">
+                    <a href="javascript:void(0);" class="item-emoji" style="font-size: 24px">😀</a>
+                </div>
+
                 ${varian}
             </div>
             `;
@@ -3025,6 +3036,7 @@ function cerrar_ventana_emojis() {
     emojis.style.display = 'none';
 }
 
+
 function print_emoji_input() {
     const lista_emojis = document.getElementById('list-emojis');
 
@@ -3054,4 +3066,102 @@ function insertEmojiAtCursor(inputField, emoji) {
     const newCursorPos = startPos + emoji.length;
     inputField.selectionStart = newCursorPos;
     inputField.selectionEnd = newCursorPos;
+
+    inputField.focus();
+}
+
+function showEmojisAddContact(e) {
+    const addContactEmojis = document.getElementById('addContactEmojis');
+
+    const deletex = document.getElementById('deletex');
+
+    deletex.innerHTML = `<a href="javascript:void(0);" id="closeEmojis" onclick="closeEmojisAddContact()" style="margin-left: 10px; color: red">X</a>`;
+
+    addContactEmojis.style.display = 'block';
+
+    fetch('/emojisAll')
+    .then(res => res.json())
+    .then(data => {
+
+        let view = "";
+
+        const datos = data.data;
+
+        datos.forEach(emoji => {
+            view += `<a href="javascript:void(0);" class="add-contact-item-emoji" style="font-size: 24px">${emoji.character}</a>`;
+        });
+
+        addContactEmojis.innerHTML = view;
+
+        print_emoji_input_add_contact();
+    })
+}
+
+function print_emoji_input_add_contact() {
+    const addContactEmojis = document.getElementById('addContactEmojis');
+
+    addContactEmojis.addEventListener('click', (e) => {
+        if(e.target.classList.contains('add-contact-item-emoji')) {
+            const variable = document.getElementById('cuerpo_variable');
+            const emoji = e.target.textContent;
+            
+            insertEmojiAtCursor(variable, emoji);
+        }
+    });
+}
+
+function closeEmojisAddContact() {
+    const addContactEmojis = document.getElementById('addContactEmojis');
+    addContactEmojis.style.display = 'none';
+
+    const deletex = document.getElementById('deletex');
+    deletex.innerHTML = "";
+}
+
+function showItemsEmojis() {
+    const listaEmojisTemplate = document.getElementById('listaEmojisTemplate');
+    const closeTemplate = document.getElementById('closeTemplate');
+
+    listaEmojisTemplate.style.display = 'block';
+
+    closeTemplate.innerHTML = `<a href="javascript:void(0);" style="color: red; margin-left: 15px" onclick="closeEmojisTemplate(event)"> X </a>`;
+
+    fetch('/emojisAll')
+    .then(res => res.json())
+    .then(data => {
+
+        let view = "";
+
+        const datos = data.data;
+
+        datos.forEach(emoji => {
+            view += `<a href="javascript:void(0);" class="template-item-emoji" style="font-size: 24px">${emoji.character}</a>`;
+        });
+
+        listaEmojisTemplate.innerHTML = view;
+
+        print_emoji_input_template();
+    })
+}
+
+function closeEmojisTemplate() {
+    const listaEmojisTemplate = document.getElementById('listaEmojisTemplate');
+    const closeTemplate = document.getElementById('closeTemplate');
+
+    closeTemplate.innerHTML = '';
+    listaEmojisTemplate. style.display = 'none';
+
+}
+
+function print_emoji_input_template() {
+    const listaEmojisTemplate = document.getElementById('listaEmojisTemplate');
+
+    listaEmojisTemplate.addEventListener('click', (e) => {
+        if(e.target.classList.contains('template-item-emoji')) {
+            const variable = document.getElementById('contentVariable');
+            const emoji = e.target.textContent;
+            
+            insertEmojiAtCursor(variable, emoji);
+        }
+    });
 }
