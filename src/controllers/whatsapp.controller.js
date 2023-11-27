@@ -866,10 +866,16 @@ export const emojisAll = async(req, res) => {
 
     try {
        
+        const emojis = await Emojis.findAll({
+            where: {
+                estado: "1"
+            }
+        });
 
+        return res.status(200).json({ message: 'ok', data: emojis });
 
     } catch (error) {
-        console.log(error);
+        return res.status(400).json({ message: error.message });
     }
 }
 

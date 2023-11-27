@@ -460,10 +460,13 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
         </ul>
         
-        <div class="mt-2 bg-light p-3 rounded">
-            <div id="emojis" class="card-body p-0" style="position: relative; height: 100px; display: none" >
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
-                <div id="list-emojis"></div>
+        <div class="mt-2 bg-light p-3 rounded" style="position: relative">
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
+            <div id="emojis" class="card-body p-0" style="height: 130px; display: none; overflow-x: scroll; margin-top: 7px" >
+                
+                <div id="list-emojis">
+                    
+                </div>
             </div>
 
             <form class="needs-validation" novalidate="" name="chat-form" id="chat-form" method="post" onsubmit="envioFormulario(event)">
@@ -2993,6 +2996,19 @@ function allEmojis(e) {
     .then(res => res.json())
     .then(data => {
         console.log(data);
+        const list_emojis = document.getElementById('list-emojis');
+
+        let view = "";
+
+        const datos = data.data;
+
+        datos.forEach(emoji => {
+            view += `<a href="javascript:void(0);" class="item-emoji" style="font-size: 24px">${emoji.character}</a>`;
+        });
+
+        list_emojis.innerHTML = view;
+
+        print_emoji_input();
     })
 
 }
@@ -3001,4 +3017,35 @@ function cerrar_ventana_emojis() {
     const emojis = document.getElementById('emojis');
 
     emojis.style.display = 'none';
+}
+
+function print_emoji_input() {
+    const lista_emojis = document.getElementById('list-emojis');
+
+    lista_emojis.addEventListener('click', (e) => {
+        if(e.target.classList.contains('item-emoji')) {
+            const inputMessage = document.getElementById('contentMensaje');
+            const emoji = e.target.textContent;
+            
+            insertEmojiAtCursor(inputMessage, emoji);
+        }
+    });
+}
+
+function insertEmojiAtCursor(inputField, emoji) {
+    // Obtener la posición actual del cursor en el campo de entrada
+    const startPos = inputField.selectionStart;
+    const endPos = inputField.selectionEnd;
+
+    // Obtener el texto actual del campo de entrada
+    const textBefore = inputField.value.substring(0, startPos);
+    const textAfter = inputField.value.substring(endPos);
+
+    // Insertar el emoji en la posición del cursor
+    inputField.value = textBefore + emoji + textAfter;
+
+    // Mover el cursor después del emoji insertado
+    const newCursorPos = startPos + emoji.length;
+    inputField.selectionStart = newCursorPos;
+    inputField.selectionEnd = newCursorPos;
 }
