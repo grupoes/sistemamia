@@ -864,34 +864,8 @@ const eliminarContacto = async(req, res) => {
 
 export const emojisAll = async(req, res) => {
 
-    let configu = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'https://emoji-api.com/emojis?access_key=eadd4a55e30153f08f4549365edb0e5734dc7c90'
-    };
-
     try {
-        const response = await axios.request(configu);
-
-        const datos = JSON.stringify(response.data);
-
-        const emojis = JSON.parse(datos);
-
-        let contador = 0;
-
-        for(const emoji of emojis) {
-            await Emojis.create({
-                slug: emoji.slug,
-                character: emoji.character,
-                unicodeName: emoji.unicodeName,
-                codePoint: emoji.codePoint,
-                group: emoji.group,
-                subGroup: emoji.subGroup,
-                estado: 1
-            });
-
-            console.log('ok: '+ (contador + 1));
-        }
+       
 
 
     } catch (error) {
