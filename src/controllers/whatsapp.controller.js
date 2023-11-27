@@ -7,6 +7,7 @@ import { Etiqueta } from "../models/etiquetas.js";
 import { Asignacion } from "../models/asignacion.js";
 import { Plantilla } from "../models/plantilla.js";
 import { Chat } from "../models/chat.js";
+import { Emojis } from "../models/emojis.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
 
@@ -22,8 +23,6 @@ import { Op } from 'sequelize';
 import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
 import { Usuario } from "../models/usuario.js";
-
-//import * as emoji from 'node-emoji'
 
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
@@ -863,13 +862,41 @@ const eliminarContacto = async(req, res) => {
     }
 }
 
-export const emojisAll = async (req, res) => {
+export const emojisAll = async(req, res) => {
 
-    /* let emojis = emoji.emojiData.all;
+    let configu = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://emoji-api.com/emojis?access_key=eadd4a55e30153f08f4549365edb0e5734dc7c90'
+    };
 
-    console.log(emojis);
+    try {
+        const response = await axios.request(configu);
 
-    return res.json({ message: 'ok' }); */
+        const datos = JSON.stringify(response.data);
+
+        const emojis = JSON.parse(datos);
+
+        let contador = 0;
+
+        for(const emoji of emojis) {
+            await Emojis.create({
+                slug: emoji.slug,
+                character: emoji.character,
+                unicodeName: emoji.unicodeName,
+                codePoint: emoji.codePoint,
+                group: emoji.group,
+                subGroup: emoji.subGroup,
+                estado: 1
+            });
+
+            console.log('ok: '+ (contador + 1));
+        }
+
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})

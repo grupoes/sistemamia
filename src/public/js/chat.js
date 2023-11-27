@@ -459,8 +459,13 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
 
         </ul>
+        
         <div class="mt-2 bg-light p-3 rounded">
-            
+            <div id="emojis" class="card-body p-0" style="position: relative; height: 100px; display: none" >
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
+                <div id="list-emojis"></div>
+            </div>
+
             <form class="needs-validation" novalidate="" name="chat-form" id="chat-form" method="post" onsubmit="envioFormulario(event)">
                 <input type="hidden" name="numberWhat" value="${numero}">
                 <div id="responderMessage">
@@ -478,7 +483,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                     </div>
                     <div class="col-sm-auto">
                         <div class="btn-group">
-                            <a href="#" class="btn btn-light" onclick="allEmojis()"><i class="bi bi-emoji-smile fs-18"></i></a>
+                            <a href="#" class="btn btn-light" onclick="allEmojis(event)"><i class="bi bi-emoji-smile fs-18"></i></a>
                             <input type="file" id="fileInput" style="display: none;" />
                             <audio id="audio" controls="" style="display: none"></audio>
                             <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
@@ -2977,10 +2982,23 @@ function cerrar_ventana_chat() {
     contentFiltros.style.display = "none";
 }
 
-function allEmojis() {
+function allEmojis(e) {
+    e.preventDefault();
+
+    const emojis = document.getElementById('emojis');
+
+    emojis.style.display = 'block';
+
     fetch('/emojisAll')
     .then(res => res.json())
     .then(data => {
         console.log(data);
     })
+
+}
+
+function cerrar_ventana_emojis() {
+    const emojis = document.getElementById('emojis');
+
+    emojis.style.display = 'none';
 }
