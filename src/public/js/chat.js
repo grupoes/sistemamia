@@ -478,7 +478,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                     </div>
                     <div class="col-sm-auto">
                         <div class="btn-group">
-                            <a href="#" class="btn btn-light"><i class="bi bi-emoji-smile fs-18"></i></a>
+                            <a href="#" class="btn btn-light" onclick="allEmojis()"><i class="bi bi-emoji-smile fs-18"></i></a>
                             <input type="file" id="fileInput" style="display: none;" />
                             <audio id="audio" controls="" style="display: none"></audio>
                             <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
@@ -2486,7 +2486,11 @@ function plantillaSelect(e) {
                 if(data.plantilla.id == 3) {
                     dinamico = `<input type="text" class="form-control variables" placeholder="Esto es dinamico" value="" id="cuerpo_variable" readonly>`;
                 } else {
-                    dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`;
+                    /* dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`; */
+
+                    dinamico = `
+                        <textarea rows="1" id="cuerpo_variable" class="form-control" style="resize: none;" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)"></textarea>
+                    `;
                 }
 
                 varian += `
@@ -2718,7 +2722,7 @@ function viewFilterContacts(data) {
         let register = "";
 
         if(contact.user_register == 0) {
-            register = "Software";
+            register = "SOFTWARE";
         } else {
             register = contact.arrayExtra.user_register;
         }
@@ -2971,4 +2975,12 @@ function cerrar_ventana_chat() {
     contentChatWhatsapp.classList.add('col-xl-9');
 
     contentFiltros.style.display = "none";
+}
+
+function allEmojis() {
+    fetch('/emojisAll')
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+    })
 }

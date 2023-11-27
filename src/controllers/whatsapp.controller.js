@@ -23,6 +23,8 @@ import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
 import { Usuario } from "../models/usuario.js";
 
+//import * as emoji from 'node-emoji'
+
 export const addWhatsapp = async(req, res) => {
     const { from, nameContact } = req.body;
     try {
@@ -581,28 +583,59 @@ export const FiltroContact = async (req, res) => {
     try {
 
         const rol = req.usuarioToken._role;
+        const id = req.usuarioToken._id;
         
         let contactos = "";
 
+        const user = await Usuario.find({
+            where: {
+                id: id
+            }
+        });
+
         if(plataforma == 0) {
-            contactos = await NumeroWhatsapp.findAll({
-                where: {
-                    [Op.and]: [
-                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
-                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
-                    ]
-                }
-            });
+
+            if(rol == 2 || rol == 6) {
+                contactos = await NumeroWhatsapp.findAll({
+                    where: {
+                        asistente: user.trabajador_id,
+                        [Op.and]: [
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                        ]
+                    }
+                });
+            } else {
+                contactos = await NumeroWhatsapp.findAll({
+                    where: {
+                        [Op.and]: [
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                        ]
+                    }
+                });
+            }
+
+            
         } else {
-            contactos = await NumeroWhatsapp.findAll({
-                where: {
-                    plataforma_id: plataforma,
-                    [Op.and]: [
-                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
-                        sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
-                    ]
-                }
-            });
+
+            if(rol == 2 || rol == 6) {
+                contactos = await NumeroWhatsapp.findAll({
+                    where: {
+                        plataforma_id: plataforma,
+                        asistente: user.trabajador_id,
+                        [Op.and]: [
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                        ]
+                    }
+                });
+
+            } else {
+                
+            }
+
+            
         }
 
         let datos = [];
@@ -828,6 +861,15 @@ const eliminarContacto = async(req, res) => {
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
+}
+
+export const emojisAll = async (req, res) => {
+
+    /* let emojis = emoji.emojiData.all;
+
+    console.log(emojis);
+
+    return res.json({ message: 'ok' }); */
 }
 
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})
