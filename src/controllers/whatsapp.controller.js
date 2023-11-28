@@ -788,7 +788,7 @@ export const reenviarMensaje = async (req, res) => {
 
             let url_audio = "";
 
-            if(sendType === 0) {
+            if(sendType === "0") {
                 url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
             } else {
                 url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+mensaje.filename;
