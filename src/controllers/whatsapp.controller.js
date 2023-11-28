@@ -794,13 +794,13 @@ export const reenviarMensaje = async (req, res) => {
                 url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+mensaje.filename;
             }
 
-            const datos = {
+            /* const datos = {
                 type: sendType,
                 fileName: fileName,
                 url_audio: url_audio
             };
 
-            return res.json({ message: 'ok', data: datos });
+            return res.json({ message: 'ok', data: datos }); */
 
         
             const dataFile = {
