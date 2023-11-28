@@ -2861,7 +2861,7 @@ reenviar_mensaje_contacto.addEventListener('click', (e) => {
     const post = {
         codigo: codigoMensaje.value,
         contacto: seleccionado,
-        sendType: sendType
+        sendType: sendType.value
     }
 
     fetch('/reenviarMensaje', {
