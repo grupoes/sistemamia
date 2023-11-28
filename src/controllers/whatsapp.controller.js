@@ -800,7 +800,7 @@ export const reenviarMensaje = async (req, res) => {
                 url_audio: url_audio
             };
 
-            return res.json({ message: ok, data: datos });
+            return res.json({ message: 'ok', data: datos });
 
         
             const dataFile = {
