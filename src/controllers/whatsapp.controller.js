@@ -631,7 +631,15 @@ export const FiltroContact = async (req, res) => {
                 });
 
             } else {
-                
+                contactos = await NumeroWhatsapp.findAll({
+                    where: {
+                        plataforma_id: plataforma,
+                        [Op.and]: [
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
+                            sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
+                        ]
+                    }
+                });
             }
 
             
