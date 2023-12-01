@@ -1033,6 +1033,8 @@ export const getEtiquetaEmbudo = async (req, res) => {
 export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     const { nombre, numero } = req.body;
 
+    res.header('Access-Control-Allow-Origin', '*');
+
     try {
         const existeChat = await Chat.count({
             where: {
