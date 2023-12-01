@@ -1034,6 +1034,8 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     const { nombre, numero } = req.body;
 
     res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
     try {
         const existeChat = await Chat.count({
