@@ -39,15 +39,7 @@ const __dirname = dirname(__filename);
 
 dotenv.config();
 
-import admin from 'firebase-admin';
-import serviceAccount from '../api_firestore_data.json' assert { type: 'json' };
 import { log } from "console";
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
 
 export const chatView = async (req, res) => {
     const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
@@ -71,36 +63,6 @@ export const chatView = async (req, res) => {
 }
 
 const execAsync = promisify(exec);
-
-export const addMessage = async (req, res) => {
-    const { text, messageId, numberWhatsapp } = req.body;
-    try {
-        const data = {
-            from: 51927982544,
-            message: text,
-            timestamp: Math.floor(Date.now() / 1000),
-            id: messageId,
-            type: 'text',
-            nameContact: 'Grupo Es Consultores',
-            receipt: numberWhatsapp
-
-        }
-
-        const docRef = db.collection('conversation');
-
-        try {
-            const reg = await docRef.add(data);
-            console.log('Document successfully written!');
-            res.json(reg);
-        } catch (error) {
-            console.error('Error writing document: ', error);
-            res.json('error', error);
-        }
-
-    } catch (error) {
-        return res.status(400).json({ message: error.message });
-    }
-}
 
 export const getChatCodigo = async(req, res) => {
     const codigo = req.params.id;
@@ -1037,7 +999,10 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
+    return res.json('ok');
+
     try {
+        
         const existeChat = await Chat.count({
             where: {
                 receipt: String(numero)
