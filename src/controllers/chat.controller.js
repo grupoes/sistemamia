@@ -11,6 +11,8 @@ import { Chat_estados } from "../models/estadosConversacion.js";
 import { Plataforma } from "../models/plataforma.js";
 import { FraseFinChat } from "../models/fraseFinChat.js";
 
+import { asignarAsistenteData } from "./base.controller.js";
+
 import { Op } from 'sequelize';
 
 import axios from 'axios';
@@ -39,15 +41,7 @@ const __dirname = dirname(__filename);
 
 dotenv.config();
 
-import admin from 'firebase-admin';
-import serviceAccount from '../api_firestore_data.json' assert { type: 'json' };
 import { log } from "console";
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
 
 export const chatView = async (req, res) => {
     const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
@@ -71,36 +65,6 @@ export const chatView = async (req, res) => {
 }
 
 const execAsync = promisify(exec);
-
-export const addMessage = async (req, res) => {
-    const { text, messageId, numberWhatsapp } = req.body;
-    try {
-        const data = {
-            from: 51927982544,
-            message: text,
-            timestamp: Math.floor(Date.now() / 1000),
-            id: messageId,
-            type: 'text',
-            nameContact: 'Grupo Es Consultores',
-            receipt: numberWhatsapp
-
-        }
-
-        const docRef = db.collection('conversation');
-
-        try {
-            const reg = await docRef.add(data);
-            console.log('Document successfully written!');
-            res.json(reg);
-        } catch (error) {
-            console.error('Error writing document: ', error);
-            res.json('error', error);
-        }
-
-    } catch (error) {
-        return res.status(400).json({ message: error.message });
-    }
-}
 
 export const getChatCodigo = async(req, res) => {
     const codigo = req.params.id;
@@ -1038,6 +1002,7 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
     try {
+        
         const existeChat = await Chat.count({
             where: {
                 receipt: String(numero)
@@ -1466,6 +1431,24 @@ export const contactosNoContestados = async(req, res) => {
 
         return res.json({ message: 'ok', data: arrayContactos });
 
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const envio_formulario_panel = async(req, res) => {
+    const { nombre, correo, celular, carrera, universidad, cuidad } = req.body;
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+    try {
+
+        const dataAsignado = await asignarAsistenteData();
+
+        return res.json(dataAsignado);
+        const new_contacto = await NumeroWhatsapp.create();
     } catch (error) {
         return res.json({message: error.message});
     }

@@ -23,19 +23,14 @@ import fraseFin from './routes/fraseFin.routes.js';
 
 const app = express();
 
-const whitelist = [
-    'https://grupoesconsultores.com',
-    'https://console.firebase.google.com/project/whatsapp-api-data/overview'
-];
-
-const corsOptions = {
+/* const corsOptions = {
     exposedHeaders: ['Authorization'],
     origin: 'https://grupoesconsultores.com',
     methods: 'POST',
     allowedHeaders: ['Content-Type']
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); */
 
 app.use(express.json({ limit: '10mb' }));
 
