@@ -11,6 +11,8 @@ import { Chat_estados } from "../models/estadosConversacion.js";
 import { Plataforma } from "../models/plataforma.js";
 import { FraseFinChat } from "../models/fraseFinChat.js";
 
+import { asignarAsistenteData } from "./base.controller.js";
+
 import { Op } from 'sequelize';
 
 import axios from 'axios';
@@ -999,8 +1001,6 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-    return res.json('ok');
-
     try {
         
         const existeChat = await Chat.count({
@@ -1431,6 +1431,24 @@ export const contactosNoContestados = async(req, res) => {
 
         return res.json({ message: 'ok', data: arrayContactos });
 
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const envio_formulario_panel = async(req, res) => {
+    const { nombre, correo, celular, carrera, universidad, cuidad } = req.body;
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+    try {
+
+        const dataAsignado = await asignarAsistenteData();
+
+        return res.json(dataAsignado);
+        const new_contacto = await NumeroWhatsapp.create();
     } catch (error) {
         return res.json({message: error.message});
     }
