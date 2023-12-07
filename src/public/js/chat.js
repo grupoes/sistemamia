@@ -335,9 +335,9 @@ function viewContact(data) {
         let nameContact = contact.contact;
         nameContact = nameContact.replace("'", "");
 
-        html += `
+        /* html += `
         <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
-            <div class="d-flex align-items-start p-2">
+            <div class="d-flex align-items-start border-bottom p-2">
                 <div class="position-relative">
                     <span class="user-status"></span>
                     <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Michael H" />
@@ -352,9 +352,45 @@ function viewContact(data) {
                         ${countMessage}
                         <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${checkMessage}${mensaje}</span>
                     </p>
+                    
                 </div>
+                
             </div>
         </a>
+        `; */
+
+        html += `
+        <div class="d-flex border-top pt-2">
+            <img src="img/logos/icon.png" class="avatar rounded me-1" alt="shreyu">
+            <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
+                ${asistente}
+                <h5 class="mt-1 mb-0 fs-15">${contact.contact} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
+                <h6 class="text-muted fw-normal mt-1 mb-2" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 170px;">${checkMessage}${mensaje} ${countMessage}</h6>
+            </div>
+            <div class="dropdown align-self-center float-end">
+                <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="uil uil-angle-down" style="font-size: 20px"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-edit-alt me-2"></i>Editar Contacto
+                    </a>
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-exit me-2"></i>Fijar Chat
+                    </a>
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item text-danger">
+                        <i class="uil uil-trash me-2"></i>Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
         `;
     });
 
