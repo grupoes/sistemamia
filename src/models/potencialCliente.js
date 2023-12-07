@@ -30,7 +30,20 @@ export const PotencialCliente = sequelize.define('potencial_cliente', {
     },
     numero_whatsapp: {
         type: DataTypes.STRING
+    },
+    correo: {
+        type: DataTypes.STRING
+    },
+    carrera: {
+        type: DataTypes.STRING
+    },
+    universidad: {
+        type: DataTypes.STRING
+    },
+    ciudad: {
+        type: DataTypes.STRING
     }
+
 }, {
     freezeTableName: true,
     timestamps: true
