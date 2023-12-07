@@ -1470,7 +1470,11 @@ export const envio_formulario_panel = async(req, res) => {
                     prefijo_celular: 51,
                     numero_celular: 51,
                     prefijo_whatsapp: 51,
-                    numero_whatsapp: celularPref
+                    numero_whatsapp: celularPref,
+                    correo: correo,
+                    carrera: carrera,
+                    universidad: universidad,
+                    ciudad: ciudad
                 });
     
                 
