@@ -365,7 +365,10 @@ function viewContact(data) {
             <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
                 ${asistente}
                 <h5 class="mt-1 mb-0 fs-15">${contact.contact} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
-                <h6 class="text-muted fw-normal mt-1 mb-2" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 170px;">${checkMessage}${mensaje} ${countMessage}</h6>
+                <h6 class="text-muted fw-normal mt-1 mb-2">
+                    <span style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 170px;">${checkMessage}${mensaje}</span>
+                    ${countMessage}
+                </h6>
             </div>
             <div class="dropdown align-self-center float-end">
                 <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
