@@ -1506,7 +1506,7 @@ export const envio_formulario_panel = async(req, res) => {
                         "to": celularPref,
                         "type": "template",
                         "template": {
-                          "name": "mensaje_icono_whatsapp",
+                          "name": "formulario_web",
                           "language": { "code": "es" },
                           "components": [
                             {
