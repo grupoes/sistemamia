@@ -366,7 +366,7 @@ function viewContact(data) {
                 ${asistente}
                 <h5 class="mt-1 mb-0 fs-15">${contact.contact} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
                 <h6 class="text-muted fw-normal mt-1 mb-2">
-                    <span style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 170px;">${checkMessage}${mensaje}</span>
+                    <span style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 160px;">${checkMessage}${mensaje}</span>
                     ${countMessage}
                 </h6>
             </div>
