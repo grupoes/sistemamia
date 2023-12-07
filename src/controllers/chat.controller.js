@@ -1549,8 +1549,27 @@ export const envio_formulario_panel = async(req, res) => {
                     2️⃣ ¿Ya tienes un avance en tu proyecto? 📈
                     
                     ¡Estoy aquí para asistirte en cada paso del camino! 😊`;
+
+                    const messageFrom = `Hola, soy ${nombre}, necesito más información. Soy de la carrera de ${carrera} de la universidad ${universidad} de la ciudad de ${cuidad}. Mi correo es ${correo}`;
     
                     if(messageStatus === 'accepted') {
+
+                        const customerMessage = await Chat.create({
+                            codigo: "",
+                            from: celularPref,
+                            message: messageFrom,
+                            nameContact: nombre,
+                            receipt: process.env.NUMERO_WHATSAPP,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            typeMessage: "text",
+                            estadoMessage: "read",
+                            documentId: "",
+                            id_document: "",
+                            filename: "",
+                            fromRes: "",
+                            idRes: ""
+                        });
+
                         const newMessage = await Chat.create({
                             codigo: data.messages[0].id,
                             from: process.env.NUMERO_WHATSAPP,
