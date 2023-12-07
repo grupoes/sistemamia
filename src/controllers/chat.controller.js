@@ -1437,7 +1437,7 @@ export const contactosNoContestados = async(req, res) => {
 }
 
 export const envio_formulario_panel = async(req, res) => {
-    const { nombre, correo, celular, carrera, universidad, cuidad } = req.body;
+    const { nombre, correo, celular, carrera, universidad, ciudad } = req.body;
 
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -1550,7 +1550,7 @@ export const envio_formulario_panel = async(req, res) => {
                     
                     ¡Estoy aquí para asistirte en cada paso del camino! 😊`;
 
-                    const messageFrom = `Hola, soy ${nombre}, necesito más información. Soy de la carrera de ${carrera} de la universidad ${universidad} de la ciudad de ${cuidad}. Mi correo es ${correo}`;
+                    const messageFrom = `Hola, soy <strong>${nombre}</strong>, necesito más información. Soy de la carrera de <strong>${carrera}</strong> de la universidad <strong>${universidad}</strong> de la ciudad de <strong>${ciudad}</strong>. Mi correo es <strong>${correo}</strong>`;
     
                     if(messageStatus === 'accepted') {
 
