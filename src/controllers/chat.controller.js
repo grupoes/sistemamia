@@ -1594,6 +1594,70 @@ export const envio_formulario_panel = async(req, res) => {
                 } catch (error) {
                     return res.json({message: error.message});
                 }
+            } else {
+                try {
+
+                    const mensajeJSON = {
+                        "messaging_product": "whatsapp",
+                        "recipient_type": "individual",
+                        "to": celularPref,
+                        "type": "template",
+                        "template": {
+                          "name": "icono_whatsapp_web_despues_otra_consulta",
+                          "language": { "code": "es" }
+                        }
+                    };
+    
+                    let config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: process.env.URL_MESSAGES,
+                        headers: { 
+                          'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                        },
+                        data: mensajeJSON
+                    };
+    
+                    // Realizar una solicitud POST a la API con el JSON y el token de autenticación
+                    const response = await axios(config);
+    
+                    const data = response.data;
+                
+                    const messageStatus = data.messages[0].message_status;
+    
+                    const messageSend = `
+                    Somos Grupo Es Consultores Asesoría de Tesis 📚, nos apasiona brindar el mejor servicio de asesoramiento para tus estudios.
+    
+                    Cuéntame en qué más puedo ayudarte en esta oportunidad. Estoy para servirte en lo que necesites. 😊
+                    `;
+    
+                    if(messageStatus === 'accepted') {
+    
+                        const newMessage = await Chat.create({
+                            codigo: data.messages[0].id,
+                            from: process.env.NUMERO_WHATSAPP,
+                            message: messageSend,
+                            nameContact: "Grupo Es Consultores",
+                            receipt: celularPref,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            typeMessage: "text",
+                            estadoMessage: "sent",
+                            documentId: "",
+                            id_document: "",
+                            filename: "",
+                            fromRes: "",
+                            idRes: ""
+                        });
+    
+                        return res.json({ message: 'ok', data: newMessage });
+    
+                    } else {
+                        return res.json({message: "No fue enviado la plantilla"});
+                    }
+    
+                } catch (error) {
+                    return res.json({message: error.message});
+                }
             }
 
             
