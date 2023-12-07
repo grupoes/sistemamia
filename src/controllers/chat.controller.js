@@ -1445,10 +1445,145 @@ export const envio_formulario_panel = async(req, res) => {
 
     try {
 
-        const dataAsignado = await asignarAsistenteData();
+        const lengthCelular = celular.length;
 
-        return res.json(dataAsignado);
-        const new_contacto = await NumeroWhatsapp.create();
+        if(lengthCelular === 11) {
+            const dataAsignado = await asignarAsistenteData();
+
+            const idAsignado = dataAsignado.id;
+            const nameAsignado = dataAsignado.nombres+" "+dataAsignado.apellidos;
+
+            const celularPref = "51"+celular;
+
+            const existeChat = await Chat.count({
+                where: {
+                    receipt: String(celularPref)
+                }
+            });
+
+            if(existeChat === 0) {
+                const newPotencial = await PotencialCliente.create({
+                    nombres: nombre,
+                    apellidos: "",
+                    fecha_ingreso: new Date(),
+                    fecha_registro: new Date(),
+                    prefijo_celular: 51,
+                    numero_celular: 51,
+                    prefijo_whatsapp: 51,
+                    numero_whatsapp: celularPref
+                });
+    
+                
+                const newNumeroWhatsapp =await NumeroWhatsapp.create({
+                    from: celularPref,
+                    nameContact: nombre,
+                    estado: 1,
+                    asistente: idAsignado,
+                    plataforma_id: 5,
+                    tipo_contacto: 1,
+                    user_register: 0
+                });
+    
+                // 5. Crea una nueva asignación con el cliente y el trabajador determinado
+                const newAsignacion = await Asignacion.create({
+                    fecha_asignacion: new Date(),
+                    estado: 1,  // o el estado que corresponda
+                    trabajadoreId: idAsignado,
+                    potencialClienteId: newPotencial.id
+                    
+                });
+    
+                const potEtiqueta = await EtiquetaCliente.create({
+                    cliente_id: newPotencial.id,
+                    etiqueta_id: 1,
+                    estado: 1
+                });
+    
+                try {
+                    const mensajeJSON = {
+                        "messaging_product": "whatsapp",
+                        "recipient_type": "individual",
+                        "to": celularPref,
+                        "type": "template",
+                        "template": {
+                          "name": "formulario_web",
+                          "language": { "code": "es" },
+                          "components": [
+                            {
+                              "type": "body",
+                              "parameters": [
+                                {
+                                  "type": "text",
+                                  "text": nombre
+                                },
+                                {
+                                  "type": "text",
+                                  "text": nameAsignado
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                    };
+    
+                    let config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: process.env.URL_MESSAGES,
+                        headers: { 
+                          'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                        },
+                        data: mensajeJSON
+                    };
+    
+                    // Realizar una solicitud POST a la API con el JSON y el token de autenticación
+                    const response = await axios(config);
+    
+                    const data = response.data;
+    
+                    const messageStatus = data.messages[0].message_status;
+    
+                    const messageSend = `🌞 Buen día, ${nombre}, le saluda ${nameAsignado} 🙋‍♀️, asistente administrativa de Grupo ES Consultores. Nos escribió a nuestra página web 🌐 solicitando información acerca de nuestros servicios y me encantaría poder ayudarlo(a) 💪. Para comenzar, tengo algunas preguntas de filtro:
+    
+                    1️⃣ ¿Ya tienes tema o título tentativo? 🤔
+                    2️⃣ ¿Ya tienes un avance en tu proyecto? 📈
+                    
+                    ¡Estoy aquí para asistirte en cada paso del camino! 😊`;
+    
+                    if(messageStatus === 'accepted') {
+                        const newMessage = await Chat.create({
+                            codigo: data.messages[0].id,
+                            from: process.env.NUMERO_WHATSAPP,
+                            message: messageSend,
+                            nameContact: "Grupo Es Consultores",
+                            receipt: celularPref,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            typeMessage: "text",
+                            estadoMessage: "sent",
+                            documentId: "",
+                            id_document: "",
+                            filename: "",
+                            fromRes: "",
+                            idRes: ""
+                        });
+    
+                        return res.json({ message: 'ok', data: newMessage });
+                    } else {
+                        return res.json({message: "No fue enviado la plantilla"});
+                    }
+    
+                } catch (error) {
+                    return res.json({message: error.message});
+                }
+            }
+
+            
+
+        }
+
+        //const new_contacto = await NumeroWhatsapp.create();
+
+
     } catch (error) {
         return res.json({message: error.message});
     }
