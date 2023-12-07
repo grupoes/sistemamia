@@ -1447,7 +1447,7 @@ export const envio_formulario_panel = async(req, res) => {
 
         const lengthCelular = celular.length;
 
-        if(lengthCelular === 9) {
+        if(lengthCelular == 9) {
             const dataAsignado = await asignarAsistenteData();
 
             const idAsignado = dataAsignado.id;
