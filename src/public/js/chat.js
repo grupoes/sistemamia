@@ -2791,6 +2791,10 @@ filtroEmbudo.addEventListener('change', (e) => {
         });
 
         filtroEtiqueta.innerHTML = html;
+
+        if(valor == 0) {
+            loadContact();
+        }
     })
 
 });
