@@ -87,9 +87,9 @@ io.on('connection', (socket) => {
 
             console.log(datos);
     
-            /* io.emit('messageContacts', datos);
+            io.emit('messageContacts', datos);
 
-            if(data.sonido === true) {
+            /*if(data.sonido === true) {
                 if(data.from != process.env.NUMERO_WHATSAPP) {
                     if(data.rol == 2) {
                         if(data.id == datos.id) {
