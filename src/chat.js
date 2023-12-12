@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
 });
 
 pubsub.addChannel('new_contact', async(data) => {
-    //console.log('New contact added:', data);
+    console.log('New contact added:', data);
 
     try {
         const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/socketMensaje/"+data.id);
