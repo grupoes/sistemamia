@@ -252,7 +252,7 @@ socket.on("messageStatus", data => {
 socket.on("messageContacts", data => {
     console.log("messageContacts");
     console.log(data);
-    if(data.data.rol == 2) {
+    if(data.data.rol == 2 || data.data.rol == 6) {
         if(data.data.idAsistente == iduser.value) {
             viewItemContactList(data.data);
         }
