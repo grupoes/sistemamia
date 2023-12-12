@@ -699,6 +699,7 @@ document.addEventListener('keydown', function (event) {
 });
 
 socket.on("messageChat", data => {
+    console.log(data);
 
     /*const audio = new Audio('./audios/whatsapp/whatsapp-campana.mp3');
     audio.volume = 0.5;
