@@ -294,19 +294,23 @@ function viewItemContactList(data) {
 
         if(data.statusMessage != '') {
 
-            if(data.statusMessage == 'sent') {
-                checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
-            } else {
-                if(data.statusMessage == 'delivered') {
-                    checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+            if(check == 1) {
+                if(data.statusMessage == 'sent') {
+                    checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
                 } else {
-                    if (data.statusMessage == 'read') {
-                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                    if(data.statusMessage == 'delivered') {
+                        checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
                     } else {
-                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                        if (data.statusMessage == 'read') {
+                            checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                        } else {
+                            checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                        }
                     }
                 }
+
             }
+
 
         }
 
