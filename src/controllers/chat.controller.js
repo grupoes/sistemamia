@@ -399,7 +399,7 @@ export const updateLoadContact = async (req, res) => {
             message: new_message
         };
 
-        return res.json({message: "ok",data: datos });
+        return res.json({message: "ok", data: datos });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

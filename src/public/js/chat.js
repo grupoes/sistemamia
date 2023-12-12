@@ -230,6 +230,8 @@ socket.on("messageStatus", data => {
 });
 
 socket.on("messageContacts", data => {
+    console.log("messageContacts");
+    console.log(data);
     if(data.rol == 2) {
         if(data.id == iduser.value) {
             viewItemContactList(data);
@@ -244,6 +246,7 @@ socket.on("messageContacts", data => {
 
 function viewItemContactList(data) {
     console.log(data);
+    console.log('lista contactos');
     let html = "";
 
     if(document.getElementById('item-contacto-'+data.numero)) {
@@ -700,6 +703,7 @@ document.addEventListener('keydown', function (event) {
 
 socket.on("messageChat", data => {
     console.log(data);
+    console.log('messageChat');
 
     /*const audio = new Audio('./audios/whatsapp/whatsapp-campana.mp3');
     audio.volume = 0.5;
