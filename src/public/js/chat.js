@@ -95,6 +95,7 @@ function mostrar_chat(numero) {
 let listenerFile = false;
 
 function fileWhatsapp() {
+    document.getElementById("fileInput").setAttribute("accept", "image/*,video/*");
     document.getElementById("fileInput").click();
 
     const $offcanvas = $('#myOffcanvas').offcanvas({
@@ -138,6 +139,7 @@ function fileWhatsapp() {
 let listenerAttached = false;
 
 function documentoFile() {
+    document.getElementById("fileInput").setAttribute("accept", ".pdf, .xls, .xlsx, .rar, .zip, .doc, .docx, .ppt, .pptx, .txt");
     document.getElementById("fileInput").click();
 
     const $offcanvas = $('#myOffcanvas').offcanvas({
