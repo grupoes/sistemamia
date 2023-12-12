@@ -630,8 +630,6 @@ export const uploadImage = async (req, res, next) => {
             }
     
             console.log(req.file);
-
-            return res.json(req.file);
     
             let url_imagen;
             let typeFile;
@@ -669,7 +667,7 @@ export const uploadImage = async (req, res, next) => {
                 };
             }
     
-            if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain' || ar.mimeType == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+            if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimetype == 'text/plain' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
                 url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/documentos/archivos/"+req.file.filename;
                 typeFile = "document";
     
@@ -693,9 +691,6 @@ export const uploadImage = async (req, res, next) => {
                 },
                 data: dataFile
             };
-
-            console.log(config);
-            return res.json(dataFile);
     
             try {
                 const response = await axios(config);
