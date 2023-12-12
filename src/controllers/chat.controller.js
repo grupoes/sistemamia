@@ -319,7 +319,7 @@ export const updateLoadContact = async (req, res) => {
             }
         });
 
-        const asistente = numerosWhatsapp.asistente;
+        const asistente = numberWhatsapp.asistente;
 
         let nombre_asistente = "";
 
@@ -396,6 +396,7 @@ export const updateLoadContact = async (req, res) => {
             potencial_id: idpotencial,
             etiqueta_id: idetiqueta,
             estadoMensaje: estadoMensaje,
+            idAsistente: numberWhatsapp.asistente,
             message: new_message
         };
 
