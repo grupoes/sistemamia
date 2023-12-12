@@ -564,7 +564,7 @@ export const numerosWhatsapp = async(req, res) => {
 // Configura el almacenamiento de multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        
+        console.log(file);
         if(file.mimetype == 'video/mp4') {
             cb(null, './src/public/videos/archivos/') // directorio donde se guardarán los archivos
         }
@@ -573,7 +573,7 @@ const storage = multer.diskStorage({
             cb(null, './src/public/img/archivos/')
         }
 
-        if(file.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype == 'application/pdf' || file.mimetype == 'text/xml' || file.mimetype == 'application/x-zip-compressed' || file.mimetype == 'application/octet-stream' || file.mimetype == 'text/plain') {
+        if(file.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype == 'application/pdf' || file.mimetype == 'text/xml' || file.mimetype == 'application/x-zip-compressed' || file.mimetype == 'application/octet-stream' || file.mimetype == 'text/plain' || file.mimetype == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
             cb(null, './src/public/documentos/archivos/')
         }
         
@@ -668,7 +668,7 @@ export const uploadImage = async (req, res, next) => {
                 };
             }
     
-            if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain') {
+            if(ar.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || ar.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || ar.mimetype == 'application/pdf' || ar.mimetype == 'text/xml' || ar.mimetype == 'application/x-zip-compressed' || ar.mimetype == 'application/octet-stream' || ar.mimeType == 'text/plain' || ar.mimeType == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
                 url_imagen = process.env.URL_APP+":"+process.env.PUERTO_APP+"/documentos/archivos/"+req.file.filename;
                 typeFile = "document";
     
