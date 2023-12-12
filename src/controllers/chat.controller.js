@@ -630,6 +630,8 @@ export const uploadImage = async (req, res, next) => {
             }
     
             console.log(req.file);
+
+            return res.json(req.file);
     
             let url_imagen;
             let typeFile;
@@ -693,7 +695,7 @@ export const uploadImage = async (req, res, next) => {
             };
 
             console.log(config);
-            return res.json(config);
+            return res.json(dataFile);
     
             try {
                 const response = await axios(config);
