@@ -11,7 +11,7 @@ import { Chat_estados } from "../models/estadosConversacion.js";
 import { Plataforma } from "../models/plataforma.js";
 import { FraseFinChat } from "../models/fraseFinChat.js";
 
-import { asignarAsistenteData } from "./base.controller.js";
+import { asignarAsistenteData, registroActividad } from "./base.controller.js";
 
 import { Op } from 'sequelize';
 
@@ -44,12 +44,13 @@ dotenv.config();
 import { log } from "console";
 
 export const chatView = async (req, res) => {
+    const timestamp = Date.now();
     const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
     const dominio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED;
     const js = [
         'https://cdn.jsdelivr.net/npm/toastify-js',
         url_chat+'/socket.io/socket.io.js',
-        url_chat+'/js/chat.js',
+        url_chat+'/js/chat.js'+ '?t=' + timestamp,
         'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
     ];
 
@@ -291,6 +292,120 @@ export const addMessageFirestore = async(req, res) => {
     }
 }
 
+export const updateLoadContact = async (req, res) => {
+    const { etiqueta, plataforma_id, new_message } = req.body;
+    try {
+        const rol = req.usuarioToken._role;
+        const id = req.usuarioToken._id;
+
+        const numero = new_message.from;
+
+        let numero_whatsapp = "";
+        let icono_check = "";
+        let codigo = "";
+
+        if(numero != process.env.NUMERO_WHATSAPP) {
+            numero_whatsapp = numero;
+            icono_check = 0;
+            codigo = new_message.codigo;
+        } else {
+            numero_whatsapp = new_message.receipt;
+            icono_check = 1;
+        }
+
+        const numberWhatsapp = await NumeroWhatsapp.findOne({
+            where: {
+                from: numero_whatsapp
+            }
+        });
+
+        const asistente = numerosWhatsapp.asistente;
+
+        let nombre_asistente = "";
+
+        if (asistente != null || asistente == "") {
+            const trabajador = await Trabajadores.findOne({
+                where: {
+                    id: asistente
+                }
+            });
+
+            nombre_asistente = trabajador.nombres + " " + trabajador.apellidos;
+        }
+
+        let chatCount = await Chat.count({
+            where: {
+                from: numero_whatsapp,
+                estadoMessage: "sent"
+            }
+        });
+
+        let poten = await PotencialCliente.findOne({
+            where: {
+                numero_whatsapp: numero_whatsapp
+            }
+        });
+
+        let idpotencial = poten.id;
+
+        let etiquetaC = await EtiquetaCliente.findOne({
+            where: {
+                cliente_id: idpotencial,
+                estado: 1
+            }
+        });
+
+        let idetiqueta = etiquetaC.etiqueta_id;
+
+        let eti = await Etiqueta.findOne({
+            where: {
+                id: idetiqueta
+            }
+        });
+
+        let estadoMensaje = "";
+
+        if(numero_whatsapp != process.env.NUMERO_WHATSAPP) {
+            const statusMessage = await Chat_estados.findOne({
+                where: {
+                    codigo: codigo
+                },
+                order: [
+                    ['id', 'DESC'],
+                ]
+            });
+
+            if(statusMessage) {
+                estadoMensaje = statusMessage.status;
+            } else {
+                estadoMensaje = 'read';
+            }
+                    
+        }
+
+        const datos = {
+            nameAsistente: nombre_asistente,
+            nameContacto: numberWhatsapp.nameContact,
+            numero: numero_whatsapp,
+            check: icono_check,
+            plataforma: numberWhatsapp.plataforma_id,
+            rol: rol,
+            userId: id,
+            cantidad: chatCount,
+            etiqueta: eti.descripcion,
+            potencial_id: idpotencial,
+            etiqueta_id: idetiqueta,
+            estadoMensaje: estadoMensaje,
+            message: new_message
+        };
+
+        return res.json({message: "ok",data: datos });
+
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 export const numerosWhatsapp = async(req, res) => {
     const { etiqueta, plataforma_id } = req.body;
     try { 
@@ -438,29 +553,6 @@ export const numerosWhatsapp = async(req, res) => {
         }
 
         return res.json({message: "ok",data: resultados, rol: rol, id:id });
-
-    } catch (error) {
-        return res.status(400).json({ message: error.message });
-    }
-}
-
-export const traer_ultimo_mensaje = async(req, res) => {
-    const numero = req.params.id;
-    try {
-        let collectionRef = db.collection('conversation');
-        const query = collectionRef.where('from', '==', numero).orderBy('timestamp', 'desc').limit(1);
-
-        const snapshot = await query.get();
-
-        if (snapshot.empty) {
-            console.log('No se encontraron registros.');
-            return;
-        }
-
-        // Como solo estamos obteniendo un documento, simplemente lo imprimimos
-        const record = snapshot.docs[0].data();
-        console.log(record);
-        return res.json(record);
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
@@ -1670,6 +1762,66 @@ export const envio_formulario_panel = async(req, res) => {
 
         //const new_contacto = await NumeroWhatsapp.create();
 
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const delete_contacto = async (req, res) => {
+    const numero = req.params.id;
+    try {
+        //select * from potencial_cliente pc where pc.numero_whatsapp = '51922502947';
+        const potencial = await PotencialCliente.findOne({
+            where: {
+                numero_whatsapp: numero
+            }
+        });
+
+        const idpotencial = potencial.id;
+
+
+        const id = req.usuarioToken._id;
+        const tipo_actividad = "eliminación";
+        const descripcion_detallada = `Eliminación del contacto ${numero} - ${potencial.nombres}`;
+        const fecha_hora = new Date();
+        const direccion_ip = "";
+        const dispositivo = "";
+        const resultado_actividad = "";
+
+        const registro = await registroActividad(id, tipo_actividad, descripcion_detallada, fecha_hora, direccion_ip, dispositivo, resultado_actividad);
+
+        const chatFrom = await Chat.destroy({
+            where: {
+                from: numero
+            }
+        });
+
+        const chatReceipt = await Chat.destroy({
+            where: {
+                receipt: numero
+            }
+        });
+
+        const deletePotencial = await PotencialCliente.destroy({
+            where: {
+                id: idpotencial
+            }
+        });
+
+        const deleteEtiqueta = await EtiquetaCliente.destroy({
+            where: {
+                cliente_id: idpotencial
+            }
+        });
+
+        const deleteNumber = await NumeroWhatsapp.destroy({
+            where: {
+                from: numero
+            }
+        });
+
+        return res.json({message: 'ok', data: 'Se elimino correctamente el contacto'});
 
     } catch (error) {
         return res.json({message: error.message});

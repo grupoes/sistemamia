@@ -1,6 +1,7 @@
 import { Trabajadores } from "../models/trabajadores.js";
 import { Asignacion } from "../models/asignacion.js";
 import { Usuario } from "../models/usuario.js";
+import { Registros } from "../models/registros.js";
 
 import { Op } from 'sequelize';
 
@@ -81,4 +82,22 @@ export const asignarAsistenteDataJson = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
     
+}
+
+export const registroActividad = async (id_usuario, tipo_actividad, descripcion_detallada, fecha_hora, direccion_ip, dispositivo, resultado_actividad) => {
+    try {
+        const registro = await Registros.create({
+            id_usuario,
+            tipo_actividad,
+            descripcion_detallada,
+            fecha_hora,
+            direccion_ip,
+            dispositivo,
+            resultado_actividad
+        });
+
+        return registro;
+    } catch (error) {
+        return error.message;
+    }
 }

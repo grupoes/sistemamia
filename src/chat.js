@@ -53,12 +53,14 @@ const io = new Server(server, {
     }
 });
 
-const pubsub = new PgPubSub('postgres://postgres:grupoes2023@157.230.239.170/miasis');
+const pubsub = new PgPubSub(`postgres://postgres:${process.env.PASSWORDDB}@${process.env.HOST}/${process.env.DATABASE}`);
 
 io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('getToken', async data => {
+
+        console.log(data);
 
         try {
             const token = data.token;
@@ -67,7 +69,8 @@ io.on('connection', (socket) => {
 
             const post = {
                 etiqueta: etiqueta,
-                plataforma_id: plataforma_id
+                plataforma_id: plataforma_id,
+                new_message: data.new_message
             };
 
             const requestConfig = {
@@ -78,11 +81,13 @@ io.on('connection', (socket) => {
                 data: post 
             };
 
-            const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/numeroWhatsapp", requestConfig);
+            const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/actualizarContactList", requestConfig);
     
             const datos = response.data;
+
+            console.log(datos);
     
-            io.emit('messageContacts', datos);
+            /* io.emit('messageContacts', datos);
 
             if(data.sonido === true) {
                 if(data.from != process.env.NUMERO_WHATSAPP) {
@@ -95,7 +100,7 @@ io.on('connection', (socket) => {
                     }
                     
                 }
-            }
+            } */
 
         } catch (error) {
             console.error("Hubo un error al hacer la solicitud:", error);  // <-- Maneja y muestra el error
@@ -138,7 +143,12 @@ pubsub.addChannel('new_contact', async(data) => {
 
         const datos = response.data;
 
-        io.emit("messageChat", datos);
+        const enviar_data = {
+            data_chat: datos,
+            new_message: data
+        };
+
+        io.emit("messageChat", enviar_data);
         
     } catch (error) {
         console.log(error.message);

@@ -88,7 +88,7 @@ function mostrar_chat(numero) {
 
             grabarAudio();
 
-            loadContact();
+            //loadContact();
         })
 }
 
@@ -225,22 +225,139 @@ socket.on("messageStatus", data => {
         icono.innerHTML = iconoUpdate;
     }
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value });
+    /* socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value }); */
 
 });
 
 socket.on("messageContacts", data => {
     if(data.rol == 2) {
         if(data.id == iduser.value) {
-            viewContact(data);
+            viewItemContactList(data);
         }
     } else {
         if(data.rol == rol.value) {
-            viewContact(data);
+            viewItemContactList(data);
         }
     }
 
 });
+
+function viewItemContactList(data) {
+    console.log(data);
+    let html = "";
+
+    if(document.getElementById('item-contacto-'+data.numero)) {
+        document.getElementById('item-contacto-'+data.numero).remove();
+    }
+
+    let dataMessage = data.new_message;
+
+    let hourMessage = formatDate(dataMessage.timestamp);
+
+        let countMessage = "";
+        let asistente = "";
+
+        if (data.cantidad > 0) {
+            countMessage = `<span class="float-end badge bg-danger text-white" id="cantidad-message-${data.numero}">${data.cantidad}</span>`;
+        }
+
+        if(data.rol === 1 || data.rol === 3) {
+            asistente = `<p style="margin: 0;font-size: 12px;color: dodgerblue;">${data.nameAsistente}</p>`;
+        }
+
+        let mensaje = ""
+
+        if(dataMessage.typeMessage === 'text') {
+            mensaje = dataMessage.message;
+        }
+
+        if (dataMessage.typeMessage === 'audio') {
+            mensaje = `<i class="bi bi-headphones"></i> Audio`;
+        }
+
+        if (dataMessage.typeMessage === 'video') {
+            mensaje = `<i class="bi bi-camera-video-fill"></i> Video`;
+        }
+
+        if (dataMessage.typeMessage === 'document') {
+            mensaje = `<i class="bi bi-file-earmark-fill"></i> Archivo`;
+        }
+
+        if (dataMessage.typeMessage === 'image') {
+            mensaje = `<i class="bi bi-image-fill"></i> Imagen`;
+        }
+
+        let checkMessage = "";
+
+        if(data.statusMessage != '') {
+
+            if(data.statusMessage == 'sent') {
+                checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+            } else {
+                if(data.statusMessage == 'delivered') {
+                    checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+                } else {
+                    if (data.statusMessage == 'read') {
+                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                    } else {
+                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                    }
+                }
+            }
+
+        }
+
+        let itemDelete = "";
+
+
+        if(rol == 1 || rol == 3) {
+            itemDelete += `
+            <div class="dropdown-divider"></div>
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item text-danger" onclick="deleteContacto('${data.numero}')">
+                <i class="uil uil-trash me-2"></i>Eliminar
+            </a>
+            `;
+        }
+
+        let nameContact = data.nameContacto;
+        nameContact = nameContact.replace("'", "");
+
+        html += `
+        <div class="d-flex border-top pt-2" id="item-contacto-${data.numero}">
+            <img src="img/logos/icon.png" class="avatar rounded me-1" alt="shreyu">
+            <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${data.numero}','${nameContact}', '${data.etiqueta}', ${data.potencial_id}, ${data.etiqueta_id}, ${rol}, ${data.idAsistente}, '${data.nameAsistente}')">
+                ${asistente}
+                <h5 class="mt-1 mb-0 fs-15">${contact.contact} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
+                <h6 class="text-muted fw-normal mt-1 mb-2">
+                    <span style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 160px;">${checkMessage}${mensaje}</span>
+                    ${countMessage}
+                </h6>
+            </div>
+            <div class="dropdown align-self-center float-end">
+                <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="uil uil-angle-down" style="font-size: 20px"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-edit-alt me-2"></i>Editar Contacto
+                    </a>
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-exit me-2"></i>Fijar Chat
+                    </a>
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
+                    </a>
+                    ${itemDelete}
+                </div>
+            </div>
+        </div>
+        `;
+
+    $("#contactos-whatsapp").prepend(html);
+}
 
 
 filterEtiqueta.addEventListener('change', (e) => {
@@ -252,6 +369,9 @@ plataforma_id.addEventListener('change', (e) => {
 });
 
 function loadContact() {
+
+    contactos.innerHTML = '<p class="text-center text-primary">Cargando...</p>';
+
     const post = {
         etiqueta: filterEtiqueta.value,
         plataforma_id: plataforma_id.value
@@ -283,7 +403,7 @@ function viewContact(data) {
         let asistente = "";
 
         if (contact.cantidad > 0) {
-            countMessage = `<span class="float-end badge bg-danger text-white">${contact.cantidad}</span>`;
+            countMessage = `<span class="float-end badge bg-danger text-white" id="cantidad-message-${contact.numero}">${contact.cantidad}</span>`;
         }
 
         if(contact.rol === 1 || contact.rol === 3) {
@@ -332,35 +452,24 @@ function viewContact(data) {
 
         }
 
+        let itemDelete = "";
+
+
+        if(rol == 1 || rol == 3) {
+            itemDelete += `
+            <div class="dropdown-divider"></div>
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item text-danger" onclick="deleteContacto('${contact.numero}')">
+                <i class="uil uil-trash me-2"></i>Eliminar
+            </a>
+            `;
+        }
+
         let nameContact = contact.contact;
         nameContact = nameContact.replace("'", "");
 
-        /* html += `
-        <a href="javascript:void(0);" class="text-body" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
-            <div class="d-flex align-items-start border-bottom p-2">
-                <div class="position-relative">
-                    <span class="user-status"></span>
-                    <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Michael H" />
-                </div>
-                <div class="w-100 overflow-hidden">
-                    ${asistente}
-                    <h5 class="mt-0 mb-0 fs-14">
-                        <span class="float-end text-muted fs-12">${hourMessage}</span>
-                        ${contact.contact}
-                    </h5>
-                    <p class="mt-1 mb-0 text-muted fs-14">
-                        ${countMessage}
-                        <span class="text-dark" style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 220px;">${checkMessage}${mensaje}</span>
-                    </p>
-                    
-                </div>
-                
-            </div>
-        </a>
-        `; */
-
         html += `
-        <div class="d-flex border-top pt-2">
+        <div class="d-flex border-top pt-2" id="item-contacto-${contact.numero}">
             <img src="img/logos/icon.png" class="avatar rounded me-1" alt="shreyu">
             <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')">
                 ${asistente}
@@ -386,11 +495,7 @@ function viewContact(data) {
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item text-danger">
-                        <i class="uil uil-trash me-2"></i>Eliminar
-                    </a>
+                    ${itemDelete}
                 </div>
             </div>
         </div>
@@ -439,6 +544,13 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
     let asignar = "";
     let asist = ""
+
+    if(document.getElementById('cantidad-message-'+numero)) {
+        console.log('si hay');
+        document.getElementById('cantidad-message-'+numero).remove();
+    } else {
+        console.log('no hay');
+    }
 
     if(rol === 1 || rol === 3) {
         asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${potencial}, ${asignado})"><i
@@ -592,67 +704,70 @@ socket.on("messageChat", data => {
     audio.volume = 0.5;
     audio.play();*/
 
-    socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value });
+    const datos = data.data_chat;
+    const message = data.new_message;
 
-    let fecha_y_hora = convertTimestampToDate(data.timestamp);
+    socket.emit('getToken', { token: token, from: datos.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value, new_message: message });
 
-    if (data.from != '51938669769') {
-        switch (data.typeMessage) {
+    let fecha_y_hora = convertTimestampToDate(datos.timestamp);
+
+    if (datos.from != '51938669769') {
+        switch (datos.typeMessage) {
             case "text":
-                let text = viewFromText(data, fecha_y_hora);
-                const lista = $("#conversation-" + data.from);
+                let text = viewFromText(datos, fecha_y_hora);
+                const lista = $("#conversation-" + datos.from);
                 lista.append(text);
                 break;
 
             case "image":
-                let image = viewFromImage(data, fecha_y_hora);
-                const listaImage = $("#conversation-" + data.from);
+                let image = viewFromImage(datos, fecha_y_hora);
+                const listaImage = $("#conversation-" + datos.from);
                 listaImage.append(image);
                 break;
             case "video":
-                let video = viewFromVideo(data, fecha_y_hora);
-                const listaVideo = $("#conversation-" + data.from);
+                let video = viewFromVideo(datos, fecha_y_hora);
+                const listaVideo = $("#conversation-" + datos.from);
                 listaVideo.append(video);
                 break;
             case "document":
-                let document = viewFromDocument(data, fecha_y_hora);
-                const listaDocument = $("#conversation-" + data.from);
+                let document = viewFromDocument(datos, fecha_y_hora);
+                const listaDocument = $("#conversation-" + datos.from);
                 listaDocument.append(document);
                 break;
             case "audio":
-                let audio = viewFromAudio(data, fecha_y_hora);
-                const listaAudio = $("#conversation-" + data.from);
+                let audio = viewFromAudio(datos, fecha_y_hora);
+                const listaAudio = $("#conversation-" + datos.from);
                 listaAudio.append(audio);
                 break;
             default:
                 break;
         }
     } else {
-        switch (data.typeMessage) {
+        switch (datos.typeMessage) {
             case "text":
-                let text = viewReceipText(data, fecha_y_hora);
-                const lista = $("#conversation-" + data.receipt);
+                let text = viewReceipText(datos, fecha_y_hora);
+                const lista = $("#conversation-" + datos.receipt);
                 lista.append(text);
                 break;
 
             case "image":
-                let image = viewReceipImage(data, fecha_y_hora);
-                const listaImage = $("#conversation-" + data.receipt);
+                let image = viewReceipImage(datos, fecha_y_hora);
+                const listaImage = $("#conversation-" + datos.receipt);
                 listaImage.append(image);
                 break;
             case "video":
-                let videoRec = viewReceipVideo(data, fecha_y_hora);
-                const listaVideo = $("#conversation-" + data.receipt);
+                let videoRec = viewReceipVideo(datos, fecha_y_hora);
+                const listaVideo = $("#conversation-" + datos.receipt);
                 listaVideo.append(videoRec);
                 break;
             case "document":
-                let documentRec = viewReceipDocument(data, fecha_y_hora);
-                const listaDoc = $("#conversation-" + data.receipt);
+                let documentRec = viewReceipDocument(datos, fecha_y_hora);
+                const listaDoc = $("#conversation-" + datos.receipt);
                 listaDoc.append(documentRec);
                 break;
             case "audio":
-                let audioRec = viewReceipAudio(data, fecha_y_hora);
-                const listaAudio = $("#conversation-" + data.receipt);
+                let audioRec = viewReceipAudio(datos, fecha_y_hora);
+                const listaAudio = $("#conversation-" + datos.receipt);
                 listaAudio.append(audioRec);
                 break;
             default:
@@ -3193,6 +3308,50 @@ function print_emoji_input_template() {
             const emoji = e.target.textContent;
             
             insertEmojiAtCursor(variable, emoji);
+        }
+    });
+}
+
+function deleteContacto(numero) {
+    Swal.fire({
+        title: "¿Desea eliminar este contacto?",
+        text: "¡No podrás revertir esto.!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            fetch('/deleteContact/'+numero, {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.message === 'ok') {
+                    loadContact();
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Contacto eliminado correctamente",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "danger",
+                        title: "Ocurrio un error",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
         }
     });
 }
