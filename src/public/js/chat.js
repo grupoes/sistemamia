@@ -661,7 +661,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                     <div class="col mb-2 mb-sm-0">
                         <!--<input type="text" class="form-control border-0" name="mensaje_form"
                             placeholder="Ingrese el mensaje" required="" id="contentMensaje">-->
-                        <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)" onpaste="pegarImagenInput(event)"></textarea>
+                        <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)" onpaste="pegarImagenInput(event)" spellcheck="true"></textarea>
                         <ul id="listaSugerencias"></ul>
                         <div class="" id="horas_transcurridas" style="display:none; text-align:center;">
                             <span class="hora-estilo">01:45:30 H </span>
