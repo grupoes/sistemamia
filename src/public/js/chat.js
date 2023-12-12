@@ -232,13 +232,13 @@ socket.on("messageStatus", data => {
 socket.on("messageContacts", data => {
     console.log("messageContacts");
     console.log(data);
-    if(data.rol == 2) {
-        if(data.id == iduser.value) {
-            viewItemContactList(data);
+    if(data.data.rol == 2) {
+        if(data.data.id == iduser.value) {
+            viewItemContactList(data.data);
         }
     } else {
-        if(data.rol == rol.value) {
-            viewItemContactList(data);
+        if(data.data.rol == rol.value) {
+            viewItemContactList(data.data);
         }
     }
 
@@ -253,7 +253,7 @@ function viewItemContactList(data) {
         document.getElementById('item-contacto-'+data.numero).remove();
     }
 
-    let dataMessage = data.new_message;
+    let dataMessage = data.message;
 
     let hourMessage = formatDate(dataMessage.timestamp);
 
