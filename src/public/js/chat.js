@@ -294,7 +294,7 @@ function viewItemContactList(data) {
 
         if(data.statusMessage != '') {
 
-            if(check == 1) {
+            if(data.check == 1) {
                 if(data.statusMessage == 'sent') {
                     checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
                 } else {
