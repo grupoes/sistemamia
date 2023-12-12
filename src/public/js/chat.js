@@ -225,6 +225,26 @@ socket.on("messageStatus", data => {
         icono.innerHTML = iconoUpdate;
     }
 
+    const iconoList = document.getElementById('list-'+data.codigo);
+
+    if (iconoList) {
+        iconoList.removeAttribute('class');
+        if(data.status === 'sent') {
+            iconoList.classList.add('bi', 'bi-check', 'ms-1');
+        } else {
+            if (data.status === 'delivered') {
+                iconoList.classList.add('bi', 'bi-check-all', 'ms-1');
+            } else {
+                if (data.status === 'read') {
+                    iconoList.classList.add('bi', 'bi-check-all', 'ms-1', 'text-primary');
+                } else {
+                    iconoList.classList.add('bi', 'bi-exclamation-circle', 'ms-1', 'text-danger');
+                }
+            }
+        }
+
+    }
+
     /* socket.emit('getToken', { token: token, from: data.from, rol: rol.value, iduser: iduser.value, sonido: false, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value }); */
 
 });
@@ -296,15 +316,15 @@ function viewItemContactList(data) {
 
             if(data.check == 1) {
                 if(data.statusMessage == 'sent') {
-                    checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+                    checkMessage = `<i class="bi bi-check ms-1" id="list-${dataMessage.codigo}"  style="font-size: 16px"></i>`;
                 } else {
                     if(data.statusMessage == 'delivered') {
-                        checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+                        checkMessage = `<i class="bi bi-check-all ms-1" id="list-${dataMessage.codigo}" style="font-size: 16px"></i>`;
                     } else {
                         if (data.statusMessage == 'read') {
-                            checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                            checkMessage = `<i class="bi bi-check-all ms-1 text-primary" id="list-${dataMessage.codigo}" style="font-size: 16px"></i>`;
                         } else {
-                            checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                            checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" id="list-${dataMessage.codigo}" style="font-size: 16px"></i>`;
                         }
                     }
                 }
@@ -444,15 +464,15 @@ function viewContact(data) {
         if(contact.statusMessage != '') {
 
             if(contact.statusMessage == 'sent') {
-                checkMessage = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+                checkMessage = `<i class="bi bi-check ms-1" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
             } else {
                 if(contact.statusMessage == 'delivered') {
-                    checkMessage = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+                    checkMessage = `<i class="bi bi-check-all ms-1" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
                 } else {
                     if (contact.statusMessage == 'read') {
-                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
+                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
                     } else {
-                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
+                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
                     }
                 }
             }
