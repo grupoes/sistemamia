@@ -313,7 +313,7 @@ function viewItemContactList(data) {
         let itemDelete = "";
 
 
-        if(rol == 1 || rol == 3) {
+        if(data.rol == 1 || data.rol == 3) {
             itemDelete += `
             <div class="dropdown-divider"></div>
             <!-- item-->
@@ -329,7 +329,7 @@ function viewItemContactList(data) {
         html += `
         <div class="d-flex border-top pt-2" id="item-contacto-${data.numero}">
             <img src="img/logos/icon.png" class="avatar rounded me-1" alt="shreyu">
-            <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${data.numero}','${nameContact}', '${data.etiqueta}', ${data.potencial_id}, ${data.etiqueta_id}, ${rol}, ${data.idAsistente}, '${data.nameAsistente}')">
+            <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail('${data.numero}','${nameContact}', '${data.etiqueta}', ${data.potencial_id}, ${data.etiqueta_id}, ${data.rol}, ${data.idAsistente}, '${data.nameAsistente}')">
                 ${asistente}
                 <h5 class="mt-1 mb-0 fs-15">${nameContact} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
                 <h6 class="text-muted fw-normal mt-1 mb-2">
