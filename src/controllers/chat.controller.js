@@ -395,7 +395,7 @@ export const updateLoadContact = async (req, res) => {
             etiqueta: eti.descripcion,
             potencial_id: idpotencial,
             etiqueta_id: idetiqueta,
-            estadoMensaje: estadoMensaje,
+            statusMessage: estadoMensaje,
             idAsistente: numberWhatsapp.asistente,
             message: new_message
         };
