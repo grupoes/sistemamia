@@ -621,7 +621,6 @@ function quitarTildes(texto) {
 const upload = multer({ storage: storage });
 
 export const uploadImage = async (req, res, next) => {
-
     const uploadSingle = upload.single('imagen');
         uploadSingle(req, res, async (error) => {
             const { numero, description } = req.body;
@@ -692,6 +691,9 @@ export const uploadImage = async (req, res, next) => {
                 },
                 data: dataFile
             };
+
+            console.log(config);
+            return res.json(config);
     
             try {
                 const response = await axios(config);
