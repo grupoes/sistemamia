@@ -233,7 +233,7 @@ socket.on("messageContacts", data => {
     console.log("messageContacts");
     console.log(data);
     if(data.data.rol == 2) {
-        if(data.data.id == iduser.value) {
+        if(data.data.userId == iduser.value) {
             viewItemContactList(data.data);
         }
     } else {
