@@ -35,11 +35,11 @@ export const addChatEstados = async(req, res) => {
 export const orderEstatus = async (req, res) => {
     const codigo = req.params.id;
     try {
-        const estados = await Chat_estados.findAll({
+        const estados = await Chat_estados.findOne({
             where: {
                 codigo: codigo
             },
-            order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END")
+            order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
         });
 
         return res.json({ message: 'ok', data: estados });
