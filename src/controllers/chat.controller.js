@@ -13,7 +13,7 @@ import { FraseFinChat } from "../models/fraseFinChat.js";
 
 import { asignarAsistenteData, registroActividad } from "./base.controller.js";
 
-import { Op } from 'sequelize';
+import { Op, literal } from 'sequelize';
 
 import axios from 'axios';
 import path from 'path';
@@ -122,9 +122,7 @@ export const mensajes_numero = async (req, res) => {
                     where: {
                         codigo: mensaje.codigo
                     },
-                    order: [
-                        ['id', 'DESC'],
-                    ]
+                    order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
                 });
 
                 if(estadoMensaje) {
@@ -370,9 +368,7 @@ export const updateLoadContact = async (req, res) => {
                 where: {
                     codigo: codigo
                 },
-                order: [
-                    ['id', 'DESC'],
-                ]
+                order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
             });
 
             if(statusMessage) {
@@ -495,9 +491,7 @@ export const numerosWhatsapp = async(req, res) => {
                         where: {
                             codigo: ultimoChat.codigo
                         },
-                        order: [
-                            ['id', 'DESC'],
-                        ]
+                        order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
                     });
 
                     if(statusMessage) {
@@ -1336,9 +1330,7 @@ export const socketMensaje = async (req, res) => {
                 where: {
                     codigo: chat.codigo
                 },
-                order: [
-                    ['id', 'DESC'],
-                ]
+                order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
             });
 
             if(estadoMensaje) {
