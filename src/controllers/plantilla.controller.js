@@ -5,6 +5,25 @@ import { Variable } from "../models/variable.js";
 
 import axios from 'axios';
 
+export const viewIndex = (req, res) => {
+
+    const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
+    const timestamp = Date.now();
+
+    const js = [
+        'https://cdn.jsdelivr.net/npm/toastify-js',
+        url_chat+'/plantilla.js'+ '?t=' + timestamp,
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
+    ];
+
+    const css = [
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css',
+        'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
+    ];
+
+    res.render('plantilla/index', { layout: 'partials/main', css, js });
+}
+
 export const getPlantillas = async (req, res) => {
     try {
         const plantillas = await Plantilla.findAll({
