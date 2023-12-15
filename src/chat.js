@@ -132,6 +132,10 @@ io.on('connection', (socket) => {
             console.error("Hubo un error al hacer la solicitud:", error);
         }
     });
+
+    socket.on('updateQuantyMessage', data => {
+        io.emit('updateMessageQuanty', data);
+    });
     
 });
 

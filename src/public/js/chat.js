@@ -574,11 +574,11 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
     let asignar = "";
     let asist = ""
 
+    socket.emit( 'updateQuantyMessage', { numero: numero } );
+
     if(document.getElementById('cantidad-message-'+numero)) {
-        console.log('si hay');
+        socket.emit( { numero: numero } );
         document.getElementById('cantidad-message-'+numero).remove();
-    } else {
-        console.log('no hay');
     }
 
     if(rol === 1 || rol === 3) {
@@ -2287,7 +2287,6 @@ function contactosLista(buscar) {
 }
 
 function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente) {
-    console.log('hola');
 
     $("#modalContacts").modal('hide');
 
@@ -3390,3 +3389,10 @@ function deleteContacto(numero) {
         }
     });
 }
+
+socket.on('updateMessageQuanty', data => {
+    if(document.getElementById('cantidad-message-'+data)) {
+        document.getElementById('cantidad-message-'+data).remove();
+    }
+
+});

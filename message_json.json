@@ -1,0 +1,40 @@
+{
+    "object": "whatsapp_business_account",
+    "entry": [
+      {
+        "id": "143448295519803",
+        "changes": [
+          {
+            "value": {
+              "messaging_product": "whatsapp",
+              "metadata": {
+                "display_phone_number": "51938669769",
+                "phone_number_id": "149168884944344"
+              },
+              "contacts": [
+                {
+                  "profile": {
+                    "name": "Magdali"
+                  },
+                  "wa_id": "51914353003"
+                }
+              ],
+              "messages": [
+                {
+                  "from": "51914353003",
+                  "id": "wamid.HBgLNTE5MTQzNTMwMDMVAgASGBYzRUIwMDk0RUVBN0IwN0E4MjAzQTBEAA==",
+                  "timestamp": "1702477119",
+                  "type": "reaction",
+                  "reaction": {
+                    "message_id": "wamid.HBgLNTE5MTQzNTMwMDMVAgARGBJBNTMwREE2RDUwQjNFQTg1MEYA",
+                    "emoji": "👍"
+                  }
+                }
+              ]
+            },
+            "field": "messages"
+          }
+        ]
+      }
+    ]
+  }
