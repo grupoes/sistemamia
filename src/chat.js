@@ -60,8 +60,6 @@ io.on('connection', (socket) => {
 
     socket.on('getToken', async data => {
 
-        console.log(data);
-
         try {
             const token = data.token;
             const etiqueta = data.etiqueta;
@@ -84,8 +82,6 @@ io.on('connection', (socket) => {
             const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/actualizarContactList", requestConfig);
     
             const datos = response.data;
-
-            console.log(datos);
     
             io.emit('messageContacts', datos);
 

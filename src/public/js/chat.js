@@ -3367,7 +3367,7 @@ function deleteContacto(numero) {
             .then(res => res.json())
             .then(data => {
                 if(data.message === 'ok') {
-                    loadContact();
+                    
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
@@ -3375,6 +3375,11 @@ function deleteContacto(numero) {
                         showConfirmButton: false,
                         timer: 1500
                     });
+
+                    const deleteItem = document.getElementById('item-contacto-'+numero);
+
+                    deleteItem.remove();
+
                 } else {
                     Swal.fire({
                         position: "top-end",
