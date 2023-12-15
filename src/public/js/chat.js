@@ -707,6 +707,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
 
     mostrar_chat(numero);
 
+    detectarScrollChat(numero);
+
     //formMessage();
 }
 
@@ -3388,8 +3390,17 @@ function deleteContacto(numero) {
 }
 
 socket.on('updateMessageQuanty', data => {
-    if(document.getElementById('cantidad-message-'+data)) {
-        document.getElementById('cantidad-message-'+data).remove();
+    const numero = data.numero
+    if(document.getElementById('cantidad-message-'+numero)) {
+        document.getElementById('cantidad-message-'+numero).remove();
     }
 
 });
+
+function detectarScrollChat(numero) {
+    const scroll = document.getElementById('conversation-'+numero);
+
+    scroll.addEventListener('scroll', (e) => {
+        socket.emit( 'updateQuantyMessage', { numero: numero } );
+    });
+}
