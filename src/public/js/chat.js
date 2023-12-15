@@ -574,11 +574,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
     let asignar = "";
     let asist = ""
 
-    socket.emit( 'updateQuantyMessage', { numero: numero } );
-
     if(document.getElementById('cantidad-message-'+numero)) {
-        socket.emit( { numero: numero } );
-        document.getElementById('cantidad-message-'+numero).remove();
+        socket.emit( 'updateQuantyMessage', { numero: numero } );
     }
 
     if(rol === 1 || rol === 3) {
