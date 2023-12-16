@@ -3376,9 +3376,7 @@ function deleteContacto(numero) {
                         timer: 1500
                     });
 
-                    const deleteItem = document.getElementById('item-contacto-'+numero);
-
-                    deleteItem.remove();
+                    socket.emit('deleteContact', { contacto: numero });
 
                 } else {
                     Swal.fire({
@@ -3400,6 +3398,15 @@ socket.on('updateMessageQuanty', data => {
         document.getElementById('cantidad-message-'+numero).remove();
     }
 
+});
+
+socket.on('updateDeleteListContact', data => {
+    const numero = data.contacto;
+
+    if(document.getElementById('item-contacto-'+numero)) {
+        const deleteItem = document.getElementById('item-contacto-'+numero);
+        deleteItem.remove();
+    }
 });
 
 function detectarScrollChat(numero) {

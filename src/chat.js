@@ -132,6 +132,10 @@ io.on('connection', (socket) => {
     socket.on('updateQuantyMessage', data => {
         io.emit('updateMessageQuanty', data);
     });
+
+    socket.on('deleteContact', data => { 
+        io.emit('updateDeleteListContact', data);
+    });
     
 });
 
