@@ -7,18 +7,20 @@ import axios from 'axios';
 
 export const viewIndex = (req, res) => {
 
-    const url_chat = process.env.URL_APP+":"+process.env.SOCKET_RED;
     const timestamp = Date.now();
 
-    const js = [
-        'https://cdn.jsdelivr.net/npm/toastify-js',
-        url_chat+'/plantilla.js'+ '?t=' + timestamp,
-        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
-    ];
-
     const css = [
+        'assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css',
         'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
+    ];
+
+    const js = [
+        'assets/libs/datatables.net/js/jquery.dataTables.min.js',
+        'assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js',
+        'https://cdn.jsdelivr.net/npm/toastify-js',
+        '/js/plantilla.js'+ '?t=' + timestamp,
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js'
     ];
 
     res.render('plantilla/index', { layout: 'partials/main', css, js });
@@ -253,4 +255,118 @@ export const sendPlantilla = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
+}
+
+export const apiGetTemplateAll = async (req, res) => {
+    try {
+
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: process.env.WHATSAPP_MESSAGE_TEMPLATE,
+            headers: { 
+              'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+            },
+            data: ''
+        };
+
+        const response = await axios(config);
+
+        const data = response.data;
+
+        return res.json({ message: 'ok', data: data });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+export const createTemplate = async (req, res) => {
+    const { categoryTemplate, editorTemplate, languageTemplate, nameTemplate, typeHeaderTemplate } = req.body;
+    try {
+
+        let dataTemplate = "";
+
+        if(typeHeaderTemplate === 'NINGUNA') {
+            const datos = {
+                name: nameTemplate,
+                category: categoryTemplate,
+                language: languageTemplate,
+                bodyText: editorTemplate
+            };
+
+            dataTemplate = body_without_variable_none(datos);
+        }
+
+        if(typeHeaderTemplate === 'MENSAJE_TEXTO') {
+            const datos = {
+                name: nameTemplate,
+                category: categoryTemplate,
+                language: languageTemplate,
+                bodyText: editorTemplate,
+                textHeader: req.body.text_header
+            };
+
+            dataTemplate = body_without_variable_none_text_header(datos);
+        }
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: process.env.WHATSAPP_MESSAGE_TEMPLATE,
+            headers: { 
+              'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+            },
+            data: dataTemplate
+        };
+
+        const response = await axios(config);
+
+        const data = response.data;
+
+        return res.json({ message: 'ok', data: data });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+const body_without_variable_none = (data) => {
+    const dataTemplate = {
+        "name": data.name,
+        "language": data.language,
+        "category": data.category,
+        "components": [
+            {
+                "type": "BODY",
+                "text": data.bodyText
+            }
+        ]
+    };
+
+    return dataTemplate;
+}
+
+const body_without_variable_none_text_header = (data) => {
+    const dataTemplate = {
+        "name": data.name,
+        "language": data.language,
+        "category": data.category,
+        "components": [
+            {
+                "type": "HEADER",
+                "format": "TEXT",
+                "text": data.textHeader,
+                "example": {
+                  "header_text": [
+                    "Summer Sale"
+                  ]
+                }
+            },
+            {
+                "type": "BODY",
+                "text": data.bodyText
+            }
+        ]
+    };
+
+    return dataTemplate;
 }

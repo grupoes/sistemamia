@@ -1,3 +1,157 @@
+<style>
+    .bubble {
+        position: relative;
+        background-color: white;
+        border-radius: 8px;
+        padding: 10px;
+        /* Ajusta el ancho como sea necesario */
+        min-height: 50px;
+        /* Ajusta la altura como sea necesario */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Ajusta la sombra como sea necesario */
+    }
+
+    .bubble::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-left: 10px solid transparent;
+        /* Ajusta el tamaño para cambiar el aspecto de la "oreja" */
+        border-bottom: 10px solid white;
+        /* Ajusta el tamaño para cambiar el aspecto de la "oreja" */
+        transform: translate(-100%, 0) rotate(-45deg);
+        /* Ajusta la transformación para cambiar la orientación de la "oreja" */
+        transform-origin: 0 0;
+        box-shadow: -2px -2px 2px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .toolbar {
+        margin-bottom: 10px;
+    }
+
+    .toolbar button {
+        background-color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .toolbar button:hover {
+        background-color: #e8e8e8;
+    }
+
+    .char-counter {
+        text-align: right;
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+
+    input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .optiones {
+        display: block;
+        position: relative;
+        /* Añadido para que el 'before' se posicione correctamente */
+        cursor: pointer;
+    }
+
+    .optiones:before {
+        content: '';
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #555;
+        border-radius: 50%;
+        position: absolute;
+        left: 5px;
+        top: 3px;
+        z-index: 999;
+    }
+
+    input[type="radio"]:checked+label.optiones:before {
+        background-color: #066CD2;
+        /* o el color que desees para el círculo */
+        border-color: #066CD2;
+        /* opcional, si quieres cambiar el color del borde también */
+    }
+
+
+    .file-upload-wrapper {
+        display: inline-block;
+        align-items: center;
+        border: 1px solid #cccccc;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    .file-upload-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .file-upload-input {
+        display: none;
+        /* Oculta el input real */
+    }
+
+    /* Puedes agregar estilos adicionales para el ícono y el texto si es necesario */
+    .uil-image {
+        margin-right: 8px;
+        /* Ajusta el margen según necesidad */
+    }
+
+    .popover .popover-body {
+        height: 200px;
+        overflow-y: auto;
+    }
+
+    /*tooltip*/
+    /* Estilos para la ventana emergente */
+    .emoji-popup {
+        display: none;
+        /* oculto por defecto */
+        position: absolute;
+        /* para posicionar respecto al botón */
+        bottom: 30px;
+        /* distancia desde el botón */
+        border: 1px solid #ccc;
+        background-color: #fff;
+        padding: 10px;
+        width: 300px;
+        /* el ancho de tu ventana emergente */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        /* para asegurarse de que se muestre por encima de otros elementos */
+        border-radius: 10px;
+        /* bordes redondeados */
+        box-sizing: border-box;
+    }
+
+    .emoji {
+        display: inline-block;
+        margin: 5px;
+        font-size: 24px;
+        /* tamaño del emoji */
+        cursor: pointer;
+        /* cambia el cursor al pasar el ratón por encima */
+    }
+
+    /* Mostrar la ventana emergente */
+    .emoji-popup.show {
+        display: block;
+    }
+</style>
+
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -18,9 +172,15 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+
+                <div class="float-end">
+                    <i class="uil uil-refresh me-2" style="cursor: pointer;"></i>
+                </div>
+
                 <h4 class="header-title mt-0 mb-1">LISTA DE PLANTILLAS DE META</h4>
-                
-                <button type="button" class="btn btn-primary mt-2 mb-3">Crear plantilla</button>
+
+                <button type="button" class="btn btn-primary mt-2 mb-3" id="btnAddTemplate">Crear plantilla</button>
+
 
                 <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                     <thead>
@@ -33,17 +193,8 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>formulario_web</td>
-                            <td>Marketing</td>
-                            <td>Spanish</td>
-                            <td>
-                                <span class="fw-bold badge badge-soft-success py-1 fs-6">Activo</span>
-                            </td>
-                            <td>$320,800</td>
-                        </tr>
+                    <tbody id="getTemplates">
+                        
                     </tbody>
                 </table>
 
@@ -52,3 +203,133 @@
     </div><!-- end col-->
 </div>
 <!-- end row-->
+
+<div class="modal fade" id="modal-plantilla" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalTemplate">Crear Plantilla</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formCreateTemplate">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="mb-3" style="position: relative;">
+                                <label class="form-label" for="nameTemplate">Nombre de la plantilla <span class="text-muted">( no debe contener Mayúsculas ni espacios )</span></label>
+                                <input type="text" class="form-control" id="nameTemplate" name="nameTemplate" maxlength="512"
+                                    style="padding-right: 50px;" placeholder="Escribe el nombre de la plantilla" required="">
+                                <span id="contadorHeader" class="contador-dentro"
+                                    style="position: absolute; right: 20px; top: 70%; transform: translateY(-50%); color: gray; pointer-events: none;">0/512</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="categoryTemplate">Categoría de la plantilla</label>
+                                <select name="categoryTemplate" id="categoryTemplate" class="form-select" required>
+                                    <option value="">Seleccionar</option>
+                                    <option value="MARKETING">Marketing</option>
+                                    <option value="UTILITY">Utilidad</option>
+                                    <option value="AUTHENTICATION">Autentificación</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="languageTemplate">Lenguaje/Idioma</label>
+                                <select name="languageTemplate" id="languageTemplate" class="form-select" required="">
+                                    <option value="">Seleccionar</option>
+                                    <option value="es" selected>Español</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label class="form-label" for="typeHeaderTemplate">Encabezado</label>
+                                <span class="badge badge-soft-secondary py-1">Opcional</span>
+                                <p>Agrega un título o elige el tipo de contenido multimedia que usarás para este encabezado.
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <select name="typeHeaderTemplate" id="typeHeaderTemplate" class="form-select">
+                                            <option value="NINGUNA">Ninguna</option>
+                                            <option value="MENSAJE_TEXTO">Mensaje de texto</option>
+                                            <option value="MEDIOS">Medios</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-9" id="selectHeaderContent">
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="bodyTemplate">Cuerpo</label>
+                                <p>Ingresa el texto del mensaje en el idioma que seleccionaste.</p>
+
+                                <div class="toolbar">
+
+                                    <!-- Icons or text can be added inside the buttons -->
+                                    <button type="button" title="Insertar un emoji" data-bs-toggle="popover" id="btnEmojiTemplate"
+                                        data-bs-placement="top"> <i class="bi bi-emoji-smile"></i> </button>
+                                    <button type="button" title="Negrita (Ctrl + b)" id="addNegrita"><b>B</b></button>
+                                    <button type="button" title="Cursiva (Ctrl + i)" id="addCursiva"><i>I</i></button>
+                                    <button type="button" title="Tachado" id="addTachado"><s>T</s></button>
+                                    <button type="button" title="Add Variable" id="addVariable"> <i class="uil uil-plus"></i> Agregar
+                                        variable</button>
+
+                                </div>
+
+                                <textarea name="editorTemplate" id="editorTemplate" cols="30" rows="7"
+                                    class="form-control" maxlength="1024" required=""></textarea>
+                                <div class="char-counter">Caracteres: 0 de 1024</div>
+
+                            </div>
+
+                            <div id="viewVariables">
+                                
+                            </div>
+
+                            <div id="listVariables">
+                                
+                            </div>
+
+                            <div class="mb-3" style="position: relative;">
+                                <label class="form-label" for="bodyTemplate">Pie de página</label>
+                                <span class="badge badge-soft-secondary py-1">Opcional</span>
+                                <p>Agrega una breve línea de texto en la parte inferior de la plantilla de mensaje.</p>
+
+                                <input type="text" class="form-control" id="pie_de_pagina" class="pie_de_pagina" maxlength="60" style="padding-right: 50px;"
+                                    placeholder="Escribe texto del pie de página">
+                                <span id="contador" class="contador-dentro"
+                                    style="position: absolute; right: 10px; top: 82%; transform: translateY(-50%); color: gray; pointer-events: none;">0/60</span>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                Vista previa del mensaje
+                            </div>
+                            <div style="min-height: 100px; background: #e5ddd5; padding: 20px">
+                                <div class="bubble" id="previewMessage">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnCreateTemplate">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

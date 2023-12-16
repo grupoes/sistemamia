@@ -575,10 +575,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
     let asist = ""
 
     if(document.getElementById('cantidad-message-'+numero)) {
-        console.log('si hay');
-        document.getElementById('cantidad-message-'+numero).remove();
-    } else {
-        console.log('no hay');
+        socket.emit( 'updateQuantyMessage', { numero: numero } );
     }
 
     if(rol === 1 || rol === 3) {
@@ -709,6 +706,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
     cardBody.innerHTML = html;
 
     mostrar_chat(numero);
+
+    detectarScrollChat(numero);
 
     //formMessage();
 }
@@ -2287,7 +2286,6 @@ function contactosLista(buscar) {
 }
 
 function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente) {
-    console.log('hola');
 
     $("#modalContacts").modal('hide');
 
@@ -3369,7 +3367,7 @@ function deleteContacto(numero) {
             .then(res => res.json())
             .then(data => {
                 if(data.message === 'ok') {
-                    loadContact();
+                    
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
@@ -3377,6 +3375,9 @@ function deleteContacto(numero) {
                         showConfirmButton: false,
                         timer: 1500
                     });
+
+                    socket.emit('deleteContact', { contacto: numero });
+
                 } else {
                     Swal.fire({
                         position: "top-end",
@@ -3388,5 +3389,30 @@ function deleteContacto(numero) {
                 }
             });
         }
+    });
+}
+
+socket.on('updateMessageQuanty', data => {
+    const numero = data.numero
+    if(document.getElementById('cantidad-message-'+numero)) {
+        document.getElementById('cantidad-message-'+numero).remove();
+    }
+
+});
+
+socket.on('updateDeleteListContact', data => {
+    const numero = data.contacto;
+
+    if(document.getElementById('item-contacto-'+numero)) {
+        const deleteItem = document.getElementById('item-contacto-'+numero);
+        deleteItem.remove();
+    }
+});
+
+function detectarScrollChat(numero) {
+    const scroll = document.getElementById('conversation-'+numero);
+
+    scroll.addEventListener('scroll', (e) => {
+        socket.emit( 'updateQuantyMessage', { numero: numero } );
     });
 }
