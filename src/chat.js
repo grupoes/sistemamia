@@ -133,6 +133,10 @@ io.on('connection', (socket) => {
         io.emit('updateMessageQuanty', data);
     });
 
+    socket.on('updateQuantyMessageAll', data => {
+        io.emit('updateMessageQuanty', data);
+    });
+
     socket.on('deleteContact', data => { 
         io.emit('updateDeleteListContact', data);
     });

@@ -919,7 +919,7 @@ function viewFromImage(data, hora) {
                             <div class="p-2">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="${dominio}/img/archivos/${data.id_document}.jpg" alt="" height="150" onclick="openFullscreen(this)">
+                                        <img src="${dominio}/img/archivos/${data.id_document}.jpg" alt="" height="150" style="width: 100%;" onclick="openFullscreen(this)">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -1189,7 +1189,7 @@ function viewReceipImage(data, fecha) {
                             <div class="p-2" id="${data.codigo}">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150" onclick="openFullscreen(this)">
+                                        <img src="${dominio}/img/archivos/${data.filename}" alt="" height="150" style="width: 100%;" onclick="openFullscreen(this)">
                                         <p style="margin-top: 5px">${data.description}</p>
                                     </div>
                                 </div>
@@ -3413,6 +3413,6 @@ function detectarScrollChat(numero) {
     const scroll = document.getElementById('conversation-'+numero);
 
     scroll.addEventListener('scroll', (e) => {
-        socket.emit( 'updateQuantyMessage', { numero: numero } );
+        socket.emit( 'updateQuantyMessageAll', { numero: numero } );
     });
 }
