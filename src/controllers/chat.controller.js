@@ -1451,9 +1451,11 @@ export const contactosNoContestados = async(req, res) => {
     
                             const frases = await FraseFinChat.findAll();
     
-                            const arrayDeContenidos = frases.map(frase => frase.descripcion);
+                            const arrayDeContenidos = frases.map(frase => frase.descripcion.toLowerCase());
+
+                            const ultimoMessage = chat.message;
     
-                            const verificado = contienePalabra(chat.message, arrayDeContenidos);
+                            const verificado = arrayDeContenidos.includes(ultimoMessage.toLowerCase());
     
                             if(verificado === false) {
                                 const potencial = await PotencialCliente.findOne({
@@ -1502,7 +1504,9 @@ export const contactosNoContestados = async(req, res) => {
                                     etiqueta_id: idetiqueta,
                                     rol: rol,
                                     asistente: contacto.asistente,
-                                    nameAsistente: nameAsistente
+                                    nameAsistente: nameAsistente,
+                                    chat: chat.message,
+                                    verificado: verificado
                                 }
                     
                                 arrayContactos.push(datos);
