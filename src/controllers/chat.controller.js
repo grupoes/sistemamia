@@ -1452,8 +1452,10 @@ export const contactosNoContestados = async(req, res) => {
                             const arrayDeContenidos = frases.map(frase => frase.descripcion.toLowerCase());
 
                             const ultimoMessage = chat.message;
+
+                            const buscar = ultimoMessage.toLowerCase();
     
-                            const verificado = arrayDeContenidos.some(elemento => elemento.includes(ultimoMessage.toLowerCase()));
+                            const verificado = arrayDeContenidos.some(elemento => buscar.includes(elemento));
     
                             if(verificado === false) {
                                 const potencial = await PotencialCliente.findOne({
