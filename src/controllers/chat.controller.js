@@ -1408,14 +1408,17 @@ export const contactosNoContestados = async(req, res) => {
 
         let contactos = "";
 
-        if(rol != 2 || rol != 6) {
+        console.log(rol);
+
+        if(rol != 2 && rol != 6) {
+            contactos = await NumeroWhatsapp.findAll();
+
+        } else {
             contactos = await NumeroWhatsapp.findAll({
                 where: {
                     asistente: id
                 }
             });
-        } else {
-            contactos = await NumeroWhatsapp.findAll();
         }
 
         let arrayContactos = [];

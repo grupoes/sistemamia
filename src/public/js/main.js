@@ -7,10 +7,7 @@ window.addEventListener('load', (e) => {
 
     getDataToken(token_);
 
-    setInterval(() => {
-        getNotificationNotContest(token_);
-    }, 300000);
-    
+    getNotificationNotContest(token_);
     
 });
 
