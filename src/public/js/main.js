@@ -2,8 +2,9 @@ const rol = document.getElementById('rol_user');
 const iduser = document.getElementById('user_id');
 const nameLogin = document.getElementById('nameLogin');
 
+const token_ = localStorage.getItem('token');
+
 window.addEventListener('load', (e) => {
-    const token_ = localStorage.getItem('token');
 
     getDataToken(token_);
 
@@ -26,6 +27,10 @@ function getDataToken(token_) {
         nameLogin.textContent = data.name;
     })
 }
+
+setInterval(() => {
+    getNotificationNotContest(token_);
+}, 30000);
 
 function getNotificationNotContest(token) {
     fetch('/contactosNoContestados', {
