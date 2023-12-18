@@ -1408,8 +1408,6 @@ export const contactosNoContestados = async(req, res) => {
 
         let contactos = "";
 
-        console.log(rol);
-
         if(rol != 2 && rol != 6) {
             contactos = await NumeroWhatsapp.findAll();
 
@@ -1455,7 +1453,7 @@ export const contactosNoContestados = async(req, res) => {
 
                             const ultimoMessage = chat.message;
     
-                            const verificado = arrayDeContenidos.includes(ultimoMessage.toLowerCase());
+                            const verificado = arrayDeContenidos.some(elemento => elemento.includes(ultimoMessage.toLowerCase));
     
                             if(verificado === false) {
                                 const potencial = await PotencialCliente.findOne({
