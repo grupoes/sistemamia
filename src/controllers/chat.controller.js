@@ -1453,7 +1453,7 @@ export const contactosNoContestados = async(req, res) => {
 
                             const ultimoMessage = chat.message;
     
-                            const verificado = arrayDeContenidos.some(elemento => elemento.includes(ultimoMessage.toLowerCase));
+                            const verificado = arrayDeContenidos.some(elemento => elemento.includes(ultimoMessage.toLowerCase()));
     
                             if(verificado === false) {
                                 const potencial = await PotencialCliente.findOne({
