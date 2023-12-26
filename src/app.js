@@ -34,6 +34,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.json({ limit: '10mb' }));
 
 const __filename = fileURLToPath(import.meta.url);
@@ -45,8 +47,6 @@ app.set('view engine', 'hbs');
 app.set("views", __dirname + "/views");
 
 app.use(express.static(__dirname + "/public"));
-
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(login);
 app.use(dashboard);

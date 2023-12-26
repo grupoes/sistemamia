@@ -1,6 +1,8 @@
 import { Modulos } from "../models/modules.js";
 import { Actions } from "../models/actions.js";
 
+import { ModuleActions } from "../models/ModuleActions.js";
+
 export const index = (req, res) => {
     const timestamp = Date.now();
 
@@ -54,7 +56,10 @@ export const getAllActions = async (req, res) => {
         const actions = await Actions.findAll({
             where: {
                 status: 'activo'
-            }
+            },
+            order: [
+                ['id', 'asc']
+            ]
         });
 
         return res.status(200).json({status: "ok", data: actions});
@@ -77,9 +82,41 @@ export const getModuleFather = async (req, res) => {
     }
 }
 
-export const createModule = (req, res) => {
+export const createModule = async (req, res) => {
+
+    const { nameModule, urlModulo, iconoModulo } = req.body;
+
     try {
-        return res.json(req.body.actions);
+
+        let padre = "";
+        let array_actions = [];
+
+        if(req.body.espadre) {
+            padre = 0;
+        } else {
+            padre = req.body.modulopadre;
+            array_actions = req.body.actions;
+        }
+
+        const newModule = await Modulos.create({
+            fatherId: padre,
+            name: nameModule,
+            url: urlModulo,
+            icono: iconoModulo,
+            status: "activo"
+        });
+
+        for (let i = 0; i < array_actions.length; i++) {
+            let actionId = array_actions[i];
+            await ModuleActions.create({ 
+                actionId: actionId, 
+                moduleId: newModule.id
+            });
+            
+        }
+
+        return res.json({ status: 'ok', data: newModule });
+
     } catch (error) {
         return res.status(400).json({status: 'error', message: error.message});
     }

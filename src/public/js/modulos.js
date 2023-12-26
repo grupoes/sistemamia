@@ -8,7 +8,6 @@ const espadre = document.getElementById('espadre');
 const formModulo = document.getElementById('formModulo');
 
 renderModulos();
-renderModulosPadres();
 
 function renderModulos() {
     fetch('/render-modulos')
@@ -58,7 +57,14 @@ function renderView(data) {
 
 addModulo.addEventListener('click', () => {
     $("#modalModulo").modal('show');
+
+    formModulo.reset();
+
+    modulopadre.disabled = false;
+
     renderActions();
+
+    renderModulosPadres();
 });
 
 function renderActions() {
@@ -81,10 +87,21 @@ function viewActionsHtml(data) {
 
     let actions = "";
 
+    actions += `<input type="hidden" name="actions" value="1">`;
+
     data.forEach(action => {
+
+        let check = "";
+        let readonly = "";
+
+        if(action.id == 1) {
+            check = "checked";
+            readonly = "disabled";
+        }
+
         actions += `
         <div class="col-md-3">
-            <input type="checkbox" class="form-check-input" id="action-${action.id}" name="actions[]" value="${action.id}">
+            <input type="checkbox" class="form-check-input" ${check} id="action-${action.id}" name="actions" value="${action.id}" ${readonly}>
             <label for="action-${action.id}" class="form-check-label" style="font-weight: normal;">${action.name}</label> 
         </div>
         `;
@@ -132,33 +149,66 @@ espadre.addEventListener('click', (e) => {
     }
 });
 
+const btnaddModulo = document.getElementById('btnaddModulo');
+
 formModulo.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    btnaddModulo.disabled = true;
+    btnaddModulo.textContent = 'Agregando...';
+
     const formData = new FormData(formModulo);
 
-    const actiones = document.querySelectorAll('input[name="actions[]"]');
+    const jsonObject = {};
 
-    let act = [];
+    for (const [key, value]  of formData.entries()) {
+        // Verifica si la propiedad ya existe en el objeto, lo que indica un array
+        if (jsonObject[key]) {
+            // Si la propiedad existe y no es un array, conviértela en un array
+            if (!Array.isArray(jsonObject[key])) {
+                jsonObject[key] = [jsonObject[key]];
+            }
+            jsonObject[key].push(value);
+        } else {
+            // Si la propiedad no existe, añádela al objeto
+            jsonObject[key] = value;
+        }
+    }
 
-    actiones.forEach(ac => {
-        act.push(ac.value)
-    });
-
-    formData.append('actions', act);
-
-    const plainFormData = Object.fromEntries(formData.entries());
-    const formDataJsonString = JSON.stringify(plainFormData);
+    const json = JSON.stringify(jsonObject);
 
     fetch('/create-module', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: formDataJsonString
+        body: json
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+
+        btnaddModulo.disabled = false;
+        btnaddModulo.textContent = 'Agregar';
+
+        if(data.status === 'ok') {
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Se creo correctamente el módulo",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            renderModulos();
+
+            $("#modalModulo").modal('hide');
+
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "¡Ocurrio un error!",
+            });
+        }
     });
 });
