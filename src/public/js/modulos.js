@@ -5,6 +5,8 @@ const viewActions = document.getElementById('viewActions');
 const modulopadre = document.getElementById('modulopadre');
 const espadre = document.getElementById('espadre');
 
+const listModulos = document.getElementById('listModulos');
+
 const formModulo = document.getElementById('formModulo');
 
 renderModulos();
@@ -21,8 +23,6 @@ function renderView(data) {
     let html = "";
 
     $('#basic-datatable').DataTable().destroy();
-
-    const listModulos = document.getElementById('listModulos');
 
     data.forEach((modulo, index) => {
 
@@ -43,7 +43,7 @@ function renderView(data) {
             <td>${modulo.url}</td>
             <td>${modulo.icono}</td>
             <td>
-                <button type="button" class="btn btn-info">Editar</button>
+                <button type="button" class="btn btn-info editModule" data-id="${modulo.id}">Editar</button>
                 <button type="button" class="btn btn-danger">Eliminar</button>
             </td>
         </tr>
@@ -212,3 +212,29 @@ formModulo.addEventListener('submit', (e) => {
         }
     });
 });
+
+listModulos.addEventListener('click', (e) => {
+    if(e.target.classList.contains('editModule')) {
+        $("#modalModulo").modal('show');
+
+        renderModulosPadres();
+
+        const id = e.target.getAttribute('data-id');
+
+        fetch('/getModule/'+id)
+        .then(res => res.json())
+        .then(data => {
+            viewEditModule(data.data);
+        })
+    }
+});
+
+function viewEditModule(data) {
+    const nameModule = document.getElementById('nameModule');
+    const urlModulo = document.getElementById('urlModulo');
+    const iconoModulo = document.getElementById('iconoModulo');
+
+    nameModule.value = data.name;
+    urlModulo.value = data.url;
+    iconoModulo.value = data.icono;
+}

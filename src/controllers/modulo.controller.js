@@ -121,3 +121,32 @@ export const createModule = async (req, res) => {
         return res.status(400).json({status: 'error', message: error.message});
     }
 }
+
+export const getModule = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const modulo = await Modulos.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        let plainObject = modulo.get({ plain: true });
+
+        if(modulo.fatherId != 0) {
+            const acciones = await ModuleActions.findAll({
+                where: {
+                    moduleId: id
+                }
+            });
+
+            plainObject.acciones = acciones.map(accion => accion.get({ plain: true }));
+        }
+
+        return res.json({ status: 'ok', data: plainObject });
+
+    } catch (error) {
+        return res.status(400).json({status: 'error', message: error.message});
+    }
+}
