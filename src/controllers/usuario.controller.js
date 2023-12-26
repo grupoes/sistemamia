@@ -1,6 +1,10 @@
 import { Usuario } from "../models/usuario.js";
 import { Trabajadores } from "../models/trabajadores.js";
 
+export const index = (req, res) => {
+    res.render('usuario/index', { layout: 'partials/main' });
+}
+
 export const allUsers = async (req, res) => {
     try {
         const users = await Usuario.findAll({
