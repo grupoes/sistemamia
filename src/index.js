@@ -25,7 +25,7 @@ import './models/ubigeo.js';
 import './models/chat.js';
 import './models/estadosConversacion.js';
 import './models/numerosWhatsapp.js';*/
-i/* mport './models/modules.js';
+/* import './models/modules.js';
 import './models/actions.js';
 import './models/permissions.js';
 import './models/associate.js'; */
