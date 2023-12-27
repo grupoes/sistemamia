@@ -53,3 +53,76 @@
     </div><!-- end col-->
 </div>
 <!-- end row-->
+
+<div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Agregar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="tipoDocumento">Tipo de Documento</label>
+                            <select name="tipoDocumento" id="tipoDocumento" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <option value="1">D.N.I.</option>
+                                <option value="2">Pasaporte</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="numeroDocumento">Número de Documento</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Ingrese el número" name="numeroDocumento" id="numeroDocumento">
+                                <button class="btn btn-outline-primary" type="button"
+                                    id="button-addon2"><i class="uil-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="nameUsuario">Nombre</label>
+                            <input type="text" class="form-control" name="nameUsuario" id="nameUsuario" placeholder="Nombre del usuario">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="lastName">Apellidos</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Apellidos del usuario">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="numberWhatsapp">Número de Whatsapp</label>
+                            <input type="text" class="form-control" name="numberWhatsapp" id="numberWhatsapp" placeholder="whatsapp del usuario">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="address">Dirección</label>
+                            <input type="text" class="form-control" name="address" id="address" placeholder="Dirección del usuario">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="urbanizacion">Urbanización</label>
+                            <input type="text" class="form-control" name="urbanizacion" id="urbanizacion" placeholder="Urbanización del usuario">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

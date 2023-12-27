@@ -2684,7 +2684,7 @@ function plantillaSelect(e) {
                     /* dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`; */
 
                     dinamico = `
-                        <textarea rows="1" id="cuerpo_variable" class="form-control" style="resize: none;" oninput="detectarAltoInputMensaje(this)"></textarea>
+                        <textarea rows="1" id="cuerpo_variable" class="form-control variables" style="resize: none;" oninput="detectarAltoInputMensaje(this)"></textarea>
                     `;
                 }
 
