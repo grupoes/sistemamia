@@ -1,0 +1,111 @@
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Módulos</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
+                    <li class="breadcrumb-item active">Módulos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mt-0 mb-1">Lista de Módulos</h4>
+
+                <button type="button" class="btn btn-primary mt-2 mb-2" id="addModulo">Crear Módulo</button>
+
+                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Módulo</th>
+                            <th>Módulo padre</th>
+                            <th>Url</th>
+                            <th>Icono</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listModulos">
+                        
+                    </tbody>
+                </table>
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
+</div>
+<!-- end row-->
+
+<!-- Modal Editar Modulo-->
+<div class="modal fade" id="modalModulo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEtiqueta">Agregar Módulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formModulo">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="nameModule" class="col-form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="nameModule" name="nameModule" required="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="checkbox" class="form-check-input" id="espadre" name="espadre">
+                                <label for="espadre" class="form-check-label">Es módulo padre?</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="modulopadre" class="col-form-label">Módulo padre:</label>
+                                <select name="modulopadre" id="modulopadre" class="form-select">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="urlModulo" class="col-form-label">Url:</label>
+                                <input type="text" class="form-control" id="urlModulo" name="urlModulo">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="iconoModulo" class="col-form-label">Icono:</label>
+                                <input type="text" class="form-control" id="iconoModulo" name="iconoModulo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="viewActions">
+                        
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" id="btnaddModulo">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

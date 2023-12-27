@@ -20,6 +20,8 @@ import base from './routes/base.routes.js';
 import plataforma from './routes/plataforma.routes.js';
 import contactos from './routes/contactos.routes.js';
 import fraseFin from './routes/fraseFin.routes.js';
+import usuarios from './routes/usuario.routes.js';
+import modulos from "./routes/modulo.routes.js";
 
 const app = express();
 
@@ -32,6 +34,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.json({ limit: '10mb' }));
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,8 +47,6 @@ app.set('view engine', 'hbs');
 app.set("views", __dirname + "/views");
 
 app.use(express.static(__dirname + "/public"));
-
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(login);
 app.use(dashboard);
@@ -61,5 +63,7 @@ app.use(base);
 app.use(plataforma);
 app.use(contactos);
 app.use(fraseFin);
+app.use(usuarios);
+app.use(modulos);
 
 export default app;

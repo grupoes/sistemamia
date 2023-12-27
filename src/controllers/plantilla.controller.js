@@ -290,6 +290,7 @@ export const createTemplate = async (req, res) => {
             const datos = {
                 name: nameTemplate,
                 category: categoryTemplate,
+                allow_category_change: true,
                 language: languageTemplate,
                 bodyText: editorTemplate
             };
@@ -301,6 +302,7 @@ export const createTemplate = async (req, res) => {
             const datos = {
                 name: nameTemplate,
                 category: categoryTemplate,
+                allow_category_change: true,
                 language: languageTemplate,
                 bodyText: editorTemplate,
                 textHeader: req.body.text_header
