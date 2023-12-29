@@ -28,7 +28,8 @@ import './models/numerosWhatsapp.js';*/
 /* import './models/modules.js';
 import './models/actions.js';
 import './models/permissions.js';
-import './models/associate.js'; */
+import './models/associate.js';
+import './models/publicidad.js'; */
 
 
 dotenv.config();

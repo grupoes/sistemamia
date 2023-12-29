@@ -16,6 +16,9 @@ export const Publicidad = sequelize.define('publicidad', {
     codigo: {
         type: DataTypes.INTEGER
     },
+    imagen: {
+        type: DataTypes.STRING
+    },
     estado: {
         type: DataTypes.INTEGER,
         defaultValue: 1
