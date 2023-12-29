@@ -1,0 +1,96 @@
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Publicidad</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
+                    <li class="breadcrumb-item active">Publicidad</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mt-0 mb-1">Lista de Publicidad</h4>
+
+                <button type="button" class="btn btn-primary mt-2 mb-2" id="addbtn">Agregar</button>
+
+                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
+</div>
+<!-- end row-->
+
+<!-- sample modal content -->
+<div id="modalAddPublicidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Agregar Publicidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formPublicidad" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="numero_publicidad">Número</label>
+                                <input type="number" class="form-control" id="numero_publicidad" name="numero_publicidad" placeholder="#" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre_publicidad">Nombre</label>
+                                <input type="text" class="form-control" id="nombre_publicidad" name="nombre_publicidad" placeholder="Escriba el nombre de la publicidad" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="descripcion_publicidad">Descripción</label>
+                                <input type="text" class="form-control" id="descripcion_publicidad" name="descripcion_publicidad" placeholder="(opcional)">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-referencial">Imagen referencial</label>
+                                <input type="file" class="form-control" id="imagen-referencial" name="imagen-referencial">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

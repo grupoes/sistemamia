@@ -2682,9 +2682,14 @@ function plantillaSelect(e) {
                     dinamico = `<input type="text" class="form-control variables" placeholder="Esto es dinamico" value="" id="cuerpo_variable" readonly>`;
                 } else {
                     /* dinamico = `<input type="text" class="form-control variables" placeholder="Ingrese el contenido de la variable" value="" id="cuerpo_variable">`; */
+                    let placeholder = "";
+
+                    if(data.plantilla.id == 20) {
+                        placeholder = "el Mg. Erik Pezo"
+                    }
 
                     dinamico = `
-                        <textarea rows="1" id="cuerpo_variable" class="form-control variables" style="resize: none;" oninput="detectarAltoInputMensaje(this)"></textarea>
+                        <textarea rows="1" id="cuerpo_variable" class="form-control variables" style="resize: none;" oninput="detectarAltoInputMensaje(this)" value="${placeholder}"></textarea>
                     `;
                 }
 
