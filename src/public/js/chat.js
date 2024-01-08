@@ -3532,7 +3532,10 @@ function viewPlataformaDirectoWhatsapp() {
             const datos = data.data;
 
             datos.forEach(numero => {
-                options += `<option value="${numero.id}">${numero.numero} - ${numero.nombre}</option>`;
+                if(numero.status == 1) {
+                    options += `<option value="${numero.id}">${numero.numero} - ${numero.nombre}</option>`;
+                }
+                
             });
 
         }
