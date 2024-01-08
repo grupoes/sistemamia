@@ -3421,3 +3421,120 @@ function detectarScrollChat(numero) {
         socket.emit( 'updateQuantyMessageAll', { numero: numero } );
     });
 }
+
+const view_plataforma = document.getElementById('view_plataforma');
+
+plataforma.addEventListener('change', (e) => {
+    const valor = e.target.value;
+
+    if(valor === '4') {
+        viewPlataformaPublicidad();
+        return;
+    }
+
+    if(valor === '1') {
+        viewPlataformaDirectoWhatsapp();
+        return;
+    }
+
+    view_plataforma.innerHTML = "";
+
+});
+
+function viewPlataformaPublicidad() {
+    let html = `
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="tipo_contacto" class="col-form-label">Tipo Publicidad:</label>
+            <select name="tipo_publicidad" id="tipo_publicidad" class="form-select" onchange="elegirTipoPublicidad(event)">
+                <option value="">Seleccione...</option>
+                <option value="1">Publicidad para Facebook</option>
+                <option value="2">Publicidad Orgánica Facebook</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6" id="publicidadFacebook">
+
+    </div>
+    `;
+
+    view_plataforma.innerHTML = html;
+}
+
+function elegirTipoPublicidad(e) {
+
+    const publicidadFacebook = document.getElementById('publicidadFacebook');
+    const valor = e.target.value;
+
+    if (valor === '1') {
+
+        fetch('/allPublicidad')
+        .then(res => res.json())
+        .then(data => {
+            if(data.message === 'ok') {
+
+                const datos = data.data;
+
+                let options = `<option value="">Seleccione...</option>`;
+
+                datos.forEach(pub => {
+                    options += `<option value="${pub.id}">${pub.nombre}</option>`;
+                });
+
+                let html = `
+                <div class="mb-3">
+                    <label for="tipo_contacto" class="col-form-label">Publicidad Facebook:</label>
+                        <select name="publicidad_facebook" id="publicidad_facebook" class="form-select">
+                        ${options}
+                    </select>
+                </div>
+                `;
+
+                publicidadFacebook.innerHTML = html;
+            }
+        })
+
+        
+    } else {
+        publicidadFacebook.innerHTML = "";
+    }
+}
+
+function viewPlataformaDirectoWhatsapp() {
+    let html = `
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="tipo_contacto" class="col-form-label">Numeros de Whatsapp:</label>
+            <select name="numeros_whatsapp" id="numeros_whatsapp" class="form-select" onchange="elegirNumero(event)">
+                <option value="">Seleccione...</option>
+                <option value="1">51938669769 - Ventas</option>
+                <option value="2">51938669769 - Sumiko</option>
+                <option value="2">51938669769 - Kathia</option>
+                <option value="2">51938669769 - Erik</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6" id="publicidadFacebook">
+
+    </div>
+    `;
+
+    view_plataforma.innerHTML = html;
+}
+
+function elegirNumero(e) {
+    let html = `
+        <div class="mb-3">
+            <label for="tipo_contacto" class="col-form-label">Tipo:</label>
+            <select name="publicidad_facebook" id="publicidad_facebook" class="form-select">
+                <option value="">Seleccione</option>
+                <option value="1">Recomendados</option>
+                <option value="2">Recompra</option>
+            </select>
+        </div>
+        `;
+
+    publicidadFacebook.innerHTML = html;
+}

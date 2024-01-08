@@ -1,5 +1,6 @@
+import { Publicidad } from "../models/publicidad.js";
+
 import multer from 'multer';
-import path from 'path';
 
 export const indexView = (req, res) => {
     const timestamp = Date.now();
@@ -70,6 +71,68 @@ export const uploadSingle = upload.single('imagen-referencial');
 
 export const addPublicidad = async (req, res, next) => {
 
-    console.log(req.file);
+    const { numero_publicidad, nombre_publicidad, descripcion_publicidad } = req.body;
 
+    try {
+
+        const verificarCodigo = await Publicidad.findOne({
+            where: {
+                codigo: numero_publicidad
+            }
+        });
+
+        if(verificarCodigo) {
+            return res.json({ message: 'existe', response: "El código de publicidad ya existe" });
+        }
+
+        const newPublicidad = await Publicidad.create({
+            nombre: nombre_publicidad,
+            descripcion: descripcion_publicidad,
+            codigo: numero_publicidad,
+            imagen: req.file.filename,
+            estado: 1
+        });
+
+        return res.json({ message: 'ok', data: newPublicidad });
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+
+}
+
+export const getAllPublicidad = async(req, res) => {
+    try {
+        const all = await Publicidad.findAll({
+            order: [
+                ['id', 'desc']
+            ]
+        });
+
+        return res.json({ message: 'ok', data: all });
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
+export const disabledPublicidad = async (req, res) => {
+    const { id, estado } = req.body;
+    try {
+
+        let act = "";
+
+        if(estado == "1") {
+            act = 1;
+        } else {
+            act = 2;
+        }
+
+        const update = await Publicidad.update({ estado: act }, {
+            where: { id: id }
+        });
+
+        return res.json({ message: 'ok', data: update });
+        
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
 }
