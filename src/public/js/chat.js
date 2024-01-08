@@ -3448,7 +3448,7 @@ function viewPlataformaPublicidad() {
             <label for="tipo_contacto" class="col-form-label">Tipo Publicidad:</label>
             <select name="tipo_publicidad" id="tipo_publicidad" class="form-select" onchange="elegirTipoPublicidad(event)">
                 <option value="">Seleccione...</option>
-                <option value="1">Publicidad para Facebook</option>
+                <option value="1">Publicidad Paga Facebook</option>
                 <option value="2">Publicidad Orgánica Facebook</option>
             </select>
         </div>
@@ -3479,7 +3479,7 @@ function elegirTipoPublicidad(e) {
                 let options = `<option value="">Seleccione...</option>`;
 
                 datos.forEach(pub => {
-                    options += `<option value="${pub.id}">${pub.nombre}</option>`;
+                    options += `<option value="${pub.id}">${pub.codigo} - ${pub.nombre}</option>`;
                 });
 
                 let html = `
@@ -3502,26 +3502,40 @@ function elegirTipoPublicidad(e) {
 }
 
 function viewPlataformaDirectoWhatsapp() {
-    let html = `
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label for="tipo_contacto" class="col-form-label">Numeros de Whatsapp:</label>
-            <select name="numeros_whatsapp" id="numeros_whatsapp" class="form-select" onchange="elegirNumero(event)">
-                <option value="">Seleccione...</option>
-                <option value="1">51938669769 - Ventas</option>
-                <option value="2">51938669769 - Sumiko</option>
-                <option value="2">51938669769 - Kathia</option>
-                <option value="2">51938669769 - Erik</option>
-            </select>
+
+    fetch('/allWhatsapp')
+    .then(res => res.json())
+    .then(data => {
+        let options = "";
+
+        if(data.message === 'ok') {
+            const datos = data.data;
+
+            datos.forEach(numero => {
+                options += `<option value="${numero.id}">${numero.numero} - ${numero.nombre}</option>`;
+            });
+
+        }
+
+        let html = `
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="tipo_contacto" class="col-form-label">Numeros de Whatsapp:</label>
+                <select name="numeros_whatsapp" id="numeros_whatsapp" class="form-select" onchange="elegirNumero(event)">
+                    <option value="">Seleccione...</option>
+                    ${options}
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-6" id="publicidadFacebook">
+        <div class="col-md-6" id="publicidadFacebook">
 
-    </div>
-    `;
+        </div>
+        `;
 
-    view_plataforma.innerHTML = html;
+        view_plataforma.innerHTML = html;
+    })
+    
 }
 
 function elegirNumero(e) {
@@ -3532,6 +3546,9 @@ function elegirNumero(e) {
                 <option value="">Seleccione</option>
                 <option value="1">Recomendados</option>
                 <option value="2">Recompra</option>
+                <option value="3">Directo</option>
+                <option value="4">Publicidad Online</option>
+                <option value="5">Otros</option>
             </select>
         </div>
         `;

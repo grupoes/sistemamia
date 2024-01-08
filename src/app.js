@@ -23,6 +23,7 @@ import fraseFin from './routes/fraseFin.routes.js';
 import usuarios from './routes/usuario.routes.js';
 import modulos from "./routes/modulo.routes.js";
 import publicidad from "./routes/publicidad.routes.js";
+import whatsappVentas from './routes/whatsappVentas.routes.js';
 
 const app = express();
 
@@ -67,5 +68,6 @@ app.use(fraseFin);
 app.use(usuarios);
 app.use(modulos);
 app.use(publicidad);
+app.use(whatsappVentas);
 
 export default app;

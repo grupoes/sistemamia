@@ -28,6 +28,12 @@ export const NumeroWhatsapp = sequelize.define('numeros_whatsapp', {
     },
     user_register: {
         type: DataTypes.INTEGER
+    },
+    tipo_publicidad: {
+        type: DataTypes.INTEGER
+    },
+    publicidad: {
+        type: DataTypes.INTEGER
     }
 }, {
     freezeTableName: true,
