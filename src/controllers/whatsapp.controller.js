@@ -51,7 +51,7 @@ export const addWhatsapp = async(req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad } = req.body;
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
@@ -93,7 +93,11 @@ export const addContact = async (req, res) => {
             asistente: asistente,
             plataforma_id: plataforma_contacto,
             tipo_contacto: tipo_contacto,
-            user_register: id
+            user_register: id,
+            tipo_publicidad: tipoPublicidad,
+            publicidad: publicidad,
+            numberWhatsapp: numerosWht,
+            tipoWhatsapp: tipoW
         });
 
         const newPotencial = await PotencialCliente.create({

@@ -2139,6 +2139,22 @@ btnAgregar.addEventListener('click', (e) => {
         return false;
     }
 
+    let numerosWht = 0;
+    let tipoW = 0;
+
+    if(plataforma_contacto.value == 1) {
+        numerosWht = document.getElementById('numeros_whatsapp').value;
+        tipoW = document.getElementById('publicidad_facebook').value;
+    }
+
+    let tipoPublicidad = 0;
+    let publicidad = 0;
+
+    if(plataforma_contacto.value == 4) {
+        tipoPublicidad = document.getElementById('tipo_publicidad').value;
+        publicidad = document.getElementById('publicidad_facebook').value;
+    }
+
     const numeroChat = codigopais.value+""+numero;
 
     let clickAsignar = 1;
@@ -2185,7 +2201,11 @@ btnAgregar.addEventListener('click', (e) => {
             clickAsignar: clickAsignar,
             asignado: asignado,
             idPlantilla: selectedPlantilla.value,
-            variables: inputVariables
+            variables: inputVariables,
+            numerosWht: numerosWht,
+            tipoW: tipoW,
+            tipoPublicidad: tipoPublicidad,
+            publicidad: publicidad
         }),
         headers: {
             'Content-Type': 'application/json',
@@ -3446,7 +3466,7 @@ function viewPlataformaPublicidad() {
     <div class="col-md-6">
         <div class="mb-3">
             <label for="tipo_contacto" class="col-form-label">Tipo Publicidad:</label>
-            <select name="tipo_publicidad" id="tipo_publicidad" class="form-select" onchange="elegirTipoPublicidad(event)">
+            <select name="tipo_publicidad" id="tipo_publicidad" class="form-select" onchange="elegirTipoPublicidad(event)" required="">
                 <option value="">Seleccione...</option>
                 <option value="1">Publicidad Paga Facebook</option>
                 <option value="2">Publicidad Orgánica Facebook</option>
@@ -3485,7 +3505,7 @@ function elegirTipoPublicidad(e) {
                 let html = `
                 <div class="mb-3">
                     <label for="tipo_contacto" class="col-form-label">Publicidad Facebook:</label>
-                        <select name="publicidad_facebook" id="publicidad_facebook" class="form-select">
+                        <select name="publicidad_facebook" id="publicidad_facebook" class="form-select" required="">
                         ${options}
                     </select>
                 </div>
@@ -3521,7 +3541,7 @@ function viewPlataformaDirectoWhatsapp() {
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="tipo_contacto" class="col-form-label">Numeros de Whatsapp:</label>
-                <select name="numeros_whatsapp" id="numeros_whatsapp" class="form-select" onchange="elegirNumero(event)">
+                <select name="numeros_whatsapp" id="numeros_whatsapp" class="form-select" onchange="elegirNumero(event)" required="">
                     <option value="">Seleccione...</option>
                     ${options}
                 </select>
@@ -3542,7 +3562,7 @@ function elegirNumero(e) {
     let html = `
         <div class="mb-3">
             <label for="tipo_contacto" class="col-form-label">Tipo:</label>
-            <select name="publicidad_facebook" id="publicidad_facebook" class="form-select">
+            <select name="publicidad_facebook" id="publicidad_facebook" class="form-select" required="">
                 <option value="">Seleccione</option>
                 <option value="1">Recomendados</option>
                 <option value="2">Recompra</option>
