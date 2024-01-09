@@ -4,8 +4,12 @@ const addbtn = document.getElementById('addbtn');
 const formWhatsapp = document.getElementById('formWhatsapp');
 const renderWhatsapp = document.getElementById('renderWhatsapp');
 
+const idnumber = document.getElementById('idnumber');
+
 addbtn.addEventListener('click', () => {
     $("#modalAddWhatsapp").modal("show");
+    formWhatsapp.reset();
+    idnumber.value = 0;
 });
 
 formWhatsapp.addEventListener('submit', (e) => {
@@ -77,8 +81,8 @@ function renderAll() {
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info">Editar</button>
-                            <button type="button" class="btn btn-danger">Eliminar</button>
+                            <button type="button" class="btn btn-info" onclick="editNumber(${what.id})">Editar</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteNumber(${what.id})">Eliminar</button>
                         </td>
                     </tr>
                     `;
@@ -124,5 +128,23 @@ function disabledWhatsapp(id, e) {
         } else {
             alert(data.response);
         }
+    })
+}
+
+function editNumber(id) {
+    $("#modalAddWhatsapp").modal("show");
+
+    fetch('/getWhatsappVenta/'+id)
+    .then(res => res.json())
+    .then(data => {
+        
+        const numero_whatsapp = document.getElementById('numero_whatsapp');
+        const nombre_whatsapp = document.getElementById('nombre_whatsapp');
+        const descripcion_whatsapp = document.getElementById('descripcion_whatsapp');
+
+        numero_whatsapp.value = data.response.numero;
+        nombre_whatsapp.value = data.response.nombre;
+        descripcion_whatsapp.value = data.response.description; 
+        idnumber.value = id;
     })
 }

@@ -67,3 +67,18 @@ export const updateStatusWhatsapp = async(req, res) => {
         return res.status(400).json({ message: 'error', response: error.message });
     }
 }
+
+export const getWhatsappVenta = async(req, res) => {
+    try {
+        const id = req.params.id;
+        const getWhatsapp = await WahtasappVentas.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        return res.json({ message: 'ok', response: getWhatsapp });
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}

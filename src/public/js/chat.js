@@ -2956,27 +2956,43 @@ function viewFilterContacts(data) {
             register = contact.arrayExtra.user_register;
         }
 
+        const fechaHora = new Date(contact.createdAt);
+        const fecha = fechaHora.toLocaleDateString('es-ES'); // Cambia 'es-ES' al código local que prefieras
+
+        // Formatear la hora en español
+        const hora = fechaHora.toLocaleTimeString('es-ES');
+
         //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente}, '${contact.asistente}')
 
         tbody += `
         <tr>
             <td> <a href="javascript:void(0);" onclick="chatDetail('${contact.from}', '${contact.nameContact}','${contact.arrayExtra.nameEtiqueta}',${contact.arrayExtra.potencial_id}, ${contact.arrayExtra.etiqueta_id}, ${contact.arrayExtra.rol}, ${contact.asistente}, '${contact.arrayExtra.asistente}')">${contact.nameContact}</a> </td>
             <td>${contact.from}</td>
-            <td>${contact.createdAt}</td>
+            <td>${fecha}</td>
+            <td>${hora}</td>
             <td>${register}</td>
+            <td>${contact.arrayExtra.asistente}</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         `;
     });
 
     let htmlTable = `
     <div class="table-responsive table-nowrap mt-3" style="height: 370px; overflow-y: scroll">
-        <table class="table table-sm table-centered mb-0 fs-13">
+        <table class="table table-sm table-centered mb-0 fs-13" id="tablaFiltro">
             <thead class="table-light">
                 <tr>
                     <th>Contacto</th>
                     <th style="width: 30%;">Whatsapp</th>
                     <th style="width: 30%;">Fecha</th>
+                    <th style="width: 30%;">Hora</th>
                     <th>Registrado</th>
+                    <th>Asistente</th>
+                    <th>Carrera</th>
+                    <th>Origen</th>
+                    <th>Tipo Origen</th>
                 </tr>
             </thead>
             <tbody>
@@ -2987,6 +3003,10 @@ function viewFilterContacts(data) {
     `;
 
     content_filtro.innerHTML = htmlTable;
+
+    $('#tablaFiltro').DataTable({
+        buttons: ['copy', 'print']
+    });
 }
 
 //reenviar mensajes
