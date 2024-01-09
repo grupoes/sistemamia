@@ -1095,8 +1095,6 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
     try {
-
-        throw new Error('Algo salió mal');
         
         const existeChat = await Chat.count({
             where: {
