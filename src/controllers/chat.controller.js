@@ -1095,6 +1095,8 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
     try {
+
+        throw new Error('Algo salió mal');
         
         const existeChat = await Chat.count({
             where: {
@@ -1308,6 +1310,7 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
         }
 
     } catch (error) {
+        fs.appendFileSync('errores.txt', new Date().toISOString() + ': ' + error.stack + '\n');
         return res.json({message: error.message});
     }
 }
@@ -1770,6 +1773,7 @@ export const envio_formulario_panel = async(req, res) => {
 
 
     } catch (error) {
+        fs.appendFileSync('erroresPanel.txt', new Date().toISOString() + ': ' + error.stack + '\n');
         return res.json({message: error.message});
     }
 }
