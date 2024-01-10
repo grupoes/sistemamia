@@ -79,7 +79,7 @@ function renderAllView(data) {
                 </td>
                 <td>
                     <button type="button" class="btn btn-info">Editar</button>
-                    <button type="button" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-danger" onclick="deletePublicidad(${publi.id})">Eliminar</button>
                 </td>
             </tr>
         `;
@@ -126,4 +126,42 @@ function desabledPublicidad(id, e) {
             renderAll();
         }
     })
+}
+
+function deletePublicidad(id) {
+    Swal.fire({
+        title: "¿Está seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/delete-publicidad/'+id)
+            .then(res => res.json())
+            .then(data => {
+                if (data.message === 'ok') {
+                    renderAll();
+
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "ha sido eliminado correctamente",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "danger",
+                        title: data.response,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+        }
+    });
 }
