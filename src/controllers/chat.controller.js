@@ -1240,6 +1240,7 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 }
 
             } catch (error) {
+                fs.appendFileSync('errores.txt', new Date().toISOString() + ': ' + error.stack + '\n');
                 return res.json({message: error.message});
             }
 
@@ -1306,6 +1307,7 @@ export const enviar_mensaje_icono_whatsapp = async (req, res) => {
                 }
 
             } catch (error) {
+                fs.appendFileSync('errores.txt', new Date().toISOString() + ': ' + error.stack + '\n');
                 return res.json({message: error.message});
             }
 
