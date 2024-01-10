@@ -24,6 +24,7 @@ import usuarios from './routes/usuario.routes.js';
 import modulos from "./routes/modulo.routes.js";
 import publicidad from "./routes/publicidad.routes.js";
 import whatsappVentas from './routes/whatsappVentas.routes.js';
+import etiqueta from './routes/etiqueta.routes.js';
 
 const app = express();
 
@@ -69,5 +70,6 @@ app.use(usuarios);
 app.use(modulos);
 app.use(publicidad);
 app.use(whatsappVentas);
+app.use(etiqueta);
 
 export default app;
