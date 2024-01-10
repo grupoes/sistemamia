@@ -140,7 +140,7 @@ export const disabledPublicidad = async (req, res) => {
 export const deletePublicidad = async(req, res) => {
     try {
         const id = req.params.id;
-        
+
         const eliminar = await Publicidad.destroy({
             where: {
                 id: id
@@ -148,6 +148,22 @@ export const deletePublicidad = async(req, res) => {
         });
 
         return res.json({ message: 'ok', response: eliminar });
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
+export const getPublicidadById = async(req, res) => {
+    try {
+        const id = req.params.id;
+
+        const getById = await Publicidad.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        return res.json({ message: 'ok', response: getById });
     } catch (error) {
         return res.status(400).json({ message: 'error', response: error.message });
     }
