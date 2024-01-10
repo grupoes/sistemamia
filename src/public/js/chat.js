@@ -3005,7 +3005,11 @@ function viewFilterContacts(data) {
     content_filtro.innerHTML = htmlTable;
 
     $('#tablaFiltro').DataTable({
-        buttons: ['copy', 'print']
+        "ordering": false,
+        dom: 'Bfrtip',
+        buttons: [
+            'excel'
+        ]
     });
 }
 
