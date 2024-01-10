@@ -750,7 +750,7 @@ export const FiltroContact = async (req, res) => {
                     }
                 });
 
-                tipo_origen = nameWhatsapp.numero + " "+nameWhatsapp.nombre;
+                tipo_origen = "";
 
                 if (contacto.tipoWhatsapp == 1) {
                     origen = "Recomendados";
