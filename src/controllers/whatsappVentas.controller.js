@@ -33,21 +33,38 @@ export const allWhatsapp = async(req, res) => {
 }
 
 export const saveNumeroWhatsappVentas = async(req, res) => {
-    const { numero_whatsapp, nombre_whatsapp, descripcion_whatsapp } = req.body;
+    const { idnumber, numero_whatsapp, nombre_whatsapp, descripcion_whatsapp } = req.body;
     try { 
 
         if(numero_whatsapp.length != 9) {
             return res.json({ message: 'error', response: 'El numero debe contener 9 digitos' });
         }
 
-        const saveWhatsapp = await WahtasappVentas.create({
-            numero: numero_whatsapp,
-            nombre: nombre_whatsapp,
-            description: descripcion_whatsapp,
-            status: 1
-        });
+        if(idnumber == 0) {
+            const saveWhatsapp = await WahtasappVentas.create({
+                numero: numero_whatsapp,
+                nombre: nombre_whatsapp,
+                description: descripcion_whatsapp,
+                status: 1
+            });
+    
+            return res.json({ message: 'ok', response: saveWhatsapp, dialog: 'Se agrego correctamente el número' });
+        } else {
+            const update = await WahtasappVentas.update(
+                { 
+                    numero: numero_whatsapp,
+                    nombre: nombre_whatsapp,
+                    description: descripcion_whatsapp
+                }, 
+                {
+                    where: { id: idnumber }
+                }
+            );
+    
+            return res.json({ message: 'ok', response: update, dialog: 'Se edito correctamente el número' });
+        }
 
-        return res.json({ message: 'ok', response: saveWhatsapp });
+        
     } catch (error) {
         return res.status(400).json({ message: 'error', response: error.message });
     }
