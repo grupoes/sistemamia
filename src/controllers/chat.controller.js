@@ -52,6 +52,11 @@ export const chatView = async (req, res) => {
         'assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js',
         'assets/libs/datatables.net-buttons/js/buttons.html5.min.js',
         'assets/libs/datatables.net-buttons/js/buttons.print.min.js',
+        'https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js',
+        'https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js',
         'https://cdn.jsdelivr.net/npm/toastify-js',
         url_chat+'/socket.io/socket.io.js',
         url_chat+'/js/chat.js'+ '?t=' + timestamp,
@@ -60,7 +65,7 @@ export const chatView = async (req, res) => {
 
     const css = [
         'assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css',
-        'assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css',
+        'https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css',
         'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
     ];

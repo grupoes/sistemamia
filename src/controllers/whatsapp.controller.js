@@ -8,6 +8,8 @@ import { Asignacion } from "../models/asignacion.js";
 import { Plantilla } from "../models/plantilla.js";
 import { Chat } from "../models/chat.js";
 import { Emojis } from "../models/emojis.js";
+import { Publicidad } from "../models/publicidad.js";
+import { WahtasappVentas } from "../models/whatsappVentas.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
 
@@ -606,7 +608,10 @@ export const FiltroContact = async (req, res) => {
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
                         ]
-                    }
+                    },
+                    order: [
+                        ['createdAt', 'ASC']
+                    ]
                 });
             } else {
                 contactos = await NumeroWhatsapp.findAll({
@@ -615,7 +620,10 @@ export const FiltroContact = async (req, res) => {
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
                         ]
-                    }
+                    },
+                    order: [
+                        ['createdAt', 'ASC']
+                    ]
                 });
             }
 
@@ -631,7 +639,10 @@ export const FiltroContact = async (req, res) => {
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
                         ]
-                    }
+                    },
+                    order: [
+                        ['createdAt', 'ASC']
+                    ]
                 });
 
             } else {
@@ -642,7 +653,10 @@ export const FiltroContact = async (req, res) => {
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '>=', dateInit),
                             sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), '<=', dateEnd)
                         ]
-                    }
+                    },
+                    order: [
+                        ['createdAt', 'ASC']
+                    ]
                 });
             }
 
@@ -709,13 +723,57 @@ export const FiltroContact = async (req, res) => {
                 usuario_register = tra.nombres+" "+tra.apellidos;
             }
 
+            let origen = "";
+            let tipo_origen = "";
+
+            if(contacto.tipo_publicidad != null || contacto.tipo_publicidad != 0) {
+                if(contacto.tipo_publicidad == "1") {
+                    tipo_origen = "Publicidad Paga Facebook";
+
+                    const publi = await Publicidad.findOne({
+                        where: {
+                            id: contacto.publicidad
+                        }
+                    });
+    
+                    origen = publi.nombre;
+
+                } else {
+                    tipo_origen = "Publicidad Orgánica Facebook";
+                }
+            }
+
+            if(contacto.numberWhatsapp != null || contacto.numberWhatsapp != 0) {
+                const nameWhatsapp = await WahtasappVentas.findOne({
+                    where: {
+                        id: contacto.numberWhatsapp
+                    }
+                });
+
+                tipo_origen = nameWhatsapp.numero + " "+nameWhatsapp.nombre;
+
+                if (contacto.tipoWhatsapp == 1) {
+                    origen = "Recomendados";
+                } else if(contacto.tipoWhatsapp == 2) {
+                    origen = "Recompra";
+                } else if(contacto.tipoWhatsapp == 3) {
+                    origen = "Directo";
+                } else if(contacto.tipoWhatsapp == 4) {
+                    origen = "Publicidad Online";
+                } else {
+                    origen = "Otros";
+                }
+            }
+
             const arrayExtra = {
                 nameEtiqueta: etiqueta.descripcion,
                 potencial_id: idPotencial,
                 etiqueta_id: idEtiqueta,
                 rol: rol,
                 asistente: nombreAsistente,
-                user_register: usuario_register
+                user_register: usuario_register,
+                tipo_origen: tipo_origen,
+                origen: origen
             };
 
             let estadoObject = contacto.get({ plain: true });
