@@ -2122,6 +2122,8 @@ btnAgregar.addEventListener('click', (e) => {
     const type_contact = document.getElementById('tipo_contacto');
     const asignar = document.getElementById('asignar_automaticamente');
 
+    const carreraContacto = document.getElementById('carreraContacto');
+
     const numero = nWhatsapp.value;
 
     if (numero.length != 9) {
@@ -2152,7 +2154,13 @@ btnAgregar.addEventListener('click', (e) => {
 
     if(plataforma_contacto.value == 4) {
         tipoPublicidad = document.getElementById('tipo_publicidad').value;
-        publicidad = document.getElementById('publicidad_facebook').value;
+
+        if(tipoPublicidad == 1) {
+            publicidad = document.getElementById('publicidad_facebook').value;
+        } else {
+            publicidad = "";
+        }
+        
     }
 
     const numeroChat = codigopais.value+""+numero;
@@ -2205,7 +2213,8 @@ btnAgregar.addEventListener('click', (e) => {
             numerosWht: numerosWht,
             tipoW: tipoW,
             tipoPublicidad: tipoPublicidad,
-            publicidad: publicidad
+            publicidad: publicidad,
+            carreraContacto: carreraContacto
         }),
         headers: {
             'Content-Type': 'application/json',
