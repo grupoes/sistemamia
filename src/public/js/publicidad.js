@@ -78,7 +78,7 @@ function renderAllView(data) {
                     </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info">Editar</button>
+                    <button type="button" class="btn btn-info" onclick="editPublicidad(${publi.id})">Editar</button>
                     <button type="button" class="btn btn-danger" onclick="deletePublicidad(${publi.id})">Eliminar</button>
                 </td>
             </tr>
@@ -164,4 +164,22 @@ function deletePublicidad(id) {
             })
         }
     });
+}
+
+function editPublicidad(id) {
+    $("#modalAddPublicidad").modal('show');
+
+    fetch('/getPublicidad/'+id)
+    .then(res => res.json())
+    .then(data => {
+        const numero_publicidad = document.getElementById('numero_publicidad');
+        const nombre_publicidad = document.getElementById('nombre_publicidad');
+        const descripcion_publicidad = document.getElementById('descripcion_publicidad');
+
+        const datos = data.response;
+
+        numero_publicidad.value = datos.codigo;
+        nombre_publicidad.value = datos.nombre;
+        descripcion_publicidad.value = datos.descripcion;
+    })
 }
