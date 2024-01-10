@@ -136,3 +136,19 @@ export const disabledPublicidad = async (req, res) => {
         return res.status(400).json({ message: 'error', response: error.message });
     }
 }
+
+export const deletePublicidad = async(req, res) => {
+    try {
+        const id = req.params.id;
+        
+        const eliminar = await Publicidad.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        return res.json({ message: 'ok', response: eliminar });
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
