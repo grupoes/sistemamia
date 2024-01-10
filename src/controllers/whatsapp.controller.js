@@ -726,7 +726,7 @@ export const FiltroContact = async (req, res) => {
             let origen = "";
             let tipo_origen = "";
 
-            if(contacto.tipo_publicidad != null || contacto.tipo_publicidad != 0) {
+            if(contacto.tipo_publicidad != null && contacto.tipo_publicidad != 0) {
                 if(contacto.tipo_publicidad == "1") {
                     tipo_origen = "Publicidad Paga Facebook";
 
@@ -743,14 +743,14 @@ export const FiltroContact = async (req, res) => {
                 }
             }
 
-            if(contacto.numberWhatsapp != null || contacto.numberWhatsapp != 0) {
+            if(contacto.numberWhatsapp != null && contacto.numberWhatsapp != 0) {
                 const nameWhatsapp = await WahtasappVentas.findOne({
                     where: {
                         id: contacto.numberWhatsapp
                     }
                 });
 
-                tipo_origen = "";
+                tipo_origen = nameWhatsapp.numero + " - " + nameWhatsapp.nombre;
 
                 if (contacto.tipoWhatsapp == 1) {
                     origen = "Recomendados";

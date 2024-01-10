@@ -2973,8 +2973,8 @@ function viewFilterContacts(data) {
             <td>${register}</td>
             <td>${contact.arrayExtra.asistente}</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>${contact.arrayExtra.origen}</td>
+            <td>${contact.arrayExtra.tipo_origen}</td>
         </tr>
         `;
     });
