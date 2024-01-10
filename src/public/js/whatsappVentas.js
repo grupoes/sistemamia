@@ -148,3 +148,25 @@ function editNumber(id) {
         idnumber.value = id;
     })
 }
+
+function deleteNumber(id) {
+    Swal.fire({
+        title: "¿Está seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "ha sido eliminado correctamente",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+}
