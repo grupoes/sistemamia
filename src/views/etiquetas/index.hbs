@@ -1,0 +1,154 @@
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Etiqueta y Embudo</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
+                    <li class="breadcrumb-item active">Etiqueta y Embudo</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<!-- nav -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="header-title mb-3 mt-0">LISTAS</h5>
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                            <span class="d-block d-sm-none"><i class="uil-home-alt"></i></span>
+                            <span class="d-none d-sm-block">Etiquetas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                            <span class="d-block d-sm-none"><i class="uil-user"></i></span>
+                            <span class="d-none d-sm-block">Embudo</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content p-3 text-muted">
+                    <div class="tab-pane show active" id="home">
+                        <button type="button" class="btn btn-primary mb-3" id="addEtiqueta">Agregar Etiqueta</button>
+                        <div class="table-responsive">
+                            <table class="table dt-responsive nowrap w-100" id="tableEtiqueta">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Etiqueta</th>
+                                        <th>Embudo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="renderEtiquetas">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        <button type="button" class="btn btn-primary mb-3" id="addEmbudo">Agregar Embudo</button>
+                        <div class="table-responsive">
+                            <table class="table" id="tableEmbudo">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Embudo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="allEmbudo">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<!-- sample modal content -->
+<div id="modalEtiqueta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEtiqueta">Agregar Etiqueta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEtiqueta">
+                <input type="hidden" name="idetiqueta" id="idetiqueta" value="0">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre_etiqueta">Nombre</label>
+                                <input type="text" class="form-control" id="nombre_etiqueta" name="nombre_etiqueta" placeholder="Ingrese el nombre de la etiqueta" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="selectEmbudo">Embudo</label>
+                                <select name="selectEmbudo" id="selectEmbudo" class="form-select" required>
+
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="guardarEtiqueta">Guardar</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- sample modal content -->
+<div id="modalEmbudo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEmbudo">Agregar Embudo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEmbudo">
+                <input type="hidden" name="idembudo" id="idembudo" value="0">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre_embudo">Nombre</label>
+                                <input type="text" class="form-control" id="nombre_embudo" name="nombre_embudo" placeholder="Ingrese el nombre del embudo" required="">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="guardarEmbudo">Guardar</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
