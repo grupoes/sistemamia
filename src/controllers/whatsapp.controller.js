@@ -53,7 +53,7 @@ export const addWhatsapp = async(req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad,carrera } = req.body;
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
@@ -110,7 +110,8 @@ export const addContact = async (req, res) => {
             prefijo_celular: 51,
             numero_celular: 51,
             prefijo_whatsapp: 51,
-            numero_whatsapp: numero
+            numero_whatsapp: numero,
+            carrera: carrera
         });
 
         const potEtiqueta = await EtiquetaCliente.create({
