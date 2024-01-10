@@ -35,7 +35,14 @@ formWhatsapp.addEventListener('submit', (e) => {
         if(data.message === 'ok') {
             $("#modalAddWhatsapp").modal("hide");
             renderAll();
-            formWhatsapp.reset();
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: data.dialog,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            
         } else {
             alert(data.response)
         }
