@@ -10,6 +10,7 @@ import { Chat } from "../models/chat.js";
 import { Emojis } from "../models/emojis.js";
 import { Publicidad } from "../models/publicidad.js";
 import { WahtasappVentas } from "../models/whatsappVentas.js";
+import { SeguimientoContacto } from "../models/seguimientoContacto.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
 
@@ -955,6 +956,50 @@ export const emojisAll = async(req, res) => {
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
+    }
+}
+
+export const addSeguimiento = async(req, res) => {
+    const { numeroContacto, descripcion_seguimiento } = req.body;
+    try {
+
+        let fecha = "1970-01-01 19:00:00";
+        let notificado = "";
+
+        if(req.body.notificarSeguimiento) {
+            fecha = req.body.notificar_fecha;
+            notificado = "SI";
+        }
+
+        const add = await SeguimientoContacto.create({
+            description: descripcion_seguimiento,
+            status: "activo",
+            fecha: fecha,
+            notificado: notificado,
+            numero: numeroContacto
+        });
+
+        return res.json({ message: 'ok', response: add });
+
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
+export const allSeguimiento = async(req, res) => {
+    try {
+        const numero = req.params.id;
+
+        const all = await SeguimientoContacto.findAll({
+            where: {
+                numero: numero
+            }
+        });
+
+        return res.json({ message: 'ok', response: all });
+
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
     }
 }
 

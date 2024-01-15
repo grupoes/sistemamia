@@ -337,6 +337,7 @@ function viewItemContactList(data) {
         }
 
         let itemDelete = "";
+        let seguimiento = "";
 
 
         if(data.rol == 1 || data.rol == 3) {
@@ -347,6 +348,11 @@ function viewItemContactList(data) {
                 <i class="uil uil-trash me-2"></i>Eliminar
             </a>
             `;
+
+            seguimiento += `
+            <a href="javascript:void(0);" class="dropdown-item">
+                <i class="uil uil-exit me-2"></i>Seguimiento
+            </a>`;
         }
 
         let nameContact = data.nameContacto;
@@ -376,6 +382,11 @@ function viewItemContactList(data) {
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-exit me-2"></i>Fijar Chat
                     </a>
+
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-exit me-2"></i>Seguimiento
+                    </a>
+
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
                     </a>
@@ -482,6 +493,10 @@ function viewContact(data) {
         }
 
         let itemDelete = "";
+        let seguimiento = "";
+
+        let nameContact = contact.contact;
+        nameContact = nameContact.replace("'", "");
 
 
         if(rol == 1 || rol == 3) {
@@ -492,10 +507,12 @@ function viewContact(data) {
                 <i class="uil uil-trash me-2"></i>Eliminar
             </a>
             `;
-        }
 
-        let nameContact = contact.contact;
-        nameContact = nameContact.replace("'", "");
+            seguimiento += `
+            <a href="javascript:void(0);" class="dropdown-item" onclick="modalSeguimiento('${contact.numero}', '${nameContact}')">
+                <i class="uil uil-exit me-2"></i>Seguimiento
+            </a>`;
+        }
 
         html += `
         <div class="d-flex border-top pt-2" id="item-contacto-${contact.numero}">
@@ -521,6 +538,9 @@ function viewContact(data) {
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-exit me-2"></i>Fijar Chat
                     </a>
+
+                    ${seguimiento}
+
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
                     </a>
@@ -572,7 +592,8 @@ chatPrincipalView();
 function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado, asistente) {
 
     let asignar = "";
-    let asist = ""
+    let asist = "";
+    let seguimiento = "";
 
     if(document.getElementById('cantidad-message-'+numero)) {
         socket.emit( 'updateQuantyMessage', { numero: numero } );
@@ -582,6 +603,9 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
         asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${potencial}, ${asignado})"><i
         class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
         asist = `<span class="text-primary">${asistente}</span>`;
+
+        seguimiento = `<a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${numero}', '${name}')"><i
+        class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>`;
     }
 
     let html = `
@@ -624,6 +648,8 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                         <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         ${asignar}
+
+                        ${seguimiento}
                         
                     </div>
                 </li>
@@ -3610,4 +3636,106 @@ function elegirNumero(e) {
         `;
 
     publicidadFacebook.innerHTML = html;
+}
+
+const formSeguimiento = document.getElementById('formSeguimiento');
+const viewfechaNotificar = document.getElementById('viewfechaNotificar');
+
+function modalSeguimiento(numero, contacto) {
+    $("#modalSeguimiento").modal('show');
+
+    const titleSeguimiento = document.getElementById('titleSeguimiento');
+    titleSeguimiento.textContent = 'Agregar Seguimiento | ' + numero + ' - ' + contacto;
+    
+    const wcontacto = document.getElementById('wcontacto');
+    wcontacto.value = numero;
+
+    formSeguimiento.reset();
+    viewfechaNotificar.innerHTML = "";
+
+    vistaDescription(numero);
+}
+
+formSeguimiento.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formSeguimiento);
+
+    const wcontacto = document.getElementById('wcontacto');
+
+    const formDataObj = {};
+
+    formData.forEach((value, key) => {
+        formDataObj[key] = value;
+    });
+
+    fetch('/add-seguimiento', {
+        method: 'POST',
+        body: JSON.stringify(formDataObj),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            formSeguimiento.reset();
+            viewfechaNotificar.innerHTML = "";
+            vistaDescription(wcontacto.value);
+            alert('Se agrego correctamente el seguimiento');
+        } else {
+            alert('Ocurrio un error');
+        }
+    })
+})
+
+function fechaNotificar(e) {
+
+    let html = "";
+
+    if (e.target.checked) {
+        html += `
+        <div class="mb-3">
+            <label for="notificar_fecha" class="col-form-label">Fecha:</label>
+            <input type="date" class="form-control" id="notificar_fecha" name="notificar_fecha">
+        </div>
+        `;
+    }
+
+    viewfechaNotificar.innerHTML = html;
+}
+
+function vistaDescription(numero) {
+    fetch('/all-seguimientos/'+numero)
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            const bodySeguimientos = document.getElementById('bodySeguimientos');
+
+            let html = "";
+
+            const datos = data.response;
+
+            datos.forEach((seg, index) => {
+
+                let fecha = "";
+
+                if(seg.notificado === 'SI') {
+                    let fechaHora = new Date(seg.fecha);
+                    fecha = fechaHora.toLocaleDateString('es-ES');
+                }
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${seg.description}</td>
+                        <td>${seg.notificado}</td>
+                        <td>${fecha}</td>
+                    </tr>
+                `;
+            });
+
+            bodySeguimientos.innerHTML = html;
+        }
+    })
 }

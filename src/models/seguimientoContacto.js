@@ -1,19 +1,25 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-export const Actions = sequelize.define('', {
+export const SeguimientoContacto = sequelize.define('seguimientoContacto', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
-        type: DataTypes.STRING
-    },
     description: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     status: {
+        type: DataTypes.STRING
+    },
+    fecha: {
+        type: DataTypes.DATE
+    },
+    notificado: {
+        type: DataTypes.STRING
+    },
+    numero: {
         type: DataTypes.STRING
     }
 }, {
