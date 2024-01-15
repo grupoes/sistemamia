@@ -2158,7 +2158,7 @@ btnAgregar.addEventListener('click', (e) => {
         if(tipoPublicidad == 1) {
             publicidad = document.getElementById('publicidad_facebook').value;
         } else {
-            publicidad = "";
+            publicidad = 0;
         }
         
     }
