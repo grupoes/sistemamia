@@ -220,13 +220,14 @@
     <div class="col-xl-4 p-0" style="display: none;" id="contentFiltros">
         <div class="card" style="height: 620px">
             <div class="card-body">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_chat()"></button>
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
+                    onclick="cerrar_ventana_chat()"></button>
 
                 <div id="contentFilterContact">
-                    
+
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -445,48 +446,15 @@
                 </div>
 
                 <div class="row" id="view_plataforma">
-                    {{!-- <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="tipo_contacto" class="col-form-label">Tipo Publicidad:</label>
-                            <select name="tipo_contacto" id="tipo_contacto" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="1">Publicidad para Facebook</option>
-                                <option value="2">Publicidad Orgánica Facebook</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="tipo_contacto" class="col-form-label">Publicidad Facebook:</label>
-                            <select name="tipo_contacto" id="tipo_contacto" class="form-select">
-                                <option value="">Seleccione...</option>
-                            </select>
-                        </div>
-                    </div> --}}
+
                 </div>
 
                 <div class="row" id="contentContactNew">
-                    <!--<div class="col-md-12">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="asignar_automaticamente" checked="">
-                            <label class="form-check-label" for="asignar_automaticamente">Asignar automáticamente</label>
 
-                        </div>
-                    </div>-->
                 </div>
 
                 <div class="row" id="check_automatico">
-                    <!--<div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="asignarAgente" class="col-form-label">Agente:</label>
-                            <select name="asignarAgente" id="asignarAgente" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="1">Potencial</option>
-                                <option value="2">Cliente</option>
-                                <option value="3">Proveedor</option>
-                            </select>
-                        </div>
-                    </div>-->
+
 
                 </div>
 
@@ -638,6 +606,90 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id="reenviar_mensaje_contacto">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Seguimiento-->
+<div class="modal fade" id="modalSeguimiento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleSeguimiento"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-pills navtab-bg nav-justified p-1">
+                    <li class="nav-item">
+                        <a href="#home1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                            <span class="d-block d-sm-none"><i class="uil-home-alt"></i></span>
+                            <span class="d-none d-sm-block">Agregar Seguimiento</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#profile1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                            <span class="d-block d-sm-none"><i class="uil-user"></i></span>
+                            <span class="d-none d-sm-block">Lista de los seguimientos</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content text-muted">
+                    <div class="tab-pane show active" id="home1">
+                        <form id="formSeguimiento">
+                            <input type="hidden" name="numeroContacto" id="wcontacto" value="">
+                            <div class="row" >
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="descripcion_seguimiento" class="col-form-label">Descripción:</label>
+                                        <textarea class="form-control" name="descripcion_seguimiento"
+                                            id="descripcion_seguimiento" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-switch mb-2">
+                                        <input type="checkbox" class="form-check-input" id="notificarSeguimiento" name="notificarSeguimiento" onchange="fechaNotificar(event)">
+                                        <label class="form-check-label" for="notificarSeguimiento">Notificar</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" id="viewfechaNotificar">
+                                    
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary">Agregar</button>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="profile1">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                        <th>Notificación</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodySeguimientos">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
