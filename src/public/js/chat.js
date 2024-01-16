@@ -2867,6 +2867,7 @@ const contentChatWhatsapp = document.getElementById('contentChatWhatsapp');
 const contentFiltros = document.getElementById('contentFiltros');
 
 const contentFilterContact = document.getElementById('contentFilterContact');
+const reporteSeguimiento = document.getElementById('reporteSeguimiento');
 
 filterContacto.addEventListener('click', (e) => {
     e.preventDefault();
@@ -2886,6 +2887,26 @@ filterContacto.addEventListener('click', (e) => {
     }, 50);
 
     viewFilterPlataformaContacto();
+});
+
+reporteSeguimiento.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    contentChatWhatsapp.classList.remove("col-xl-9");
+    contentChatWhatsapp.classList.add('col-xl-5');
+
+    contentFiltros.style.display = "block";
+
+    // Agregar transición
+    contentFiltros.style.transition = "opacity 0.5s ease";
+    contentFiltros.style.opacity = 0;
+
+    // Se muestra suavemente
+    setTimeout(() => {
+        contentFiltros.style.opacity = 1; 
+    }, 50);
+
+    viewSeguimientos();
 });
 
 function viewFilterPlataformaContacto() {
@@ -2929,6 +2950,92 @@ function viewFilterPlataformaContacto() {
     const platform = document.getElementById('platform');
 
     renderOptionPlataforma(platform, 0);
+}
+
+function viewSeguimientos() {
+
+    fetch('/lista-seguimientos')
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.message !== 'ok') {
+            return alert('Ocurrio un error');
+        }
+
+        const datos = data.response;
+
+        let html = "";
+
+        datos.forEach(contacto => {
+
+            let carrera = contacto.arrayExtra.carrera;
+
+            if(contacto.arrayExtra.carrera === null) {
+                carrera = "";
+            }
+
+            let segui = contacto.arrayExtra.seguimientos;
+
+            html += `
+            <tr>
+                <th>${contacto.from}</th>
+                <th>${contacto.nameContact}</th>
+                <th>${carrera}</th>
+                <th></th>
+                <th></th>
+            </tr>
+            `;
+
+            segui.forEach(seg => {
+
+                let fechaHora = new Date(seg.createdAt);
+                fecha = fechaHora.toLocaleDateString('es-ES');
+
+                let hora = fechaHora.toLocaleTimeString('es-ES');
+
+                html += `
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>${carrera}</td>
+                    <td>${fecha} ${hora}</td>
+                    <td>${seg.description}</td>
+                </tr>
+                `;
+            });
+        });
+
+        let view = `
+        <h4 class="mb-3">Seguimiento Contactos</h4>
+        <div class="row" id="content_filtro">
+            <div class="table-responsive" >
+                <table class="table" id="tablaSeguimiento">
+                    <thead>
+                        <tr>
+                            <th>Numero</th>
+                            <th>Contacto</th>
+                            <th>Carrera</th>
+                            <th>Fecha</th>
+                            <th>Seguimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${html}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        `;
+        contentFilterContact.innerHTML = view;
+
+        $("#tablaSeguimiento").DataTable({
+            "ordering": false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
+    })
 }
 
 function consultarFiltroPlataforma(e) {
@@ -3718,19 +3825,20 @@ function vistaDescription(numero) {
 
             datos.forEach((seg, index) => {
 
-                let fecha = "";
+                let fechaHora = new Date(seg.createdAt);
+                fecha = fechaHora.toLocaleDateString('es-ES');
 
-                if(seg.notificado === 'SI') {
-                    let fechaHora = new Date(seg.fecha);
-                    fecha = fechaHora.toLocaleDateString('es-ES');
-                }
+                let hora = fechaHora.toLocaleTimeString('es-ES');
+
 
                 html += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${seg.description}</td>
-                        <td>${seg.notificado}</td>
-                        <td>${fecha}</td>
+                        <td>${fecha} ${hora}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteSeguimiento(${seg.id}, '${numero}')"><i class="bi bi-trash"></i></button>
+                        </td>
                     </tr>
                 `;
             });
@@ -3738,4 +3846,36 @@ function vistaDescription(numero) {
             bodySeguimientos.innerHTML = html;
         }
     })
+}
+
+function deleteSeguimiento(id, numero) {
+    Swal.fire({
+        title: "¿Está seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, bórralo!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/delete-seguimiento/'+id)
+            .then(res => res.json())
+            .then(data => {
+                if(data.message === 'ok') {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Eliminado correctamente",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    vistaDescription(numero);
+                } else {
+                    alert(data.response);
+                }
+            })
+        }
+      });
 }
