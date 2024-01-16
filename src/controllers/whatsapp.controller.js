@@ -1003,6 +1003,60 @@ export const allSeguimiento = async(req, res) => {
     }
 }
 
+export const listaSeguimientos = async(req, res) => {
+    try {
+        const contactos = await NumeroWhatsapp.findAll();
+
+        for (const contacto of contactos) {
+            let numero = contacto.from;
+
+            let potencial = await PotencialCliente.findOne({
+                where: {
+                    numero_whatsapp: numero
+                }
+            });
+
+            let carrera = potencial.carrera;
+
+            let seguimientos = await SeguimientoContacto.findAll({
+                where: {
+                    numero: numero
+                }
+            });
+
+            const arrayExtra = {
+                carrera: carrera,
+                seguimientos: seguimientos
+            };
+
+            let estadoObject = contacto.get({ plain: true });
+
+            estadoObject.arrayExtra = arrayExtra;
+        }
+
+        return res.json({ message: 'ok', response: contactos });
+
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
+
+export const deleteSeguimiento = async(req, res) => {
+    try {
+        const id = req.params.id;
+
+        const seg = await SeguimientoContacto.findByPk(id);
+
+        const del = await seg.destroy();
+
+        return res.json({ message: 'ok', response: del });
+
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
 //chatDetail('${contact.numero}','${nameContact}', '${contact.etiqueta}', ${contact.potencial_id}, ${contact.etiqueta_id}, ${rol}, ${contact.idAsistente})
 
 /*let array = {
