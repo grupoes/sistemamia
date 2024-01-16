@@ -2993,6 +2993,7 @@ function viewSeguimientos() {
                 <tr>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td>${carrera}</td>
                     <td>${fecha} ${hora}</td>
                     <td>${seg.description}</td>
