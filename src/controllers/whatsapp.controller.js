@@ -1024,9 +1024,24 @@ export const listaSeguimientos = async(req, res) => {
                 }
             });
 
+            let trabajador = "";
+
+            if(contacto.asistente === null) {
+                trabajador = "";
+            } else {
+                let asistente = await Trabajadores.findOne({
+                    where: {
+                        id: contacto.asistente
+                    }
+                });
+
+                trabajador = asistente.nombres + " " + asistente.apellidos;
+            }
+
             const arrayExtra = {
                 carrera: carrera,
-                seguimientos: seguimientos
+                seguimientos: seguimientos,
+                asistente: trabajador
             };
 
             let estadoObject = contacto.get({ plain: true });
