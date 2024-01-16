@@ -507,11 +507,6 @@ function viewContact(data) {
                 <i class="uil uil-trash me-2"></i>Eliminar
             </a>
             `;
-
-            seguimiento += `
-            <a href="javascript:void(0);" class="dropdown-item" onclick="modalSeguimiento('${contact.numero}', '${nameContact}')">
-                <i class="uil uil-exit me-2"></i>Seguimiento
-            </a>`;
         }
 
         html += `
@@ -539,7 +534,9 @@ function viewContact(data) {
                         <i class="uil uil-exit me-2"></i>Fijar Chat
                     </a>
 
-                    ${seguimiento}
+                    <a href="javascript:void(0);" class="dropdown-item" onclick="modalSeguimiento('${contact.numero}', '${nameContact}')">
+                        <i class="uil uil-exit me-2"></i>Seguimiento
+                    </a>
 
                     <a href="javascript:void(0);" class="dropdown-item">
                         <i class="uil uil-comment-alt-edit me-2"></i>Editar Etiqueta
@@ -604,8 +601,6 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
         class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
         asist = `<span class="text-primary">${asistente}</span>`;
 
-        seguimiento = `<a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${numero}', '${name}')"><i
-        class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>`;
     }
 
     let html = `
@@ -649,7 +644,7 @@ function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignad
                                 class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
                         ${asignar}
 
-                        ${seguimiento}
+                        <a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${numero}', '${name}')"><i class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>
                         
                     </div>
                 </li>
@@ -2980,6 +2975,7 @@ function viewSeguimientos() {
             <tr>
                 <th>${contacto.from}</th>
                 <th>${contacto.nameContact}</th>
+                <th>${contacto.arrayExtra.asistente}</th>
                 <th>${carrera}</th>
                 <th></th>
                 <th></th>
@@ -3014,6 +3010,7 @@ function viewSeguimientos() {
                         <tr>
                             <th>Numero</th>
                             <th>Contacto</th>
+                            <th>Asistente</th>
                             <th>Carrera</th>
                             <th>Fecha</th>
                             <th>Seguimiento</th>
@@ -3819,6 +3816,8 @@ function vistaDescription(numero) {
         if(data.message === 'ok') {
             const bodySeguimientos = document.getElementById('bodySeguimientos');
 
+            const perfil = document.getElementById('rol_user');
+
             let html = "";
 
             const datos = data.response;
@@ -3830,6 +3829,14 @@ function vistaDescription(numero) {
 
                 let hora = fechaHora.toLocaleTimeString('es-ES');
 
+                let btnDelete = "";
+
+                if (perfil.value != 2 && perfil.value != 6) {
+                    btnDelete += `
+                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteSeguimiento(${seg.id}, '${numero}')"><i class="bi bi-trash"></i></button>
+                    `;
+                }
+
 
                 html += `
                     <tr>
@@ -3837,7 +3844,7 @@ function vistaDescription(numero) {
                         <td>${seg.description}</td>
                         <td>${fecha} ${hora}</td>
                         <td>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteSeguimiento(${seg.id}, '${numero}')"><i class="bi bi-trash"></i></button>
+                            ${btnDelete}
                         </td>
                     </tr>
                 `;
