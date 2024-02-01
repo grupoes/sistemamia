@@ -728,20 +728,22 @@ export const FiltroContact = async (req, res) => {
             let origen = "";
             let tipo_origen = "";
 
-            if(contacto.tipo_publicidad != null && contacto.tipo_publicidad != 0) {
-                if(contacto.tipo_publicidad == "1") {
-                    tipo_origen = "Publicidad Paga Facebook";
-
-                    const publi = await Publicidad.findOne({
-                        where: {
-                            id: contacto.publicidad
-                        }
-                    });
+            if(contacto.plataforma_id == 4) {
+                if(contacto.tipo_publicidad != null && contacto.tipo_publicidad != 0) {
+                    if(contacto.tipo_publicidad == "1") {
+                        tipo_origen = "Publicidad Paga Facebook";
     
-                    origen = publi.nombre;
-
-                } else {
-                    tipo_origen = "Publicidad Orgánica Facebook";
+                        const publi = await Publicidad.findOne({
+                            where: {
+                                id: contacto.publicidad
+                            }
+                        });
+        
+                        origen = publi.nombre;
+    
+                    } else {
+                        tipo_origen = "Publicidad Orgánica Facebook";
+                    }
                 }
             }
 
