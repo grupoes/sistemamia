@@ -667,8 +667,6 @@ export const FiltroContact = async (req, res) => {
 
         let datos = [];
 
-        return res.json(contactos);
-
         for(const contacto of contactos) {
             const potencial = await PotencialCliente.findOne({
                 where: {
