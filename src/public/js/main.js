@@ -82,3 +82,57 @@ salir.addEventListener('click', (e) => {
     window.location='/';
 });
 
+
+setInterval(() => {
+    notificacionesContacto(token_);
+}, 5000);
+
+function notificacionesContacto(token) {
+    fetch('/notificationContacto', {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const lista = document.getElementById('listNotification');
+
+        let html = "";
+
+        const cantidad = document.getElementById('cantidadNoti');
+
+        const quanty = data.length;
+
+        cantidad.textContent = quanty;
+
+        data.forEach(noti => {
+            html += `
+            <a href="javascript:void(0);" class="dropdown-item notify-item border-bottom" title="${noti.descripcion}">
+                <div class="notify-icon bg-primary"><i class="uil uil-user-plus"></i></div>
+                <p class="notify-details">${noti.descripcion}<small class="text-muted">${noti.fecha}</small>
+                </p>
+
+                <p class="notify-details">${noti.contacto}</p>
+            </a>
+            `;
+        });
+
+        lista.innerHTML = html;
+    })
+}
+
+
+const cantidadNoti = document.getElementById('cantidadNoti');
+
+function iniciarParpadeo() {
+  cantidadNoti.classList.add('parpadeo');
+}
+
+function detenerParpadeo() {
+  cantidadNoti.classList.remove('parpadeo');
+}
+
+// Ejemplo: si el valor es mayor a 0, inicia el parpadeo
+if (parseInt(cantidadNoti.innerText) > 0) {
+  iniciarParpadeo();
+}

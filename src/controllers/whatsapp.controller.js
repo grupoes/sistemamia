@@ -11,6 +11,7 @@ import { Emojis } from "../models/emojis.js";
 import { Publicidad } from "../models/publicidad.js";
 import { WahtasappVentas } from "../models/whatsappVentas.js";
 import { SeguimientoContacto } from "../models/seguimientoContacto.js";
+import { Notification } from "../models/notification.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
 
@@ -27,7 +28,7 @@ import axios from 'axios';
 import { Trabajadores } from "../models/trabajadores.js";
 import { Usuario } from "../models/usuario.js";
 
-export const addWhatsapp = async(req, res) => {
+export const addWhatsapp = async (req, res) => {
     const { from, nameContact } = req.body;
     try {
 
@@ -37,8 +38,8 @@ export const addWhatsapp = async(req, res) => {
             }
         });
 
-        if(whatsapp) {
-            return res.json({message: "from ya existe"});
+        if (whatsapp) {
+            return res.json({ message: "from ya existe" });
         }
 
         const newWhatsapp = await NumeroWhatsapp.create({
@@ -54,7 +55,7 @@ export const addWhatsapp = async(req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad,carrera } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera } = req.body;
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
@@ -65,13 +66,13 @@ export const addContact = async (req, res) => {
             }
         });
 
-        if(whatsapp) {
-            return res.json({message: "existe", data: 'El número de whatsapp ya existe'});
+        if (whatsapp) {
+            return res.json({ message: "existe", data: 'El número de whatsapp ya existe' });
         }
 
         let nameW = "";
 
-        if(name === '') {
+        if (name === '') {
             nameW = numero
         } else {
             nameW = name;
@@ -79,8 +80,8 @@ export const addContact = async (req, res) => {
 
         let asistente = "";
 
-        if(rol != 2) {
-            if(clickAsignar == 1) {
+        if (rol != 2) {
+            if (clickAsignar == 1) {
                 const asignar = await asignarAsistenteData();
                 asistente = asignar.id;
             } else {
@@ -126,7 +127,7 @@ export const addContact = async (req, res) => {
             estado: 1,  // o el estado que corresponda
             trabajadoreId: asistente,
             potencialClienteId: newPotencial.id
-            
+
         });
 
         const dataAsistente = await Trabajadores.findOne({
@@ -149,59 +150,59 @@ export const addContact = async (req, res) => {
 
             let tipoMensaje = "";
 
-            if(variables.length == 0) {
+            if (variables.length == 0) {
 
-                if(plantilla.cabecera === 'si') {
-                    if(plantilla.tipoCabecera === 'video') {
+                if (plantilla.cabecera === 'si') {
+                    if (plantilla.tipoCabecera === 'video') {
                         contenJson = {
                             "messaging_product": "whatsapp",
                             "recipient_type": "individual",
                             "to": numero,
                             "type": "template",
                             "template": {
-                              "name": plantilla.nombre,
-                              "language": { "code": "es" },
-                              "components" : [
-                                {
-                                    "type": "header",
-                                    "parameters": [
-                                        {
-                                            "type": "video",
-                                            "video": {
-                                                "link": plantilla.url_cabecera
+                                "name": plantilla.nombre,
+                                "language": { "code": "es" },
+                                "components": [
+                                    {
+                                        "type": "header",
+                                        "parameters": [
+                                            {
+                                                "type": "video",
+                                                "video": {
+                                                    "link": plantilla.url_cabecera
+                                                }
                                             }
-                                        }
-                                    ]
-                                }
-                              ]
+                                        ]
+                                    }
+                                ]
                             }
                         };
 
                         tipoMensaje = 'video';
                     }
 
-                    if(plantilla.tipoCabecera === 'image') {
+                    if (plantilla.tipoCabecera === 'image') {
                         contenJson = {
                             "messaging_product": "whatsapp",
                             "recipient_type": "individual",
                             "to": numero,
                             "type": "template",
                             "template": {
-                              "name": plantilla.nombre,
-                              "language": { "code": "es" },
-                              "components" : [
-                                {
-                                    "type": "header",
-                                    "parameters": [
-                                        {
-                                            "type": "image",
-                                            "image": {
-                                                "link": plantilla.url_cabecera
+                                "name": plantilla.nombre,
+                                "language": { "code": "es" },
+                                "components": [
+                                    {
+                                        "type": "header",
+                                        "parameters": [
+                                            {
+                                                "type": "image",
+                                                "image": {
+                                                    "link": plantilla.url_cabecera
+                                                }
                                             }
-                                        }
-                                    ]
-                                }
-                              ]
+                                        ]
+                                    }
+                                ]
                             }
                         };
 
@@ -215,8 +216,8 @@ export const addContact = async (req, res) => {
                         "to": numero,
                         "type": "template",
                         "template": {
-                          "name": plantilla.nombre,
-                          "language": { "code": "es" }
+                            "name": plantilla.nombre,
+                            "language": { "code": "es" }
                         }
                     };
 
@@ -229,7 +230,7 @@ export const addContact = async (req, res) => {
 
                 let parametros_body = [];
 
-                if(idPlantilla == 3) {
+                if (idPlantilla == 3) {
 
                     let dataNombre = {
                         type: "text",
@@ -249,90 +250,90 @@ export const addContact = async (req, res) => {
                             type: "text",
                             text: variables[i],
                         };
-    
+
                         parametros_body.push(parametro);
-                        
+
                     }
                 }
 
-                if(plantilla.cabecera === 'no') {
+                if (plantilla.cabecera === 'no') {
                     contenJson = {
                         "messaging_product": "whatsapp",
                         "recipient_type": "individual",
                         "to": numero,
                         "type": "template",
                         "template": {
-                          "name": plantilla.nombre,
-                          "language": { "code": "es" },
-                          "components": [
-                            {
-                              "type": "body",
-                              "parameters": parametros_body
-                            }
-                          ]
+                            "name": plantilla.nombre,
+                            "language": { "code": "es" },
+                            "components": [
+                                {
+                                    "type": "body",
+                                    "parameters": parametros_body
+                                }
+                            ]
                         }
                     };
 
                     tipoMensaje = 'text';
                 } else {
-                    if(plantilla.cabecera === 'video') {
+                    if (plantilla.cabecera === 'video') {
                         contenJson = {
                             "messaging_product": "whatsapp",
                             "recipient_type": "individual",
                             "to": numero,
                             "type": "template",
                             "template": {
-                              "name": plantilla.nombre,
-                              "language": { "code": "es" },
-                              "components": [
-                                {
-                                    "type": "header",
-                                    "parameters": [
-                                        {
-                                            "type": "video",
-                                            "video": {
-                                                "link": plantilla.url_cabecera
+                                "name": plantilla.nombre,
+                                "language": { "code": "es" },
+                                "components": [
+                                    {
+                                        "type": "header",
+                                        "parameters": [
+                                            {
+                                                "type": "video",
+                                                "video": {
+                                                    "link": plantilla.url_cabecera
+                                                }
                                             }
-                                        }
-                                    ]
-                                },
-                                {
-                                  "type": "body",
-                                  "parameters": parametros_body
-                                }
-                              ]
+                                        ]
+                                    },
+                                    {
+                                        "type": "body",
+                                        "parameters": parametros_body
+                                    }
+                                ]
                             }
                         };
 
                         tipoMensaje = 'video';
                     }
 
-                    if(plantilla.cabecera === 'image') {
+                    if (plantilla.cabecera === 'image') {
                         contenJson = {
                             "messaging_product": "whatsapp",
                             "recipient_type": "individual",
                             "to": numero,
                             "type": "template",
                             "template": {
-                              "name": plantilla.nombre,
-                              "language": { "code": "es" },
-                              "components": [
-                                {
-                                    "type": "header",
-                                    "parameters": [
-                                        {
-                                            "type": "image",
-                                            "image": {
-                                                "link": plantilla.url_cabecera
+                                "name": plantilla.nombre,
+                                "language": { "code": "es" },
+                                "components": [
+                                    {
+                                        "type": "header",
+                                        "parameters": [
+                                            {
+                                                "type": "image",
+                                                "image": {
+                                                    "link": plantilla.url_cabecera
+                                                }
                                             }
-                                        }
-                                    ]
-                                },
-                                {
-                                  "type": "body",
-                                  "parameters": parametros_body
-                                }
-                              ]
+                                        ]
+                                    },
+                                    {
+                                        "type": "body",
+                                        "parameters": parametros_body
+                                    }
+                                ]
                             }
                         };
 
@@ -340,7 +341,7 @@ export const addContact = async (req, res) => {
                     }
                 }
 
-                
+
 
                 const messageSend = plantilla.contenido;
 
@@ -352,8 +353,8 @@ export const addContact = async (req, res) => {
                 method: 'post',
                 maxBodyLength: Infinity,
                 url: process.env.URL_MESSAGES,
-                headers: { 
-                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                headers: {
+                    'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
                 },
                 data: contenJson
             };
@@ -364,12 +365,12 @@ export const addContact = async (req, res) => {
 
             const messageStatus = data.messages[0].message_status;
 
-            if(messageStatus === 'accepted') {
+            if (messageStatus === 'accepted') {
 
                 let descripcionChat = "";
                 let contenidoChat = contenido;
 
-                if(plantilla.cabecera === 'si') {
+                if (plantilla.cabecera === 'si') {
                     descripcionChat = contenido;
                     contenidoChat = "";
                 }
@@ -394,7 +395,7 @@ export const addContact = async (req, res) => {
                 return res.json({ message: 'ok', data: newMessage });
 
             } else {
-                return res.json({message: "No fue enviado la plantilla"});
+                return res.json({ message: "No fue enviado la plantilla" });
             }
 
 
@@ -415,20 +416,20 @@ export const getContacts = async (req, res) => {
 
         let contactos = "";
 
-        if(rol === 2 || rol === 6) {
+        if (rol === 2 || rol === 6) {
             contactos = await NumeroWhatsapp.findAll({
                 where: {
                     asistente: id,
                     [Op.or]: [
                         {
-                          nameContact: {
-                            [Op.iLike]: `%${buscar}%`
-                          }
+                            nameContact: {
+                                [Op.iLike]: `%${buscar}%`
+                            }
                         },
                         {
-                          from: {
-                            [Op.like]: `%${buscar}%`
-                          }
+                            from: {
+                                [Op.like]: `%${buscar}%`
+                            }
                         }
                     ]
                 }
@@ -438,14 +439,14 @@ export const getContacts = async (req, res) => {
                 where: {
                     [Op.or]: [
                         {
-                          nameContact: {
-                            [Op.iLike]: `%${buscar}%`
-                          }
+                            nameContact: {
+                                [Op.iLike]: `%${buscar}%`
+                            }
                         },
                         {
-                          from: {
-                            [Op.like]: `%${buscar}%`
-                          }
+                            from: {
+                                [Op.like]: `%${buscar}%`
+                            }
                         }
                     ]
                 }
@@ -478,8 +479,8 @@ export const getContacts = async (req, res) => {
             });
             let nombreAsistente = "";
 
-            if(contacto.asistente == null) {
-                
+            if (contacto.asistente == null) {
+
             } else {
                 const nameUsuario = await Trabajadores.findOne({
                     where: {
@@ -487,7 +488,7 @@ export const getContacts = async (req, res) => {
                     }
                 });
 
-                nombreAsistente = nameUsuario.nombres+" "+nameUsuario.apellidos;
+                nombreAsistente = nameUsuario.nombres + " " + nameUsuario.apellidos;
             }
 
             let array = {
@@ -505,7 +506,7 @@ export const getContacts = async (req, res) => {
             arrayContact.push(array);
         }
 
-        return res.json({ message: 'ok', data:arrayContact });
+        return res.json({ message: 'ok', data: arrayContact });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });
@@ -557,7 +558,7 @@ export const editContact = async (req, res) => {
         let nombreAsistente = "";
 
         if (contacto.asistente == null) {
-            
+
         } else {
             const usuario = await Trabajadores.findOne({
                 where: {
@@ -577,7 +578,7 @@ export const editContact = async (req, res) => {
             nameAsistente: nombreAsistente
         };
 
-        return res.json({ message: 'ok', data:contacto, datos: datos });
+        return res.json({ message: 'ok', data: contacto, datos: datos });
 
 
     } catch (error) {
@@ -591,7 +592,7 @@ export const FiltroContact = async (req, res) => {
 
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
-        
+
         let contactos = "";
 
         const user = await Usuario.findOne({
@@ -600,9 +601,9 @@ export const FiltroContact = async (req, res) => {
             }
         });
 
-        if(plataforma == 0) {
+        if (plataforma == 0) {
 
-            if(rol == 2 || rol == 6) {
+            if (rol == 2 || rol == 6) {
                 contactos = await NumeroWhatsapp.findAll({
                     where: {
                         asistente: user.trabajador_id,
@@ -629,10 +630,10 @@ export const FiltroContact = async (req, res) => {
                 });
             }
 
-            
+
         } else {
 
-            if(rol == 2 || rol == 6) {
+            if (rol == 2 || rol == 6) {
                 contactos = await NumeroWhatsapp.findAll({
                     where: {
                         plataforma_id: plataforma,
@@ -662,12 +663,12 @@ export const FiltroContact = async (req, res) => {
                 });
             }
 
-            
+
         }
 
         let datos = [];
 
-        for(const contacto of contactos) {
+        for (const contacto of contactos) {
             const potencial = await PotencialCliente.findOne({
                 where: {
                     numero_whatsapp: contacto.from
@@ -690,10 +691,10 @@ export const FiltroContact = async (req, res) => {
                     id: idEtiqueta
                 }
             });
-            
+
             let nombreAsistente;
 
-            if(contacto.asistente == null || contacto.asistente == "") {
+            if (contacto.asistente == null || contacto.asistente == "") {
                 nombreAsistente = "";
             } else {
                 const asistente = await Trabajadores.findOne({
@@ -702,12 +703,12 @@ export const FiltroContact = async (req, res) => {
                     }
                 });
 
-                nombreAsistente = asistente.nombres+" "+asistente.apellidos;
+                nombreAsistente = asistente.nombres + " " + asistente.apellidos;
             }
 
             let usuario_register;
 
-            if(contacto.user_register == null || contacto.user_register == "") {
+            if (contacto.user_register == null || contacto.user_register == "") {
                 usuario_register = "";
             } else {
                 const usuario = await Usuario.findOne({
@@ -722,32 +723,32 @@ export const FiltroContact = async (req, res) => {
                     }
                 });
 
-                usuario_register = tra.nombres+" "+tra.apellidos;
+                usuario_register = tra.nombres + " " + tra.apellidos;
             }
 
             let origen = "";
             let tipo_origen = "";
 
-            if(contacto.plataforma_id == 4) {
-                if(contacto.tipo_publicidad != null && contacto.tipo_publicidad != 0) {
-                    if(contacto.tipo_publicidad == "1") {
+            if (contacto.plataforma_id == 4) {
+                if (contacto.tipo_publicidad != null && contacto.tipo_publicidad != 0) {
+                    if (contacto.tipo_publicidad == "1") {
                         tipo_origen = "Publicidad Paga Facebook";
-    
+
                         const publi = await Publicidad.findOne({
                             where: {
                                 id: contacto.publicidad
                             }
                         });
-        
+
                         origen = publi.nombre;
-    
+
                     } else {
                         tipo_origen = "Publicidad Orgánica Facebook";
                     }
                 }
             }
 
-            if(contacto.numberWhatsapp != null && contacto.numberWhatsapp != 0) {
+            if (contacto.numberWhatsapp != null && contacto.numberWhatsapp != 0) {
                 const nameWhatsapp = await WahtasappVentas.findOne({
                     where: {
                         id: contacto.numberWhatsapp
@@ -758,11 +759,11 @@ export const FiltroContact = async (req, res) => {
 
                 if (contacto.tipoWhatsapp == 1) {
                     origen = "Recomendados";
-                } else if(contacto.tipoWhatsapp == 2) {
+                } else if (contacto.tipoWhatsapp == 2) {
                     origen = "Recompra";
-                } else if(contacto.tipoWhatsapp == 3) {
+                } else if (contacto.tipoWhatsapp == 3) {
                     origen = "Directo";
-                } else if(contacto.tipoWhatsapp == 4) {
+                } else if (contacto.tipoWhatsapp == 4) {
                     origen = "Publicidad Online";
                 } else {
                     origen = "Otros";
@@ -786,7 +787,7 @@ export const FiltroContact = async (req, res) => {
         }
 
         return res.json({ message: 'ok', data: contactos });
-        
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
@@ -799,14 +800,14 @@ export const getContactos = async (req, res) => {
             where: {
                 [Op.or]: [
                     {
-                      nameContact: {
-                        [Op.iLike]: `%${buscar}%`
-                      }
+                        nameContact: {
+                            [Op.iLike]: `%${buscar}%`
+                        }
                     },
                     {
-                      from: {
-                        [Op.like]: `%${buscar}%`
-                      }
+                        from: {
+                            [Op.like]: `%${buscar}%`
+                        }
                     }
                 ]
             }
@@ -834,30 +835,30 @@ export const reenviarMensaje = async (req, res) => {
 
         const timestamp = Date.now();
 
-        if(typeMessage === 'audio') {
+        if (typeMessage === 'audio') {
             let inputPath = "";
             let fileName = "";
-            if(sendType === "0") {
-                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.id_document + '.ogg');
+            if (sendType === "0") {
+                inputPath = path.join(process.cwd(), 'src', 'public', 'audios', 'archivos', mensaje.id_document + '.ogg');
 
                 // Definir la ruta de salida
-                const outputPath = path.join(process.cwd(), 'src','public','audios','archivos', timestamp + '.mp3');
+                const outputPath = path.join(process.cwd(), 'src', 'public', 'audios', 'archivos', timestamp + '.mp3');
 
                 // Ejecutar el comando ffmpeg
                 await execAsync(`ffmpeg -i ${inputPath} ${outputPath}`);
 
-                fileName = timestamp+".mp3";
+                fileName = timestamp + ".mp3";
             } else {
-                inputPath = path.join(process.cwd(), 'src','public','audios','archivos', mensaje.filename);
+                inputPath = path.join(process.cwd(), 'src', 'public', 'audios', 'archivos', mensaje.filename);
                 fileName = mensaje.filename;
             }
 
             let url_audio = "";
 
-            if(sendType === "0") {
-                url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+timestamp+".mp3";
+            if (sendType === "0") {
+                url_audio = process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/audios/archivos/" + timestamp + ".mp3";
             } else {
-                url_audio = process.env.URL_APP+":"+process.env.PUERTO_APP_RED+"/audios/archivos/"+mensaje.filename;
+                url_audio = process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/audios/archivos/" + mensaje.filename;
             }
 
             /* const datos = {
@@ -868,7 +869,7 @@ export const reenviarMensaje = async (req, res) => {
 
             return res.json({ message: 'ok', data: datos }); */
 
-        
+
             const dataFile = {
                 messaging_product: "whatsapp",
                 to: contacto,
@@ -877,21 +878,21 @@ export const reenviarMensaje = async (req, res) => {
                     link: url_audio
                 }
             };
-    
+
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
                 url: process.env.URL_MESSAGES,
-                headers: { 
-                  'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+                headers: {
+                    'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
                 },
                 data: dataFile
             };
-    
+
             try {
                 const response = await axios(config);
                 const datos = response.data;
-    
+
                 const new_message = await Chat.create({
                     codigo: datos.messages[0].id,
                     from: process.env.NUMERO_WHATSAPP,
@@ -905,12 +906,12 @@ export const reenviarMensaje = async (req, res) => {
                     id_document: Math.floor(Date.now() / 1000),
                     filename: fileName
                 });
-    
-                return res.json({ mensaje: 'ok',subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
+
+                return res.json({ mensaje: 'ok', subido: 'Archivo subido con éxito.', datos: dataFile, api: datos, newMensaje: new_message });
             }
-              catch (error) {
+            catch (error) {
                 console.error("Error in making request:", error.response.data || error.message);
-                return res.json({message: error.message});
+                return res.json({ message: error.message });
             }
         }
 
@@ -926,14 +927,14 @@ const reemplazarMarcadoresConArray = (str, array) => {
     });
 }
 
-const eliminarContacto = async(req, res) => {
+const eliminarContacto = async (req, res) => {
     const id = req.params.id;
     try {
         const contacto = await NumeroWhatsapp.findByPk(id);
 
         // Verificar que el usuario exista antes de eliminar
         if (!contacto) {
-            throw new Error('Contacto no existe'); 
+            throw new Error('Contacto no existe');
         }
 
         // Eliminar el registro
@@ -944,10 +945,10 @@ const eliminarContacto = async(req, res) => {
     }
 }
 
-export const emojisAll = async(req, res) => {
+export const emojisAll = async (req, res) => {
 
     try {
-       
+
         const emojis = await Emojis.findAll({
             where: {
                 estado: "1"
@@ -961,34 +962,60 @@ export const emojisAll = async(req, res) => {
     }
 }
 
-export const addSeguimiento = async(req, res) => {
+export const addSeguimiento = async (req, res) => {
     const { numeroContacto, descripcion_seguimiento } = req.body;
     try {
 
         let fecha = "1970-01-01 19:00:00";
         let notificado = "";
 
-        if(req.body.notificarSeguimiento) {
+        if (req.body.notificarSeguimiento) {
             fecha = req.body.notificar_fecha;
             notificado = "SI";
+
         }
 
-        const add = await SeguimientoContacto.create({
+        const add = {
             description: descripcion_seguimiento,
             status: "activo",
-            fecha: fecha,
+            fecha: new Date(fecha).toISOString(),
             notificado: notificado,
             numero: numeroContacto
-        });
+        };
 
-        return res.json({ message: 'ok', response: add });
+        //return res.json(add);
+
+        const newSeguimiento = await SeguimientoContacto.create(add);
+
+        if(notificado === 'SI') {
+            const dataContacto = await NumeroWhatsapp.findOne({
+                where: {
+                    from: numeroContacto
+                }
+            });
+    
+            const notificacion = {
+                description: descripcion_seguimiento,
+                status: "activo",
+                fecha: new Date(fecha).toISOString(),
+                url: "",
+                numero: numeroContacto,
+                contacto: dataContacto.nameContact,
+                estado: "activo",
+                id_user: dataContacto.asistente
+            };
+    
+            const addNotification = await Notification.create(notificacion);
+        }
+
+        return res.json({ message: 'ok', response: newSeguimiento });
 
     } catch (error) {
         return res.status(400).json({ message: 'error', response: error.message });
     }
 }
 
-export const allSeguimiento = async(req, res) => {
+export const allSeguimiento = async (req, res) => {
     try {
         const numero = req.params.id;
 
@@ -1005,7 +1032,7 @@ export const allSeguimiento = async(req, res) => {
     }
 }
 
-export const listaSeguimientos = async(req, res) => {
+export const listaSeguimientos = async (req, res) => {
     try {
         const contactos = await NumeroWhatsapp.findAll();
 
@@ -1028,7 +1055,7 @@ export const listaSeguimientos = async(req, res) => {
 
             let trabajador = "";
 
-            if(contacto.asistente === null) {
+            if (contacto.asistente === null) {
                 trabajador = "";
             } else {
                 let asistente = await Trabajadores.findOne({
@@ -1059,7 +1086,7 @@ export const listaSeguimientos = async(req, res) => {
 }
 
 
-export const deleteSeguimiento = async(req, res) => {
+export const deleteSeguimiento = async (req, res) => {
     try {
         const id = req.params.id;
 
@@ -1068,6 +1095,55 @@ export const deleteSeguimiento = async(req, res) => {
         const del = await seg.destroy();
 
         return res.json({ message: 'ok', response: del });
+
+    } catch (error) {
+        return res.status(400).json({ message: 'error', response: error.message });
+    }
+}
+
+export const notificationContacto = async (req, res) => {
+    try {
+        const id = req.usuarioToken._id;
+        const role = req.usuarioToken._role;
+
+        let fecha_actual = new Date();
+
+        fecha_actual = fecha_actual.toISOString().split('T');
+
+        fecha_actual = fecha_actual[0];
+
+        let array = [];
+
+        const notificaciones = await Notification.findAll();
+
+        //return res.json(fecha_actual);
+
+        for (const notificacion of notificaciones) {
+            let fecha_noti = notificacion.fecha;
+            fecha_noti = fecha_noti.toISOString().split('T');
+
+            fecha_noti = fecha_noti[0];
+
+            let add = {
+                descripcion: notificacion.description,
+                fecha: fecha_noti,
+                contacto: notificacion.contacto,
+                user: notificacion.id_user,
+                numero: notificacion.numero
+            };
+
+            array.push(add);
+        }
+
+        let contactos = "";
+
+        if (role == 1 || role == 3) {
+            contactos = array.filter(item => item.fecha === fecha_actual);
+        } else {
+            contactos = array.filter(item => item.fecha === fecha_actual && item.user == id);
+        }
+
+        return res.json(contactos);
 
     } catch (error) {
         return res.status(400).json({ message: 'error', response: error.message });
