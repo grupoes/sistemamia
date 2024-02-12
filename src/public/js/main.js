@@ -124,6 +124,8 @@ function notificacionesContacto(token) {
 
 const cantidadNoti = document.getElementById('cantidadNoti');
 
+console.log(cantidadNoti);
+
 function iniciarParpadeo() {
   cantidadNoti.classList.add('parpadeo');
 }
@@ -134,5 +136,6 @@ function detenerParpadeo() {
 
 // Ejemplo: si el valor es mayor a 0, inicia el parpadeo
 if (parseInt(cantidadNoti.innerText) > 0) {
+    console.log(cantidadNoti.innerText)
   iniciarParpadeo();
 }
