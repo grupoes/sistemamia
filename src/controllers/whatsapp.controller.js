@@ -1124,7 +1124,7 @@ export const notificationContacto = async (req, res) => {
 
             fecha_noti = fecha_noti[0];
 
-            const dataAsist = await Trabajadores.findOne({
+            let dataAsist = await Trabajadores.findOne({
                 where: {
                     id: notificacion.id_user
                 }
