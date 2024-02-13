@@ -1136,7 +1136,7 @@ export const notificationContacto = async (req, res) => {
                 contacto: notificacion.contacto,
                 user: notificacion.id_user,
                 numero: notificacion.numero,
-                nombre: dataAsist.nameContact
+                nombre: dataAsist.nombres + " " + dataAsist.apellidos
             };
 
             array.push(add);
