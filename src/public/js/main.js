@@ -106,13 +106,20 @@ function notificacionesContacto(token) {
         cantidad.textContent = quanty;
 
         data.forEach(noti => {
+
+            let asiste = "";
+
+            if(rol == 1 || rol == 3) {
+                asiste += `- <span class="text-primary">${noti.nombre}</span>`;
+            }
+
             html += `
             <a href="javascript:void(0);" class="dropdown-item notify-item border-bottom" title="${noti.descripcion}">
                 <div class="notify-icon bg-primary"><i class="uil uil-user-plus"></i></div>
                 <p class="notify-details">${noti.descripcion}<small class="text-muted">${noti.fecha}</small>
                 </p>
 
-                <p class="notify-details">${noti.contacto} - <span>${noti.nombre}</span></p>
+                <p class="notify-details">${noti.contacto} ${asiste}</p>
             </a>
             `;
         });
