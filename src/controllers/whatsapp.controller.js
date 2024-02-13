@@ -1124,12 +1124,19 @@ export const notificationContacto = async (req, res) => {
 
             fecha_noti = fecha_noti[0];
 
+            const dataAsist = await NumeroWhatsapp.findOne({
+                where: {
+                    id: notificacion.id_user
+                }
+            });
+
             let add = {
                 descripcion: notificacion.description,
                 fecha: fecha_noti,
                 contacto: notificacion.contacto,
                 user: notificacion.id_user,
-                numero: notificacion.numero
+                numero: notificacion.numero,
+                nombre: dataAsist.nameContact
             };
 
             array.push(add);
