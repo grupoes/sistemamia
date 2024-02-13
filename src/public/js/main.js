@@ -112,7 +112,7 @@ function notificacionesContacto(token) {
                 <p class="notify-details">${noti.descripcion}<small class="text-muted">${noti.fecha}</small>
                 </p>
 
-                <p class="notify-details">${noti.contacto}</p>
+                <p class="notify-details">${noti.contacto} - <span>${noti.nombre}</span></p>
             </a>
             `;
         });
