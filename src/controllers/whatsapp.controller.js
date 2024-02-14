@@ -987,13 +987,13 @@ export const addSeguimiento = async (req, res) => {
 
         const newSeguimiento = await SeguimientoContacto.create(add);
 
-        if(notificado === 'SI') {
+        if (notificado === 'SI') {
             const dataContacto = await NumeroWhatsapp.findOne({
                 where: {
                     from: numeroContacto
                 }
             });
-    
+
             const notificacion = {
                 description: descripcion_seguimiento,
                 status: "activo",
@@ -1004,7 +1004,7 @@ export const addSeguimiento = async (req, res) => {
                 estado: "activo",
                 id_user: dataContacto.asistente
             };
-    
+
             const addNotification = await Notification.create(notificacion);
         }
 
@@ -1130,6 +1130,31 @@ export const notificationContacto = async (req, res) => {
                 }
             });
 
+            let potencial = await PotencialCliente.findOne({
+                where: {
+                    numero_whatsapp: notificacion.numero
+                }
+            });
+
+            let idpotencial = potencial.id;
+
+            let etiquetaC = await EtiquetaCliente.findOne({
+                where: {
+                    cliente_id: idpotencial,
+                    estado: 1
+                }
+            });
+
+            let idetiqueta = etiquetaC.etiqueta_id;
+
+            let eti = await Etiqueta.findOne({
+                where: {
+                    id: idetiqueta
+                }
+            });
+
+            //chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado, asistente)
+
             let add = {
                 descripcion: notificacion.description,
                 fecha: fecha_noti,
@@ -1137,7 +1162,10 @@ export const notificationContacto = async (req, res) => {
                 user: notificacion.id_user,
                 numero: notificacion.numero,
                 nombre: dataAsist.nombres + " " + dataAsist.apellidos,
-                role: role
+                role: role,
+                etiquetaName: eti.descripcion,
+                potencial: idpotencial,
+                etiqueta_id: idetiqueta
             };
 
             array.push(add);

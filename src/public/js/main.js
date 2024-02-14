@@ -114,7 +114,7 @@ function notificacionesContacto(token) {
             }
 
             html += `
-            <a href="javascript:void(0);" class="dropdown-item notify-item border-bottom" title="${noti.descripcion}">
+            <a href="javascript:void(0);" onclick="chatDetail(${noti.numero}, '${noti.contacto}', '${noti.etiquetaName}', ${noti.potencial}, ${noti.etiqueta_id}, ${noti.role}, ${noti.user}, '${noti.nombre}')" class="dropdown-item notify-item border-bottom" title="${noti.descripcion}">
                 <div class="notify-icon bg-primary"><i class="uil uil-user-plus"></i></div>
                 <p class="notify-details">${noti.descripcion}<small class="text-muted">${noti.fecha}</small>
                 </p>
