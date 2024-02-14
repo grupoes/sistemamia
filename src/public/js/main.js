@@ -109,7 +109,7 @@ function notificacionesContacto(token) {
 
             let asiste = "";
 
-            if(rol == 1 || rol == 3) {
+            if(rol.value == 1 || rol.value == 3) {
                 asiste += `- <span class="text-primary">${noti.nombre}</span>`;
             }
 
