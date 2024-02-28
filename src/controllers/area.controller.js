@@ -5,7 +5,10 @@ export const allAreas = async (req, res) => {
         const areas = await Area.findAll({
             where: {
                 estado: 1
-            }
+            },
+            order: [
+                ['id', 'asc']
+            ]
         });
 
         res.status(200).json({status: "ok", data: areas});
