@@ -27,6 +27,7 @@ import whatsappVentas from './routes/whatsappVentas.routes.js';
 import etiqueta from './routes/etiqueta.routes.js';
 import proyecto from "./routes/proyectos.routes.js";
 import horario from "./routes/horario.routes.js";
+import actividades from './routes/actividades.routes.js';
 
 const app = express();
 
@@ -75,5 +76,6 @@ app.use(whatsappVentas);
 app.use(etiqueta);
 app.use(proyecto);
 app.use(horario);
+app.use(actividades);
 
 export default app;

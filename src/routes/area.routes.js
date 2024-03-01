@@ -4,9 +4,9 @@ import { allAreas, getArea, createArea, updateArea } from "../controllers/area.c
 
 const router = Router();
 
-router.get('/area/all', allAreas);
-router.get('/area/:id', getArea);
-router.post('/area/create', createArea);
-router.put('/area/:id', updateArea);
+router.get('/areas', allAreas);
+router.get('/areas/:id', getArea);
+router.post('/areas', createArea);
+router.put('/areas/:id', updateArea);
 
 export default router;

@@ -1,0 +1,147 @@
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Actividades</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
+                    <li class="breadcrumb-item active">Actividades</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<!-- nav -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="header-title mb-3 mt-0">LISTAS</h5>
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                            <span class="d-block d-sm-none"><i class="uil-home-alt"></i></span>
+                            <span class="d-none d-sm-block">Actividades</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                            <span class="d-block d-sm-none"><i class="uil-user"></i></span>
+                            <span class="d-none d-sm-block">Perfil Actividades</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content p-3 text-muted">
+                    <div class="tab-pane show active" id="home">
+                        <button type="button" class="btn btn-primary mb-3" id="addActivity">Agregar Actividad</button>
+                        <div class="table-responsive">
+                            <table class="table dt-responsive nowrap w-100" id="tableActivity">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Actividad</th>
+                                        <th>Descripción</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="renderActivity">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        <div class="row">
+                            <div class="col-xl-4" id="data-perfiles">
+                                
+                            </div>
+                            <div class="col-xl-8" id="listaActividades">
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<!-- sample modal content -->
+<div id="modalActivity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalActivity">Agregar Actividad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formActivity">
+                <input type="hidden" name="idActivity" id="idActivity" value="0">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="name_activity">Nombre</label>
+                                <input type="text" class="form-control" id="name_activity" name="name"
+                                    placeholder="Ingrese el nombre de la actividad" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="description_activity">Descripción</label>
+                                <input type="text" class="form-control" id="description_activity" name="description"
+                                    placeholder="Ingrese la descripción de la actividad (opcional)">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" id="btnActivity">Guardar</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- sample modal content -->
+<div id="modalEmbudo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalEmbudo">Agregar Embudo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEmbudo">
+                <input type="hidden" name="idembudo" id="idembudo" value="0">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre_embudo">Nombre</label>
+                                <input type="text" class="form-control" id="nombre_embudo" name="nombre_embudo"
+                                    placeholder="Ingrese el nombre del embudo" required="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="guardarEmbudo">Guardar</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
