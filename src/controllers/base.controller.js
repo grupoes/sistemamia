@@ -2,6 +2,7 @@ import { Trabajadores } from "../models/trabajadores.js";
 import { Asignacion } from "../models/asignacion.js";
 import { Usuario } from "../models/usuario.js";
 import { Registros } from "../models/registros.js";
+import { Ubigeo } from "../models/ubigeo.js";
 
 import { Op } from 'sequelize';
 
@@ -62,9 +63,24 @@ export const asignarAsistenteDataJson = async (req, res) => {
                 area_id: 2
             }
         });
+
+        const asistenteIds = await Trabajadores.findAll({
+            where: {
+                area_id: 2
+            }
+        });
+
+        // Obtener solo los IDs y convertirlos en un array
+        const idsArray = asistenteIds.map(asistente => asistente.id);
     
         // 2. Obtiene cuántas asignaciones ya existen
-        const totalAsignaciones = await Asignacion.count();
+        const totalAsignaciones = await Asignacion.count({
+            where: {
+                trabajadoreId: {
+                    [Op.in]: idsArray
+                }
+            }
+        });
     
         // 3. Usa el operador módulo para determinar el siguiente trabajador
         const trabajadorAsignado = totalAsignaciones % totalTrabajadores;
@@ -99,5 +115,16 @@ export const registroActividad = async (id_usuario, tipo_actividad, descripcion_
         return registro;
     } catch (error) {
         return error.message;
+    }
+}
+
+export const getAllUbigeo = async (req, res) => {
+    try {
+        const ubigeos = await Ubigeo.findAll();
+
+        return res.status(200).json({ status: 'ok', data: ubigeos });
+
+    } catch (error) {
+        return res.status(400).json({status: 'error', message: error.message});
     }
 }
