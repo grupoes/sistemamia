@@ -6,6 +6,8 @@ import { Ubigeo } from "../models/ubigeo.js";
 
 import { Op } from 'sequelize';
 
+import axios from 'axios';
+
 export const getDataToken = (req, res) => {
     try {
         const rol = req.usuarioToken._role;
@@ -123,6 +125,28 @@ export const getAllUbigeo = async (req, res) => {
         const ubigeos = await Ubigeo.findAll();
 
         return res.status(200).json({ status: 'ok', data: ubigeos });
+
+    } catch (error) {
+        return res.status(400).json({status: 'error', message: error.message});
+    }
+}
+
+export const api_dni = async (req, res) => {
+    try {
+        const numero = req.params.id;
+
+        const TOKEN_USER="facturalaya_erickpeso_05jFE7sAOudi8j0";
+
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `https://facturalahoy.com/api/persona/${numero}/${TOKEN_USER}/completa`
+        };
+
+        const response = await axios(config);
+        const datos = response.data;
+
+        return res.status(200).json({ status: 'ok', data: datos });
 
     } catch (error) {
         return res.status(400).json({status: 'error', message: error.message});
