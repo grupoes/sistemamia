@@ -1,3 +1,9 @@
+<style>
+    .select2-container {
+        z-index: 1551 !important; /* Asegúrate de que el valor sea mayor que el z-index del modal */
+    }
+</style>
+
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -26,6 +32,7 @@
                 <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Nombre</th>
                             <th>Cumpleaños</th>
                             <th>Perfil</th>
@@ -35,16 +42,8 @@
                             <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
+                    <tbody id="renderTableUsers">
+                        
                     </tbody>
                 </table>
 
@@ -78,22 +77,25 @@
                         <div class="mb-3">
                             <label class="form-label" for="numeroDocumento">Número de Documento</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Ingrese el número" name="numeroDocumento" id="numeroDocumento">
-                                <button class="btn btn-outline-primary" type="button"
-                                    id="button-addon2"><i class="uil-search"></i></button>
+                                <input type="text" class="form-control" placeholder="Ingrese el número"
+                                    name="numeroDocumento" id="numeroDocumento">
+                                <button class="btn btn-outline-primary" type="button" id="searchDni"><i
+                                        class="uil-search"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label" for="nameUsuario">Nombre</label>
-                            <input type="text" class="form-control" name="nameUsuario" id="nameUsuario" placeholder="Nombre del usuario">
+                            <input type="text" class="form-control" name="nameUsuario" id="nameUsuario"
+                                placeholder="Nombre del usuario">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label" for="lastName">Apellidos</label>
-                            <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Apellidos del usuario">
+                            <input type="text" class="form-control" name="lastName" id="lastName"
+                                placeholder="Apellidos del usuario">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -105,24 +107,66 @@
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label" for="numberWhatsapp">Número de Whatsapp</label>
-                            <input type="text" class="form-control" name="numberWhatsapp" id="numberWhatsapp" placeholder="whatsapp del usuario">
+                            <input type="text" class="form-control" name="numberWhatsapp" id="numberWhatsapp"
+                                placeholder="whatsapp del usuario">
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Ubigeo</label>
+                            <select data-plugin="customselect" class="form-select" id="ubigeo_user">
+                                
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label" for="address">Dirección</label>
-                            <input type="text" class="form-control" name="address" id="address" placeholder="Dirección del usuario">
+                            <input type="text" class="form-control" name="address" id="address"
+                                placeholder="Dirección del usuario">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label" for="urbanizacion">Urbanización</label>
-                            <input type="text" class="form-control" name="urbanizacion" id="urbanizacion" placeholder="Urbanización del usuario">
+                            <input type="text" class="form-control" name="urbanizacion" id="urbanizacion"
+                                placeholder="Urbanización del usuario">
                         </div>
                     </div>
-                    
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Perfil</label>
+                            <select class="form-select" id="perfil_user">
+                                
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="usuario">Correo Electrónico</label>
+                            <input type="text" class="form-control" name="email" id="email">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Contraseña</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarEtiqueta">Guardar</button>
+            </div>
+
         </div>
     </div>
 </div>

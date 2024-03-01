@@ -83,9 +83,9 @@ salir.addEventListener('click', (e) => {
 });
 
 
-setInterval(() => {
+/*setInterval(() => {
     notificacionesContacto(token_);
-}, 5000);
+}, 5000);*/
 
 function notificacionesContacto(token) {
     fetch('/notificationContacto', {
