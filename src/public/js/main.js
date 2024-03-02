@@ -28,9 +28,9 @@ function getDataToken(token_) {
     })
 }
 
-/*setInterval(() => {
+setInterval(() => {
     getNotificationNotContest(token_);
-}, 30000);*/
+}, 30000);
 
 function getNotificationNotContest(token) {
     fetch('/contactosNoContestados', {
@@ -86,6 +86,8 @@ salir.addEventListener('click', (e) => {
 /*setInterval(() => {
     notificacionesContacto(token_);
 }, 5000);*/
+
+notificacionesContacto(token_);
 
 function notificacionesContacto(token) {
     fetch('/notificationContacto', {
