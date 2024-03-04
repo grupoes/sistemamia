@@ -41,8 +41,23 @@ export const asignarAsistenteData = async () => {
         }
     });
 
+    const asistenteIds = await Trabajadores.findAll({
+        where: {
+            area_id: 2
+        }
+    });
+
+    // Obtener solo los IDs y convertirlos en un array
+    const idsArray = asistenteIds.map(asistente => asistente.id);
+
     // 2. Obtiene cuántas asignaciones ya existen
-    const totalAsignaciones = await Asignacion.count();
+    const totalAsignaciones = await Asignacion.count({
+        where: {
+            trabajadoreId: {
+                [Op.in]: idsArray
+            }
+        }
+    });
 
     // 3. Usa el operador módulo para determinar el siguiente trabajador
     const trabajadorAsignado = totalAsignaciones % totalTrabajadores;
