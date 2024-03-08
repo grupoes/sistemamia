@@ -548,6 +548,8 @@ export const numerosWhatsapp = async(req, res) => {
                 });
             }
 
+            filterData = filterData.slice(0, 50);
+
             return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
 
@@ -558,6 +560,8 @@ export const numerosWhatsapp = async(req, res) => {
                 return objeto.etiqueta_id == etiqueta; 
             });
         }
+
+        resultados = resultados.slice(0, 50);
 
         return res.json({message: "ok",data: resultados, rol: rol, id:id });
 
