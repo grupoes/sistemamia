@@ -2259,7 +2259,7 @@ btnAgregar.addEventListener('click', (e) => {
             if (data.message === 'existe') {
                 alert(data.data);
             } else {
-                alert('Comunicar con el administrador');
+                alert(data.message);
             }
         }
     })
