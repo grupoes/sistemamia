@@ -28,9 +28,9 @@ function getDataToken(token_) {
     })
 }
 
-/*setInterval(() => {
+setInterval(() => {
     getNotificationNotContest(token_);
-}, 30000);*/
+}, 30000);
 
 function getNotificationNotContest(token) {
     fetch('/contactosNoContestados', {
