@@ -1882,6 +1882,8 @@ function contienePalabra(frase, palabras) {
     );
   
 }
+<<<<<<< HEAD
+=======
 
 export const findIdChat = async(req, res) => {
     try {
@@ -1947,3 +1949,4 @@ export const statusMensajeCodigo = async (req, res) => {
         return res.json({message: error.message});
     }
 }
+>>>>>>> f849aa6ca56c02d10d6a52d8e490171dc0fdfaa9
