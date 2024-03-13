@@ -915,7 +915,7 @@ function viewFromText(data, hora) {
                                 <i class="bi bi-star fs-18 me-2"></i>Starred
                             </a>   
                             <a class="dropdown-item" href="#">
-                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                <i class="bi bi-trash fs-18 me-2"></i>Eliminar
                             </a>   
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-files fs-18 me-2"></i>Copy
@@ -1155,7 +1155,7 @@ function viewReceipText(data, fecha) {
                                 <i class="bi bi-star fs-18 me-2"></i>Starred
                             </a>   
                             <a class="dropdown-item" href="#">
-                                <i class="bi bi-trash fs-18 me-2"></i>Delete
+                                <i class="bi bi-trash fs-18 me-2"></i>Eliminar
                             </a>   
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-files fs-18 me-2"></i>Copy
@@ -2259,7 +2259,12 @@ btnAgregar.addEventListener('click', (e) => {
             if (data.message === 'existe') {
                 alert(data.data);
             } else {
-                alert(data.message);
+                $("#modalNuevoContacto").modal("hide");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "No se conecto con la Api de Whatsapp! - "+data.message
+                });
             }
         }
     })
@@ -2789,20 +2794,16 @@ function checkStateMessage(data) {
     if(dataStatus) {
         if(dataStatus.status === 'sent') {
             icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+        } else if(dataStatus.status === 'delivered') {
+            icono = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
+        } else if(dataStatus.status === 'read') {
+            icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
         } else {
-            if (dataStatus.status === 'delivered') {
-                icono = `<i class="bi bi-check-all ms-1" style="font-size: 16px"></i>`;
-            } else {
-                if (dataStatus.status === 'read') {
-                    icono = `<i class="bi bi-check-all ms-1 text-primary" style="font-size: 16px"></i>`;
-                } else {
-                    icono = `<i class="bi bi-exclamation-circle ms-1 text-danger" style="font-size: 16px"></i>`;
-                }
-            }
+            icono = `<i class="bi bi-arrow-clockwise ms-1 text-danger" style="font-size: 16px"></i>`;
         }
 
     } else {
-        icono = `<i class="bi bi-check ms-1" style="font-size: 16px"></i>`;
+        icono = `<i class="bi bi-arrow-clockwise ms-1 text-primary" style="font-size: 16px; cursor: pointer" onclick="reenviarTemplate(${data.id})"></i>`;
     }
 
     return icono;
@@ -2976,6 +2977,7 @@ function viewSeguimientos() {
                 <th>${contacto.from}</th>
                 <th>${contacto.nameContact}</th>
                 <th>${contacto.arrayExtra.asistente}</th>
+                <th>${contacto.arrayExtra.nameEtiqueta}</th>
                 <th>${carrera}</th>
                 <th></th>
                 <th></th>
@@ -2991,6 +2993,7 @@ function viewSeguimientos() {
 
                 html += `
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -3012,6 +3015,7 @@ function viewSeguimientos() {
                             <th>Numero</th>
                             <th>Contacto</th>
                             <th>Asistente</th>
+                            <th>Etiqueta</th>
                             <th>Carrera</th>
                             <th>Fecha</th>
                             <th>Seguimiento</th>
@@ -3886,4 +3890,41 @@ function deleteSeguimiento(id, numero) {
             })
         }
       });
+}
+
+function reenviarTemplate(idChat) {
+    fetch('/chatId/'+idChat)
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Enviado correctamente",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            const codigo = data.data;
+
+            updateIconoCheck(codigo);
+
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "No se envio la plantilla, intente nuevamente!",
+            });
+        }
+    })
+}
+
+function updateIconoCheck(codigo) {
+    fetch('/statusMessageCodigo/'+codigo)
+    .then(res => res.json())
+    .then(data => {
+        if(data.message === 'ok') {
+
+        }
+    })
 }

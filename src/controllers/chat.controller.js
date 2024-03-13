@@ -1881,3 +1881,71 @@ function contienePalabra(frase, palabras) {
     );
   
 }
+<<<<<<< HEAD
+=======
+
+export const findIdChat = async(req, res) => {
+    try {
+        const id = req.params.id;
+
+        const chat = await Chat.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        const dataJson = chat.dataJson;
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: process.env.URL_MESSAGES,
+            headers: {
+                'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
+            },
+            data: dataJson
+        };
+
+        const response = await axios(config);
+
+        const data = response.data;
+
+        //return res.json(data);
+
+        const messageStatus = data.messages[0].message_status;
+
+        if (messageStatus === 'accepted') {
+
+            const updateChat = await Chat.update({ codigo: data.messages[0].id }, {
+                where: { id: id }
+            });
+
+            return res.json({ message: 'ok', data: data.messages[0].id });
+
+        } else {
+            return res.json({ message: "No fue enviado la plantilla" });
+        }
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+
+export const statusMensajeCodigo = async (req, res) => {
+    try {
+        const codigo = req.params.id;
+
+        const estadoMensaje = await Chat_estados.findOne({
+            where: {
+                codigo: codigo
+            },
+            order: literal("CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC")
+        });
+
+        return res.json({ message: 'ok', data: estadoMensaje });
+
+    } catch (error) {
+        return res.json({message: error.message});
+    }
+}
+>>>>>>> f849aa6ca56c02d10d6a52d8e490171dc0fdfaa9

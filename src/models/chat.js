@@ -77,6 +77,9 @@ export const Chat = sequelize.define('chat', {
     },
     ctwa_clid: {
         type: DataTypes.STRING
+    },
+    dataJson: {
+        type: DataTypes.JSONB
     }
 }, {
     freezeTableName: true,
