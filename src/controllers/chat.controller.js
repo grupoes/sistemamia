@@ -557,7 +557,8 @@ export const numerosWhatsapp = async(req, res) => {
 
         if(etiqueta != '0') {
             resultados = sortedData.filter(objeto => {
-                return objeto.etiqueta_id == etiqueta; 
+                return objeto.etiqueta_id == etiqueta;
+                 
             });
         }
 
