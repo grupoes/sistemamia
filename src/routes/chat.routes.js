@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { chatView, mensajes_numero, addMessageFirestore, numerosWhatsapp, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta, enviar_mensaje_icono_whatsapp, socketMensaje, getEmpleadosAsignar, asignarAsistente, chatOne, getChatCodigo, contactosNoContestados, uploadImagePaste, envio_formulario_panel, delete_contacto, updateLoadContact } from "../controllers/chat.controller.js";
+import { chatView, mensajes_numero, addMessageFirestore, numerosWhatsapp, uploadImage, asignarClienteAUnTrabajador, insertChat, uploadAudio, audioMiddleware, getEmbudoEtiqueta, getEtiquetaEmbudo, actualizarEtiqueta, enviar_mensaje_icono_whatsapp, socketMensaje, getEmpleadosAsignar, asignarAsistente, chatOne, getChatCodigo, contactosNoContestados, uploadImagePaste, envio_formulario_panel, delete_contacto, updateLoadContact, findIdChat, statusMensajeCodigo } from "../controllers/chat.controller.js";
 
 import { getAgenteId, asignarAsistenteDataJson } from "../controllers/base.controller.js";
 
@@ -37,6 +37,9 @@ router.post('/postPanel', envio_formulario_panel);
 router.get('/deleteContact/:id', checkAuth, delete_contacto);
 
 router.post('/actualizarContactList', checkAuth, updateLoadContact);
+
+router.get('/chatId/:id', findIdChat);
+router.get('/statusMessageCodigo/:id', statusMensajeCodigo);
 
 
 export default router;

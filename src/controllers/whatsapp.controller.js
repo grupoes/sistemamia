@@ -14,6 +14,7 @@ import { SeguimientoContacto } from "../models/seguimientoContacto.js";
 import { Notification } from "../models/notification.js";
 
 import { asignarAsistenteData } from "./base.controller.js";
+import { jsonTemplate } from "./apisWhatsapp.controller.js";
 
 import path from 'path';
 import fs from 'fs';
@@ -56,6 +57,7 @@ export const addWhatsapp = async (req, res) => {
 
 export const addContact = async (req, res) => {
     const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera } = req.body;
+
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
@@ -137,217 +139,94 @@ export const addContact = async (req, res) => {
         });
 
         //enviar la plantilla al numero
+        let contenJson = "";
+        let contenido = "";
+
+        const plantilla = await Plantilla.findOne({
+            where: {
+                id: idPlantilla
+            }
+        });
+
+        let tipoMensaje = "";
+
+        if(plantilla.tipoCabecera === 'no') {
+            tipoMensaje = "text";
+        } else if(plantilla.tipoCabecera === 'image') {
+            tipoMensaje = "image";
+        } else if(plantilla.tipoCabecera === 'video') {
+            tipoMensaje = "video";
+        } else {
+            tipoMensaje = "document";
+        }
+
+        let parametros_body = [];
+
+        if (idPlantilla == 3) {
+
+            let dataNombre = {
+                type: "text",
+                text: dataAsistente.nombres
+            };
+
+            let dataApellidos = {
+                type: "text",
+                text: dataAsistente.apellidos
+            }
+
+            parametros_body.push(dataNombre);
+            parametros_body.push(dataApellidos);
+        } else {
+
+            if(variables.length > 0) {
+                for (let i = 0; i < variables.length; i++) {
+                    let parametro = {
+                        type: "text",
+                        text: variables[i],
+                    };
+    
+                    parametros_body.push(parametro);
+    
+                }
+            }
+
+        }
+
+        const messageSend = plantilla.contenido;
+
+        contenido = reemplazarMarcadoresConArray(messageSend, variables);
+
+        let descripcionChat = "";
+        let contenidoChat = contenido;
+
+        if (plantilla.cabecera === 'si') {
+            descripcionChat = contenido;
+            contenidoChat = "";
+        }
+
+        const jsonData = jsonTemplate(plantilla.tipoCabecera, numero, plantilla.nombre, plantilla.url_cabecera, parametros_body);
+
+        const newMessage = await Chat.create({
+            codigo: "",
+            from: process.env.NUMERO_WHATSAPP,
+            message: contenidoChat,
+            nameContact: "Grupo Es Consultores",
+            receipt: numero,
+            timestamp: Math.floor(Date.now() / 1000),
+            typeMessage: tipoMensaje,
+            estadoMessage: "sent",
+            description: descripcionChat,
+            documentId: "",
+            id_document: "",
+            filename: "",
+            fromRes: "",
+            idRes: "",
+            dataJson: jsonData
+        });
 
         try {
-            let contenJson = "";
-            let contenido = "";
 
-            const plantilla = await Plantilla.findOne({
-                where: {
-                    id: idPlantilla
-                }
-            });
-
-            let tipoMensaje = "";
-
-            if (variables.length == 0) {
-
-                if (plantilla.cabecera === 'si') {
-                    if (plantilla.tipoCabecera === 'video') {
-                        contenJson = {
-                            "messaging_product": "whatsapp",
-                            "recipient_type": "individual",
-                            "to": numero,
-                            "type": "template",
-                            "template": {
-                                "name": plantilla.nombre,
-                                "language": { "code": "es" },
-                                "components": [
-                                    {
-                                        "type": "header",
-                                        "parameters": [
-                                            {
-                                                "type": "video",
-                                                "video": {
-                                                    "link": plantilla.url_cabecera
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        };
-
-                        tipoMensaje = 'video';
-                    }
-
-                    if (plantilla.tipoCabecera === 'image') {
-                        contenJson = {
-                            "messaging_product": "whatsapp",
-                            "recipient_type": "individual",
-                            "to": numero,
-                            "type": "template",
-                            "template": {
-                                "name": plantilla.nombre,
-                                "language": { "code": "es" },
-                                "components": [
-                                    {
-                                        "type": "header",
-                                        "parameters": [
-                                            {
-                                                "type": "image",
-                                                "image": {
-                                                    "link": plantilla.url_cabecera
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        };
-
-                        tipoMensaje = 'image';
-                    }
-
-                } else {
-                    contenJson = {
-                        "messaging_product": "whatsapp",
-                        "recipient_type": "individual",
-                        "to": numero,
-                        "type": "template",
-                        "template": {
-                            "name": plantilla.nombre,
-                            "language": { "code": "es" }
-                        }
-                    };
-
-                    tipoMensaje = 'text';
-                }
-
-                contenido = plantilla.contenido;
-            } else {
-                //aca validar cuando el id de la plantilla es 3, para sacar el nombre y el apellido dinamicamente
-
-                let parametros_body = [];
-
-                if (idPlantilla == 3) {
-
-                    let dataNombre = {
-                        type: "text",
-                        text: dataAsistente.nombres
-                    };
-
-                    let dataApellidos = {
-                        type: "text",
-                        text: dataAsistente.apellidos
-                    }
-
-                    parametros_body.push(dataNombre);
-                    parametros_body.push(dataApellidos);
-                } else {
-                    for (let i = 0; i < variables.length; i++) {
-                        let parametro = {
-                            type: "text",
-                            text: variables[i],
-                        };
-
-                        parametros_body.push(parametro);
-
-                    }
-                }
-
-                if (plantilla.cabecera === 'no') {
-                    contenJson = {
-                        "messaging_product": "whatsapp",
-                        "recipient_type": "individual",
-                        "to": numero,
-                        "type": "template",
-                        "template": {
-                            "name": plantilla.nombre,
-                            "language": { "code": "es" },
-                            "components": [
-                                {
-                                    "type": "body",
-                                    "parameters": parametros_body
-                                }
-                            ]
-                        }
-                    };
-
-                    tipoMensaje = 'text';
-                } else {
-                    if (plantilla.cabecera === 'video') {
-                        contenJson = {
-                            "messaging_product": "whatsapp",
-                            "recipient_type": "individual",
-                            "to": numero,
-                            "type": "template",
-                            "template": {
-                                "name": plantilla.nombre,
-                                "language": { "code": "es" },
-                                "components": [
-                                    {
-                                        "type": "header",
-                                        "parameters": [
-                                            {
-                                                "type": "video",
-                                                "video": {
-                                                    "link": plantilla.url_cabecera
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "body",
-                                        "parameters": parametros_body
-                                    }
-                                ]
-                            }
-                        };
-
-                        tipoMensaje = 'video';
-                    }
-
-                    if (plantilla.cabecera === 'image') {
-                        contenJson = {
-                            "messaging_product": "whatsapp",
-                            "recipient_type": "individual",
-                            "to": numero,
-                            "type": "template",
-                            "template": {
-                                "name": plantilla.nombre,
-                                "language": { "code": "es" },
-                                "components": [
-                                    {
-                                        "type": "header",
-                                        "parameters": [
-                                            {
-                                                "type": "image",
-                                                "image": {
-                                                    "link": plantilla.url_cabecera
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "body",
-                                        "parameters": parametros_body
-                                    }
-                                ]
-                            }
-                        };
-
-                        tipoMensaje = 'image';
-                    }
-                }
-
-
-
-                const messageSend = plantilla.contenido;
-
-                contenido = reemplazarMarcadoresConArray(messageSend, variables);
-
-            }
+            //return res.json({ data: jsonData });
 
             let config = {
                 method: 'post',
@@ -356,40 +235,21 @@ export const addContact = async (req, res) => {
                 headers: {
                     'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
                 },
-                data: contenJson
+                data: jsonData
             };
 
             const response = await axios(config);
 
             const data = response.data;
 
+            //return res.json(data);
+
             const messageStatus = data.messages[0].message_status;
 
             if (messageStatus === 'accepted') {
 
-                let descripcionChat = "";
-                let contenidoChat = contenido;
-
-                if (plantilla.cabecera === 'si') {
-                    descripcionChat = contenido;
-                    contenidoChat = "";
-                }
-
-                const newMessage = await Chat.create({
-                    codigo: data.messages[0].id,
-                    from: process.env.NUMERO_WHATSAPP,
-                    message: contenidoChat,
-                    nameContact: "Grupo Es Consultores",
-                    receipt: numero,
-                    timestamp: Math.floor(Date.now() / 1000),
-                    typeMessage: tipoMensaje,
-                    estadoMessage: "sent",
-                    description: descripcionChat,
-                    documentId: "",
-                    id_document: "",
-                    filename: "",
-                    fromRes: "",
-                    idRes: ""
+                const updateChat = await Chat.update({ codigo: data.messages[0].id }, {
+                    where: { id: newMessage.id }
                 });
 
                 return res.json({ message: 'ok', data: newMessage });
@@ -400,6 +260,10 @@ export const addContact = async (req, res) => {
 
 
         } catch (error) {
+            const updateChat = await Chat.update({ estadoMessage: "tmpNo" }, {
+                where: { id: newMessage.id }
+            });
+
             return res.status(400).json({ message: error.message });
         }
 
@@ -1067,10 +931,32 @@ export const listaSeguimientos = async (req, res) => {
                 trabajador = asistente.nombres + " " + asistente.apellidos;
             }
 
+            const etiquetaActual = await EtiquetaCliente.findOne({
+                where: {
+                    estado: 1,
+                    cliente_id: potencial.id
+                }
+            });
+
+            let nameEtiqueta = "";
+
+            if(etiquetaActual) {
+                const etiqueta = etiquetaActual.etiqueta_id;
+
+                const dataEtiqueta = await Etiqueta.findOne({
+                    where: {
+                        id: etiqueta
+                    }
+                });
+
+                nameEtiqueta = dataEtiqueta.descripcion;
+            }
+
             const arrayExtra = {
                 carrera: carrera,
                 seguimientos: seguimientos,
-                asistente: trabajador
+                asistente: trabajador,
+                nameEtiqueta: nameEtiqueta
             };
 
             let estadoObject = contacto.get({ plain: true });
