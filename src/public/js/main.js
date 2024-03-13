@@ -8,7 +8,7 @@ window.addEventListener('load', (e) => {
 
     getDataToken(token_);
 
-    //getNotificationNotContest(token_);
+    getNotificationNotContest(token_);
     
 });
 
