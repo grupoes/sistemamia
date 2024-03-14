@@ -3119,6 +3119,7 @@ function viewFilterContacts(data) {
             <td></td>
             <td>${contact.arrayExtra.origen}</td>
             <td>${contact.arrayExtra.tipo_origen}</td>
+            <td>${contact.arrayExtra.nameEtiqueta}</td>
         </tr>
         `;
     });
@@ -3137,6 +3138,7 @@ function viewFilterContacts(data) {
                     <th>Carrera</th>
                     <th>Origen</th>
                     <th>Tipo Origen</th>
+                    <th>Etiqueta</th>
                 </tr>
             </thead>
             <tbody>
