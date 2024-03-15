@@ -548,7 +548,7 @@ export const numerosWhatsapp = async(req, res) => {
                 });
             }
 
-            filterData = filterData.slice(0, 250);
+            filterData = filterData.slice(0, 50);
 
             return res.json({message: "ok", data: filterData, rol: rol, id:id});
         }
@@ -562,7 +562,7 @@ export const numerosWhatsapp = async(req, res) => {
             });
         }
 
-        resultados = resultados.slice(0, 250);
+        resultados = resultados.slice(0, 50);
 
         return res.json({message: "ok",data: resultados, rol: rol, id:id });
 
