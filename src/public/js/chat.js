@@ -2416,7 +2416,7 @@ escogePlantilla.addEventListener('change', (e) =>  {
                 cabecera = `
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <img src="${data.plantilla.url_cabecera}" />
+                        <img src="${data.plantilla.url_cabecera}" style="width: 100%" />
                     </div>
                 </div>
                 `;
