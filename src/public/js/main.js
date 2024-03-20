@@ -8,7 +8,7 @@ window.addEventListener('load', (e) => {
 
     getDataToken(token_);
 
-    getNotificationNotContest(token_);
+    //getNotificationNotContest(token_);
     
 });
 
@@ -28,9 +28,9 @@ function getDataToken(token_) {
     })
 }
 
-setInterval(() => {
+/*setInterval(() => {
     getNotificationNotContest(token_);
-}, 30000);
+}, 30000);*/
 
 function getNotificationNotContest(token) {
     fetch('/contactosNoContestados', {
@@ -83,9 +83,9 @@ salir.addEventListener('click', (e) => {
 });
 
 
-setInterval(() => {
+/*setInterval(() => {
     notificacionesContacto(token_);
-}, 40000);
+}, 40000);*/
 
 function notificacionesContacto(token) {
     fetch('/notificationContacto', {
