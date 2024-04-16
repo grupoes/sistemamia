@@ -278,99 +278,26 @@ export const getContacts = async (req, res) => {
         const rol = req.usuarioToken._role;
         const id = req.usuarioToken._id;
 
-        let contactos = "";
+        let sql = "";
 
-        if (rol === 2 || rol === 6) {
-            contactos = await NumeroWhatsapp.findAll({
-                where: {
-                    asistente: id,
-                    [Op.or]: [
-                        {
-                            nameContact: {
-                                [Op.iLike]: `%${buscar}%`
-                            }
-                        },
-                        {
-                            from: {
-                                [Op.like]: `%${buscar}%`
-                            }
-                        }
-                    ]
-                }
-            });
-        } else {
-            contactos = await NumeroWhatsapp.findAll({
-                where: {
-                    [Op.or]: [
-                        {
-                            nameContact: {
-                                [Op.iLike]: `%${buscar}%`
-                            }
-                        },
-                        {
-                            from: {
-                                [Op.like]: `%${buscar}%`
-                            }
-                        }
-                    ]
-                }
-            });
+        if(rol === 2 || rol === 6) {
+            sql = `and nw.asistente = ${id}`;
         }
 
-        let arrayContact = [];
+        const query = `
+        select nw."from", nw."nameContact", concat(t.nombres, ' ', t.apellidos) as asistente 
+        from numeros_whatsapp nw inner join trabajadores t on t.id = nw.asistente
+        where (nw."from" like '%${buscar}%' or nw."nameContact" ilike '%${buscar}%') ${sql}
+        order by nw."createdAt" desc
+        `;
 
-        for (const contacto of contactos) {
+        const results = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT,
+            raw: true,
+            nest: true,
+        });
 
-            const potencial = await PotencialCliente.findOne({
-                where: {
-                    numero_whatsapp: contacto.from
-                }
-            });
-
-            const idp = potencial.id;
-
-            const etiqueta = await EtiquetaCliente.findOne({
-                where: {
-                    cliente_id: idp,
-                    estado: 1
-                }
-            });
-
-            const eti = await Etiqueta.findOne({
-                where: {
-                    id: etiqueta.etiqueta_id
-                }
-            });
-            let nombreAsistente = "";
-
-            if (contacto.asistente == null) {
-
-            } else {
-                const nameUsuario = await Trabajadores.findOne({
-                    where: {
-                        id: contacto.asistente
-                    }
-                });
-
-                nombreAsistente = nameUsuario.nombres + " " + nameUsuario.apellidos;
-            }
-
-            let array = {
-                numero: contacto.from,
-                name: contacto.nameContact,
-                nameEtiqueta: eti.descripcion,
-                potencial: idp,
-                etiqueta_id: etiqueta.etiqueta_id,
-                rol: rol,
-                asistente: contacto.asistente,
-                nameAsistente: nombreAsistente
-
-            };
-
-            arrayContact.push(array);
-        }
-
-        return res.json({ message: 'ok', data: arrayContact });
+        return res.json({ message: 'ok', data: results });
 
     } catch (error) {
         return res.status(400).json({ message: error.message });

@@ -180,6 +180,9 @@
                                     
                                     <a class="dropdown-item" href="javascript: void(0);" id="reporteSeguimiento"><i
                                             class="bi bi-person-check-fill fs-18 me-2"></i>Reporte seguimiento</a>
+
+                                    <a class="dropdown-item" href="javascript: void(0);" id="interaccionesContact"><i
+                                            class="bi bi-person-check-fill fs-18 me-2"></i>Interacciones</a>
                                 </div>
                             </li>
                         </ul>
@@ -195,7 +198,7 @@
                                 <button class="btn input-group-text" type="submit">
                                     <i class="uil uil-search"></i>
                                 </button>
-                                <input type="search" class="form-control" placeholder="Buscar..." id="top-search">
+                                <input type="text" class="form-control" placeholder="Buscar..." id="search-chat-list">
                             </div>
                         </div>
                     </form>
@@ -203,8 +206,20 @@
                 <!-- End searchbar -->
 
                 <!-- start contact list -->
-                <div class="pe-2" data-simplebar style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
+                <div class="pe-2" style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
                     id="contactos-whatsapp">
+
+                </div>
+
+                <div class="pe-2" style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
+                    id="search-contactos-whatsapp" hidden>
+                    <div class="modal-header" style="padding: 0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 8px;" id="closeSearch"></button>
+                    </div>
+
+                    <div id="listSearch">
+
+                    </div>
 
                 </div>
                 <!-- End contact list -->
@@ -221,7 +236,7 @@
     </div> <!-- End col -->
 
     <div class="col-xl-4 p-0" style="display: none;" id="contentFiltros">
-        <div class="card" style="height: 620px">
+        <div class="card" style="height: 620px; overflow: hidden;">
             <div class="card-body">
                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
                     onclick="cerrar_ventana_chat()"></button>
@@ -341,6 +356,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="numContEti">
                 <input type="hidden" id="idpot" value="">
                 <div class="mb-3">
                     <label for="embudo" class="col-form-label">Embudo:</label>
@@ -697,4 +713,3 @@
         </div>
     </div>
 </div>
-

@@ -267,8 +267,7 @@ socket.on("messageContacts", data => {
 });
 
 function viewItemContactList(data) {
-    console.log(data);
-    console.log('lista contactos');
+    
     let html = "";
 
     if(document.getElementById('item-contacto-'+data.numero)) {
@@ -401,11 +400,11 @@ function viewItemContactList(data) {
 
 
 filterEtiqueta.addEventListener('change', (e) => {
-    loadContact();
+    renderChatContactos();
 });
 
 plataforma_id.addEventListener('change', (e) => {
-    loadContact();
+    renderChatContactos();
 });
 
 function loadContact() {
@@ -429,6 +428,140 @@ function loadContact() {
         .then(data => {
             viewContact(data);
         })
+}
+
+//aca la nueva funcion para cargar el chat de los contactos
+renderChatContactos();
+
+function renderChatContactos() {
+    contactos.innerHTML = '<p class="text-center text-primary">Cargando...</p>';
+
+    const etiqueta = filterEtiqueta.value;
+    const plataforma = plataforma_id.value;
+
+    fetch("/lista-chat/"+etiqueta+"/"+plataforma, {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        const html = viewListChatContact(data.data, 1);
+        contactos.innerHTML = html;
+    })
+    
+}
+
+function viewListChatContact(data, tipo) {
+    let html = "";
+    data.forEach(contact => {
+        let hourMessage = formatDate(contact.ultimo_timestamp);
+
+        let countMessage = "";
+        let asistente = "";
+
+        if (contact.total_mensajes_sent > 0) {
+            countMessage = `<span class="float-end badge bg-danger text-white" id="cantidad-message-${contact.contacto}">${contact.total_mensajes_sent}</span>`;
+        }
+
+        if(rol.value === "1" || rol.value === "3") {
+            asistente = `<p style="margin: 0;font-size: 12px;color: dodgerblue;">${contact.asistente}</p>`;
+        }
+
+        let checkMessage = "";
+
+        if(contact.estadoMensaje) {
+            if(contact.estadoMensaje == 'sent') {
+                checkMessage = `<i class="bi bi-check ms-1" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
+            } else {
+                if(contact.estadoMensaje == 'delivered') {
+                    checkMessage = `<i class="bi bi-check-all ms-1" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
+                } else {
+                    if (contact.estadoMensaje == 'read') {
+                        checkMessage = `<i class="bi bi-check-all ms-1 text-primary" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
+                    } else {
+                        checkMessage = `<i class="bi bi-exclamation-circle ms-1 text-danger" id="list-${contact.codigo}" style="font-size: 16px"></i>`;
+                    }
+                }
+            }
+
+        }
+
+        let mensaje = ""
+
+        if(contact.typemessage === 'text') {
+            mensaje = contact.ultimo_mensaje;
+        }
+
+        if (contact.typemessage === 'audio') {
+            mensaje = `<i class="bi bi-headphones"></i> Audio`;
+        }
+
+        if (contact.typemessage === 'video') {
+            mensaje = `<i class="bi bi-camera-video-fill"></i> Video`;
+        }
+
+        if (contact.typemessage === 'document') {
+            mensaje = `<i class="bi bi-file-earmark-fill"></i> Archivo`;
+        }
+
+        if (contact.typemessage === 'image') {
+            mensaje = `<i class="bi bi-image-fill"></i> Imagen`;
+        }
+
+        let itemDelete = "";
+
+        if(rol.value === "1" || rol.value === "3") {
+            itemDelete += `
+            <div class="dropdown-divider"></div>
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item text-danger" onclick="deleteContacto('${contact.contacto}')">
+                <i class="uil uil-trash me-2"></i>Eliminar
+            </a>
+            `;
+        }
+
+        let opciones = "";
+
+        if(tipo === 1) {
+            opciones = `
+            <div class="dropdown align-self-center float-end">
+                <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="uil uil-angle-down" style="font-size: 20px"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item">
+                        <i class="uil uil-exit me-2"></i>Fijar Chat
+                    </a>
+
+                    <a href="javascript:void(0);" class="dropdown-item" onclick="modalSeguimiento(${contact.contacto}, '${contact.nombre_contacto}')">
+                        <i class="uil uil-exit me-2"></i>Seguimiento
+                    </a>
+                    ${itemDelete}
+                </div>
+            </div>
+            `;
+        }
+
+        html += `
+        <div class="d-flex border-top pt-2" id="item-contacto-${contact.contacto}">
+            <img src="img/logos/icon.png" class="avatar rounded me-1" alt="shreyu">
+            <div class="flex-grow-1" style="cursor: pointer" onclick="chatDetail(${contact.contacto})">
+                ${asistente}
+                <h5 class="mt-1 mb-0 fs-15">${contact.nombre_contacto} <span class="float-end text-muted fs-12">${hourMessage}</span></h5>
+                <h6 class="text-muted fw-normal mt-1 mb-2">
+                    <span style="display: inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 160px;" title='${contact.ultimo_mensaje}'>${checkMessage}${mensaje}</span>
+                    ${countMessage}
+                </h6>
+            </div>
+            ${opciones}
+        </div>
+        `;
+    });
+
+    return html;
 }
 
 function viewContact(data) {
@@ -551,7 +684,7 @@ function viewContact(data) {
     contactos.innerHTML = html;
 }
 
-loadContact();
+//loadContact();
 
 function formatDate(timestamp) {
     var now = new Date();
@@ -586,151 +719,163 @@ function chatPrincipalView() {
 
 chatPrincipalView();
 
-function chatDetail(numero, name, etiqueta, potencial, etiqueta_id, rol, asignado, asistente) {
-
-    let asignar = "";
-    let asist = "";
-    let seguimiento = "";
+function chatDetail(numero) {
 
     if(document.getElementById('cantidad-message-'+numero)) {
         socket.emit( 'updateQuantyMessage', { numero: numero } );
     }
 
-    if(rol === 1 || rol === 3) {
-        asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${potencial}, ${asignado})"><i
-        class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
-        asist = `<span class="text-primary">${asistente}</span>`;
+    fetch('/getContactoData/'+numero, {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
 
-    }
+        let asignar = "";
+        let asist = "";
+        let seguimiento = "";
 
-    let html = `
-    <div class="d-flex pb-2 border-bottom align-items-center">
-        <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Cliente" />
-        <div>
-            <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${name}</h5>
-            <p class="mb-0" id="numberWhatsapp">${numero}</p>
-            ${asist}
-            <input type="hidden" id="whatsappNumber" value="${numero}">
-            <input type="hidden" id="potencialId" value="${potencial}">
-        </div>
-        <div class="flex-grow-1">
-            <ul class="list-inline float-end mb-0">
-                <li class="list-inline-item fs-18 me-3 dropdown">
-                    <span class="badge badge-soft-success py-1" id="etiquetaTitle">${etiqueta}</span>
-                </li>
-                <li class="list-inline-item fs-18 me-3 dropdown">
-                    <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#voicecall">
-                        <i class="bi bi-telephone-plus"></i>
-                    </a>
-                </li>
-                <li class="list-inline-item fs-18 me-3 dropdown">
-                    <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#videocall">
-                        <i class="bi bi-camera-video"></i>
-                    </a>
-                </li>
-                <li class="list-inline-item fs-18 dropdown">
-                    <a href="javascript: void(0);" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="javascript: void(0);" onclick="viewProfle()">
-                            <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
-                        </a>
-                        <a class="dropdown-item" href="javascript: void(0);" onclick="editContact()">
-                            <i class="bi bi-person-check fs-18 me-2"></i>Editar Contacto
-                        </a>
-                        <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${potencial}, ${etiqueta_id})"><i
-                                class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
-                        ${asignar}
+        const datos = data.data;
 
-                        <a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${numero}', '${name}')"><i class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>
-                        
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="mt-1" id="contentChat">
-        <ul class="conversation-list px-0 h-100" data-simplebar
-            style="min-height: 405px; max-height: 405px; overflow: hidden scroll;" id="conversation-${numero}">
+        console.log(datos);
 
+        if(data.rol === 1 || data.rol === 3) {
+            asignar = `<a class="dropdown-item" href="javascript: void(0);" onclick="asignarChat(${datos.potencialcliente}, ${datos.id})"><i
+            class="bi bi-search fs-18 me-2" ></i>Asignar</a>`;
+            asist = `<span class="text-primary">${datos.asistente}</span>`;
+        }
 
-        </ul>
-        
-        <div class="mt-2 bg-light p-3 rounded" style="position: relative">
-
-            <div id="emojis" style="display: none;">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
-                <div class="card-body p-0" style="height: 130px; overflow-x: scroll; margin-top: 7px" >
-                    
-                    <div id="list-emojis">
-                        
-                    </div>
-                </div>
+        let html = `
+        <div class="d-flex pb-2 border-bottom align-items-center">
+            <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Cliente" />
+            <div>
+                <h5 class="mt-0 mb-0 fs-14" id="nameContacto">${datos.nameContact}</h5>
+                <p class="mb-0" id="numberWhatsapp">${datos.from}</p>
+                ${asist}
+                <input type="hidden" id="whatsappNumber" value="${datos.from}">
+                <input type="hidden" id="potencialId" value="${datos.potencialCliente}">
             </div>
+            <div class="flex-grow-1">
+                <ul class="list-inline float-end mb-0">
+                    <li class="list-inline-item fs-18 me-3 dropdown">
+                        <span class="badge badge-soft-success py-1" id="etiquetaTitle">${datos.descripcion}</span>
+                    </li>
+                    <li class="list-inline-item fs-18 me-3 dropdown">
+                        <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#voicecall">
+                            <i class="bi bi-telephone-plus"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item fs-18 me-3 dropdown">
+                        <a href="javascript: void(0);" class="text-dark" data-bs-toggle="modal" data-bs-target="#videocall">
+                            <i class="bi bi-camera-video"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item fs-18 dropdown">
+                        <a href="javascript: void(0);" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="javascript: void(0);" onclick="viewProfle()">
+                                <i class="bi bi-person-circle fs-18 me-2"></i>Ver Contacto
+                            </a>
+                            <a class="dropdown-item" href="javascript: void(0);" onclick="editContact()">
+                                <i class="bi bi-person-check fs-18 me-2"></i>Editar Contacto
+                            </a>
+                            <a class="dropdown-item" href="javascript: void(0);" onclick="etiquetaCliente(${datos.potencialcliente}, ${datos.etiqueta})"><i
+                                    class="bi bi-music-note-list fs-18 me-2"></i>Etiqueta</a>
+                            ${asignar}
 
-            <form class="needs-validation" novalidate="" name="chat-form" id="chat-form" method="post" onsubmit="envioFormulario(event)">
-                <input type="hidden" name="numberWhat" value="${numero}">
-                <div id="responderMessage">
-                    
-                </div>
-                <div class="row">
-                    <div class="col mb-2 mb-sm-0">
-                        <!--<input type="text" class="form-control border-0" name="mensaje_form"
-                            placeholder="Ingrese el mensaje" required="" id="contentMensaje">-->
-                        <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)" onpaste="pegarImagenInput(event)" spellcheck="true"></textarea>
-                        <ul id="listaSugerencias"></ul>
-                        <div class="" id="horas_transcurridas" style="display:none; text-align:center;">
-                            <span class="hora-estilo">01:45:30 H </span>
+                            <a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${datos.from}', '${datos.nameContact}')"><i class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>
+                            
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-1" id="contentChat">
+            <ul class="conversation-list px-0 h-100" data-simplebar
+                style="min-height: 405px; max-height: 405px; overflow: hidden scroll;" id="conversation-${datos.from}">
+
+
+            </ul>
+            
+            <div class="mt-2 bg-light p-3 rounded" style="position: relative">
+
+                <div id="emojis" style="display: none;">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="cerrar_ventana_emojis()"></button>
+                    <div class="card-body p-0" style="height: 130px; overflow-x: scroll; margin-top: 7px" >
+                        
+                        <div id="list-emojis">
+                            
                         </div>
                     </div>
-                    <div class="col-sm-auto">
-                        <div class="btn-group">
-                            <a href="#" class="btn btn-light" onclick="allEmojis(event)"><i class="bi bi-emoji-smile fs-18"></i></a>
-                            <input type="file" id="fileInput" style="display: none;" />
-                            <audio id="audio" controls="" style="display: none"></audio>
-                            <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
-                            <div class="dropdown" style="padding: 7px;">
-                                <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="true">
-                                    <i class="uil uil-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-143px, 21px);">
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item" onclick="fileWhatsapp()">
-                                        <i class="uil-image-upload me-2"></i>fotos y videos
-                                    </a>
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item" onclick="documentoFile()">
-                                        <i class="uil-file-upload-alt me-2"></i>Documento
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item" onclick="plantillaGet()">
-                                        <i class="uil-file-landscape-alt me-2"></i>Plantilla
-                                    </a>
-                                </div>
-                            </div>
-                            <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-success chat-send" id="sendChat"><i
-                                        class='uil uil-message'></i></button>
-                            </div>
+                </div>
+
+                <form class="needs-validation" novalidate="" name="chat-form" id="chat-form" method="post" onsubmit="envioFormulario(event)">
+                    <input type="hidden" name="numberWhat" value="${datos.from}">
+                    <div id="responderMessage">
                         
                     </div>
-                </div>
-            </form>
+                    <div class="row">
+                        <div class="col mb-2 mb-sm-0">
+                            <!--<input type="text" class="form-control border-0" name="mensaje_form"
+                                placeholder="Ingrese el mensaje" required="" id="contentMensaje">-->
+                            <textarea class="form-control" rows="1" id="contentMensaje" name="mensaje_form" required="" style="resize: none;" placeholder="Ingrese el mensaje" oninput="detectarAltoInputMensaje(this)" onkeydown="detectarEnterEnElTextArea(event, this)" onpaste="pegarImagenInput(event)" spellcheck="true"></textarea>
+                            <ul id="listaSugerencias"></ul>
+                            <div class="" id="horas_transcurridas" style="display:none; text-align:center;">
+                                <span class="hora-estilo">01:45:30 H </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-light" onclick="allEmojis(event)"><i class="bi bi-emoji-smile fs-18"></i></a>
+                                <input type="file" id="fileInput" style="display: none;" />
+                                <audio id="audio" controls="" style="display: none"></audio>
+                                <button type="button" class="btn btn-primary" id="sendAudio" style="display: none">ok</button>
+                                <div class="dropdown" style="padding: 7px;">
+                                    <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="uil uil-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-143px, 21px);">
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item" onclick="fileWhatsapp()">
+                                            <i class="uil-image-upload me-2"></i>fotos y videos
+                                        </a>
+                                        <!-- item-->
+                                        <a href="javascript:void(0);" class="dropdown-item" onclick="documentoFile()">
+                                            <i class="uil-file-upload-alt me-2"></i>Documento
+                                        </a>
+                                        <a href="javascript:void(0);" class="dropdown-item" onclick="plantillaGet()">
+                                            <i class="uil-file-landscape-alt me-2"></i>Plantilla
+                                        </a>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-light" id="btnAudio"><i class="bi bi-mic-fill fs-18"></i></a>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success chat-send" id="sendChat"><i
+                                            class='uil uil-message'></i></button>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            
         </div>
+        `;
 
-        
-    </div>
-    `;
+        cardBody.innerHTML = html;
 
-    cardBody.innerHTML = html;
+        mostrar_chat(numero);
 
-    mostrar_chat(numero);
+        detectarScrollChat(numero);
+    });
 
-    detectarScrollChat(numero);
-
-    //formMessage();
 }
 
 function chatMessage(numero) {
@@ -1922,9 +2067,13 @@ function cerrarRes() {
 const embudohtml = document.getElementById('embudo');
 const etiquetahtml = document.getElementById('etiqueta');
 const idpot = document.getElementById('idpot');
+const numContEti = document.getElementById('numContEti');
 
 function etiquetaCliente(potencial, etiqueta) {
     $("#modalEtiqueta").modal("show");
+
+    const num = document.getElementById('whatsappNumber');
+    numContEti.value = num.value;
 
     idpot.value = potencial;
 
@@ -2011,9 +2160,22 @@ editar_etiqueta.addEventListener('click', (e) => {
     .then(data => {
         if(data.message === 'ok') {
             $("#modalEtiqueta").modal("hide");
-            alert('Se cambio correctamente de etiqueta');
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Se cambio la etiqueta correctamente",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            chatDetail(numContEti.value)
+
         } else {
-            alert('Comunicar con el administrador');
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrio un error, comunicarse con el administrador!"
+            });
         }
     })
 
@@ -2073,9 +2235,23 @@ btnAsignar.addEventListener('click', (e) => {
         e.target.disabled = true;
         if(data.message === 'ok') {
             $("#modalAsignar").modal("hide");
-            alert('Se asigno correctamente');
+
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Se asigno correctamente",
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+            chatDetail(whatsapp.value);
+
         } else {
-            alert('Comunicar con el administrador');
+           Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrio un error, comunicate con el administrador del sistema!",
+            });
         }
     })
 
@@ -2316,20 +2492,20 @@ function contactosLista(buscar) {
 
             let separacion = "";
 
-            if(contact.rol != 2 && contact.rol != 6) {
+            if(rol.value != 2 && rol.value != 6) {
                 separacion = `
                 <div class="dropdown align-self-center float-end">
-                    <span class="text-primary">${contact.nameAsistente}</span>
+                    <span class="text-primary">${contact.asistente}</span>
                 </div>
                 `;
             }
 
             html += `
-            <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.numero}, '${contact.name}', '${contact.nameEtiqueta}', ${contact.potencial}, ${contact.etiqueta_id}, ${contact.rol}, ${contact.asistente}, '${contact.nameAsistente}')">
+            <div class="d-flex border-top pt-2" style="cursor: pointer" onclick="itemContact(${contact.from})">
                 <img src="img/logos/icon.png" class="avatar rounded me-3" alt="shreyu">
                 <div class="flex-grow-1">
-                    <h5 class="mt-1 mb-0 fs-15">${contact.name}</h5>
-                    <h6 class="text-muted fw-normal mt-1 mb-2">${contact.numero}</h6>
+                    <h5 class="mt-1 mb-0 fs-15">${contact.nameContact}</h5>
+                    <h6 class="text-muted fw-normal mt-1 mb-2">${contact.from}</h6>
                 </div>
                 ${separacion}
             </div>
@@ -2340,11 +2516,11 @@ function contactosLista(buscar) {
     })
 }
 
-function itemContact(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente) {
+function itemContact(numero) {
 
     $("#modalContacts").modal('hide');
 
-    chatDetail(numero, nameWhatsapp, etiqueta, potencial, etiqueta_id, rol, asistente, nameAsistente);
+    chatDetail(numero);
 }
 
 const escogePlantilla = document.getElementById('escogePlantilla');
@@ -2546,7 +2722,7 @@ editarContact.addEventListener('click', (e) => {
     })
     .then(res => res.json())
     .then(data => {
-        e.target.disabled = true;
+        e.target.disabled = false;
         if (data.message === 'ok') {
             $("#modalEditarContacto").modal('hide');
             Swal.fire({
@@ -2557,7 +2733,7 @@ editarContact.addEventListener('click', (e) => {
                 timer: 2000
             })
 
-            chatDetail(data.data.from,data.data.nameContact, data.datos.etiqueta, data.datos.potencial_id, data.datos.etiqueta_id, data.datos.rol, data.datos.idAsistente, data.datos.nameAsistente);
+            chatDetail(data.data.from);
 
         } else {
             Swal.fire({
@@ -2849,7 +3025,7 @@ filtroEmbudo.addEventListener('change', (e) => {
         filtroEtiqueta.innerHTML = html;
 
         if(valor == 0) {
-            loadContact();
+            renderChatContactos();
         }
     })
 
@@ -3930,3 +4106,196 @@ function updateIconoCheck(codigo) {
         }
     })
 }
+
+//para las interacciones por fechas
+const interaccionesContact = document.getElementById('interaccionesContact');
+interaccionesContact.addEventListener('click', (e) => {
+    console.log("hola");
+
+    contentChatWhatsapp.classList.remove("col-xl-9");
+    contentChatWhatsapp.classList.add('col-xl-5');
+
+    contentFiltros.style.display = "block";
+
+    // Agregar transición
+    contentFiltros.style.transition = "opacity 0.5s ease";
+    contentFiltros.style.opacity = 0;
+
+    // Se muestra suavemente
+    setTimeout(() => {
+        contentFiltros.style.opacity = 1; 
+    }, 50);
+
+    viewInteracciones();
+});
+
+function viewInteracciones() {
+    let view = `
+    <h4 class="mb-3">Filtro de Contactos - Interacciones</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-1">
+                    <label class="form-label" for="dateInit">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-1">
+                    <label class="form-label" for="dateEnd">Fecha Fin</label>
+                    <input type="date" class="form-control" id="fechaFin">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-1">
+                <button type="button" class="btn btn-primary mt-3" id="consultarInteracciones" onclick="consultarInteracciones(event)">Consultar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="content_filtro" style="overflow-y: scroll;max-height: 500px;position: relative;">
+
+    </div>
+    `;
+
+    contentFilterContact.innerHTML = view;
+}
+
+function consultarInteracciones(e) {
+    const fechaInicio = document.getElementById('fechaInicio');
+    const fechaFin = document.getElementById('fechaFin');
+
+    if(fechaInicio.value === "") {
+        return alert('seleccione una fecha de inicio');
+    }
+
+    if(fechaFin.value === "") {
+        return alert('seleccione una fecha de fin');
+    }
+
+    if(fechaInicio.value > fechaFin.value) {
+        return alert('La fecha de inicio debe ser menor o igual a la fecha de fin');
+    }
+
+    const post = {
+        fecha_inicio: fechaInicio.value,
+        fecha_fin: fechaFin.value
+    };
+
+    fetch("/interacciones", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+
+            if(data.message === 'ok') {
+                viewInteraccionesData(data.data);
+            } else {
+                alert(data.message);
+            }
+
+            
+        })
+}
+
+function viewInteraccionesData(data) {
+    const content_ = document.getElementById('content_filtro');
+
+    let datos = "";
+
+    data.forEach(contact => {
+        datos += `
+        <tr>
+            <td><a href="#">${contact.from}</a></td>
+            <td>${contact.nameContact}</td>
+            <td>${contact.etiqueta}</td>
+        </tr>
+        `;
+    });
+
+    let html = `
+    <table class="table" id="tableInteracciones">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Nombre</th>
+                <th>Etiqueta</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            ${datos}
+        </tbody>
+    </table>
+    `;
+    
+    content_.innerHTML = html;
+
+    $("#tableInteracciones").DataTable();
+}
+
+const search_chat_list = document.getElementById('search-chat-list');
+const search_contactos_chat = document.getElementById('search-contactos-whatsapp');
+
+search_chat_list.addEventListener('keyup', (e) => {
+    const buscar = e.target.value;
+    
+    if (buscar.length >= 3) {
+        contactos.setAttribute('hidden', true);
+        search_contactos_chat.removeAttribute('hidden');
+
+        renderSearchMessage(buscar);
+
+    } else {
+        search_contactos_chat.setAttribute('hidden', true);
+        contactos.removeAttribute('hidden');
+    }
+});
+
+function renderSearchMessage(buscar) {
+    fetch('/searchMessage/'+buscar, {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        
+        const listSearch = document.getElementById('listSearch');
+
+        let viewSearch = "";
+
+        if(data.message === 'ok') {
+            if(data.contactos.length > 0) {
+
+                viewSearch += `<h5>CHAT</h5>`;
+                viewSearch += viewListChatContact(data.contactos, 1);
+                
+            }
+
+            if(data.messages.length > 0) {
+
+                viewSearch += `<h5>MENSAJES</h5>`;
+                viewSearch += viewListChatContact(data.messages, 0);
+                
+            }
+        }
+
+        console.log(data.messages);
+
+        listSearch.innerHTML = viewSearch;
+    })
+}
+
+const closeSearch = document.getElementById('closeSearch');
+
+closeSearch.addEventListener('click', (e) => {
+    search_chat_list.value = "";
+    search_contactos_chat.setAttribute('hidden', true);
+    contactos.removeAttribute('hidden');
+})

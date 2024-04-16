@@ -31,7 +31,7 @@ import './models/permissions.js';
 import './models/associate.js';
 import './models/publicidad.js';*/
 
-//import './models/numerosWhatsapp.js';
+//import './models/proyecto.js';
 
 
 dotenv.config();

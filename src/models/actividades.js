@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+import { Proyecto } from "../models/proyecto.js";
+
 export const Actividades = sequelize.define('actividades', {
     id: {
         type: DataTypes.INTEGER,
@@ -20,3 +22,6 @@ export const Actividades = sequelize.define('actividades', {
     freezeTableName: true,
     timestamps: true
 });
+
+Proyecto.belongsTo(Actividades, { foreignKey: 'actividad_id' });
+Actividades.hasOne(Proyecto, { foreignKey: 'actividad_id' });
