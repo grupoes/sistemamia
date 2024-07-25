@@ -213,9 +213,9 @@ export const sendPlantilla = async (req, res) => {
 
             const data = response.data;
 
-            const messageStatus = data.messages[0].message_status;
+            //const messageStatus = data.messages[0].message_status;
 
-            if(messageStatus === 'accepted') {
+            if(data.messages[0]) {
 
                 let descriptionChat = "";
                 let contenidoChat = contenido;
