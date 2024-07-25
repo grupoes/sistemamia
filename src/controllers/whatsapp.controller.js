@@ -244,9 +244,9 @@ export const addContact = async (req, res) => {
 
             //return res.json(data);
 
-            const messageStatus = data.messages[0].message_status;
+            //const messageStatus = data.messages[0].message_status;
 
-            if (messageStatus === 'accepted') {
+            if (data.messages[0]) {
 
                 const updateChat = await Chat.update({ codigo: data.messages[0].id }, {
                     where: { id: newMessage.id }
