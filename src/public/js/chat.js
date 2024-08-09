@@ -790,6 +790,8 @@ function chatDetail(numero) {
                             ${asignar}
 
                             <a class="dropdown-item" href="javascript: void(0);" onclick="modalSeguimiento('${datos.from}', '${datos.nameContact}')"><i class="bi bi-arrow-bar-right fs-18 me-2" ></i>Seguimiento</a>
+
+                            <a class="dropdown-item" href="javascript: void(0);" onclick="modalEnvioPdf('${datos.from}')"><i class="bi bi-file-earmark-pdf-fill fs-18 me-2" ></i>Enviar Pdf</a>
                             
                         </div>
                     </li>
@@ -2666,6 +2668,7 @@ btnEnviarPlatilla.addEventListener('click', (e) => {
     .then(res => res.json())
     .then(data => {
         e.target.disabled = false;
+        console.log(data);
         if(data.message === 'ok') {
             $("#modalPlantilla").modal('hide');
             Swal.fire({
@@ -3943,6 +3946,13 @@ function modalSeguimiento(numero, contacto) {
     vistaDescription(numero);
 }
 
+function modalEnvioPdf(number_whatsapp) {
+    const num = document.getElementById('numWhat');
+    num.value = number_whatsapp;
+
+    $("#modalEnvioPdf").modal('show');
+}
+
 formSeguimiento.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -4298,4 +4308,60 @@ closeSearch.addEventListener('click', (e) => {
     search_chat_list.value = "";
     search_contactos_chat.setAttribute('hidden', true);
     contactos.removeAttribute('hidden');
+});
+
+const pdfenviar = document.getElementById('enviar_template_pdf');
+
+pdfenviar.addEventListener('click', (e) => {
+    const numero = document.getElementById('numWhat');
+    const archivo = document.getElementById('archivo_pdf');
+    const variable = document.getElementById('variabletext');
+
+    if(archivo.files.length === 0) {
+        return alert('seleccione un archivo pdf');
+    }
+
+    if(variable.value === "") {
+        return alert('ingrese el contenido de la plantilla');
+    }
+
+    pdfenviar.disabled = true;
+    pdfenviar.textContent = "Enviando...";
+    
+    const formData = new FormData();
+    formData.append('numero', numero.value);
+    formData.append('variable', variable.value);
+    formData.append('archivo', archivo.files[0]);
+
+    fetch("/enviopdf", {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        pdfenviar.disabled = false;
+        pdfenviar.textContent = "Enviar";
+
+        if(data.message === 'ok') {
+            $("#modalEnvioPdf").modal('hide');
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Se envio correctamente la plantilla',
+                showConfirmButton: false,
+                timer: 2000
+            })
+
+            archivo.value = "";
+            variable.value = "";
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No se pudo enviar la plantilla!'
+            })
+        }
+    })
+
 })

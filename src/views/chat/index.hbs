@@ -713,3 +713,35 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalEnvioPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje con un archivo pdf</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="numWhat">
+                <div class="mb-3 row">
+                    <label class="col-lg-3 col-form-label" for="archivo_pdf">Archivo Pdf</label>
+                    <div class="col-lg-9">
+                        <input type="file" class="form-control" id="archivo_pdf" accept="application/pdf">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-lg-3 col-form-label" for="variabletext">Hola, buen día</label>
+                    <div class="col-lg-9">
+                        <textarea class="form-control" rows="5" id="variabletext"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="enviar_template_pdf">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>

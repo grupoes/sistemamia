@@ -29,6 +29,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 import multer from "multer";
+import { Storage } from "@google-cloud/storage";
 
 const storageAudio = multer.memoryStorage();
 const uploadVoz = multer({ storage: storageAudio });
@@ -38,7 +39,16 @@ import dotenv from "dotenv";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const multerPdf = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 50 * 1024 * 1024, // No larger than 5mb, change as you need
+  },
+});
+
 dotenv.config();
+
+export const multerSinglePdf = multerPdf.single('archivo');
 
 export const chatView = async (req, res) => {
   const timestamp = Date.now();
@@ -2421,4 +2431,123 @@ export const searchChatList = async(req, res) => {
     } catch (error) {
         return res.json({ message: error.message });
     }
+}
+
+let projectId = "whatsapp-webhook-394517"; // Get this from Google Cloud
+let keyFilename = "keys.json"; // Get this from Google Cloud -> Credentials -> Service Accounts
+const storagePdf = new Storage({
+  projectId,
+  keyFilename,
+});
+
+const bucket = storagePdf.bucket("appwhatsapp");
+
+export const enviopdf = (req, res) => {
+  const {numero, variable} = req.body;
+  try {
+    if (req.file) {
+      console.log("File found, trying to upload...");
+      
+      const blob = bucket.file(req.file.originalname);
+      const blobStream = blob.createWriteStream();
+
+      blobStream.on("finish", async () => {
+
+        // Generar la URL pública de la imagen
+        const publicUrl = await blob.getSignedUrl({
+          action: 'read',
+          expires: '03-09-2491'
+        });
+
+        // Establecer los permisos para que la imagen sea pública
+        await blob.makePublic();
+
+        const link = publicUrl[0];
+
+        const jsonTemplate = envioTempPdf(numero, link, variable);
+
+        let config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: process.env.URL_MESSAGES,
+          headers: { 
+            'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+          },
+          data: jsonTemplate
+        };
+
+        const response = await axios(config);
+        const data = response.data;
+
+        if(data.messages[0]) {
+
+          const newMessage = await Chat.create({
+              codigo: data.messages[0].id,
+              from: process.env.NUMERO_WHATSAPP,
+              message: variable,
+              nameContact: "Grupo Es Consultores",
+              receipt: numero,
+              timestamp: Math.floor(Date.now() / 1000),
+              typeMessage: 'document',
+              description: variable,
+              estadoMessage: "sent",
+              documentId: "",
+              id_document: "",
+              filename: "",
+              fromRes: "",
+              idRes: ""
+          });
+
+          return res.json({ message: 'ok', data: newMessage });
+
+        } else {
+          return res.json({message: "No fue enviado la plantilla"});
+        }
+
+      });
+
+      blobStream.end(req.file.buffer);
+      
+    } else throw "error with img";
+    
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+const envioTempPdf = (numero, link, variable) => {
+  const mensajeJSON = {
+    "messaging_product": "whatsapp",
+    "recipient_type": "individual",
+    "to": numero,
+    "type": "template",
+    "template": {
+      "name": "envio_archivo_pdf",
+      "language": { "code": "es" },
+      "components": [
+        {
+            "type": "header",
+            "parameters": [
+                {
+                    "type": "document",
+                    "document": {
+                        "link": link
+                    }
+                }
+            ]
+        },
+        {
+          "type": "body",
+          "parameters": [
+            {
+              "type": "text",
+              "text": variable
+            }
+          ]
+        }
+      ]
+    }
+  };
+
+  return mensajeJSON;
 }
