@@ -42,7 +42,7 @@ const __dirname = dirname(__filename);
 const multerPdf = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 50 * 1024 * 1024, // No larger than 5mb, change as you need
+    fileSize: 100 * 1024 * 1024, // No larger than 5mb, change as you need
   },
 });
 
