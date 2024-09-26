@@ -1019,14 +1019,16 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
         potencialClienteId: idPt,
       });
       
-      const mensaje = `Buen día ☀️, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa 📋 de Grupo ES Consultores "Asesores de investigación" (Tesis) 📚. para poder darle un enfoque académico quisiera saber 
+      /*const mensaje = `Buen día ☀️, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa 📋 de Grupo ES Consultores "Asesores de investigación" (Tesis) 📚. para poder darle un enfoque académico quisiera saber 
 
       🙋 ¿Cuál es su nombre?
       🎓 ¿De qué especialidad y de qué universidad es Ud.?
       👩‍🏫 ¿cuenta con un avance o desea iniciar de cero?
       
       quedare al pendiente de su respuesta🧐 para que pueda acceder a la primera reunión de asesoría que es totalmente gratuita🫂; te acompañamos hasta tu sustentación final 🎓
-      `;
+      `;*/
+
+      const mensaje = "";
 
       return res.json({ message: "ok", respuesta: mensaje });
     }
