@@ -445,6 +445,28 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
+                            <label for="embudoCliente" class="col-form-label">Embudo:</label>
+                            <select name="embudoCliente" id="embudoCliente" class="form-select">
+                                <option value="">Seleccionar</option>
+                                {{#each embudo}}
+                                    <option value="{{ this.id }}">{{this.descripcion}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="etiquetaCliente" class="col-form-label">Etiqueta:</label>
+                            <select name="etiquetaCliente" id="etiquetaCliente" class="form-select">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
                             <label for="plataforma_contacto" class="col-form-label">Plataforma:</label>
                             <select name="plataforma_contacto" id="plataforma_contacto" class="form-select">
 

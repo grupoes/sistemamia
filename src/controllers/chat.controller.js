@@ -79,7 +79,11 @@ export const chatView = async (req, res) => {
     "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css",
   ];
 
-  const embudo = await Embudo.findAll();
+  const embudo = await Embudo.findAll({
+    order: [
+      ['id', 'ASC'] // O 'DESC' para orden descendente
+    ]
+  });
   const plataforma = await Plataforma.findAll();
 
   res.render("chat/index", {

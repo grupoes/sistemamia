@@ -2307,6 +2307,9 @@ newContacto.addEventListener('click', (e) => {
     document.getElementById('plataforma_contacto').value = "";
     document.getElementById('tipo_contacto').value = "";
 
+    document.getElementById('embudoCliente').value = "";
+    document.getElementById('etiquetaCliente').innerHTML = `<option value=""></option>`;
+
     renderOptionPlataforma(plataforma, 1);
     
 });
@@ -2323,6 +2326,8 @@ btnAgregar.addEventListener('click', (e) => {
 
     const carreraContacto = document.getElementById('carreraContacto');
 
+    const etiquetaCliente = document.getElementById('etiquetaCliente');
+
     const numero = nWhatsapp.value;
 
     if (numero.length != 9) {
@@ -2337,6 +2342,11 @@ btnAgregar.addEventListener('click', (e) => {
 
     if(type_contact.value == "") {
         alert('Seleccione el tipo de contacto');
+        return false;
+    }
+
+    if (etiquetaCliente.value == "") {
+        alert('Seleccione una etiqueta por favor');
         return false;
     }
 
@@ -2391,9 +2401,17 @@ btnAgregar.addEventListener('click', (e) => {
         });
     }
 
-    if(selectedPlantilla.value == "") {
-        alert('Seleccione una plantilla');
-        return false;
+    const check_plantilla = document.getElementById('check_plantilla');
+
+    let plantillaCheck = 0;
+    
+    if(check_plantilla.checked) {
+        if(selectedPlantilla.value == "") {
+            alert('Seleccione una plantilla');
+            return false;
+        }
+
+        plantillaCheck = 1;
     }
 
     e.target.disabled = true;
@@ -2413,7 +2431,9 @@ btnAgregar.addEventListener('click', (e) => {
             tipoW: tipoW,
             tipoPublicidad: tipoPublicidad,
             publicidad: publicidad,
-            carreraContacto: carreraContacto
+            carreraContacto: carreraContacto,
+            plantillaCheck: plantillaCheck,
+            etiquetaCliente: etiquetaCliente.value
         }),
         headers: {
             'Content-Type': 'application/json',
@@ -2822,9 +2842,10 @@ tipo_contacto.addEventListener('change', (e) => {
 
         let data_platilla = `
         <div class="col-md-12">
+            <label for="check_plantilla" class="col-form-label">Enviar Plantilla </label> <input type="checkbox" class="form-check-input" id="check_plantilla" name="check_plantilla" onchange="check_plantilla(event)" value="1" />
             <div class="mb-3">
-                <label for="plantillaNuevo" class="col-form-label">Plantilla:</label>
-                <select name="plantillaNuevo" id="plantillaNuevo" onchange="plantillaSelect(event)" class="form-select">
+                <label for="plantillaNuevo" class="col-form-label">Plantilla </label>
+                <select name="plantillaNuevo" id="plantillaNuevo" class="form-select">
                     <option value="">Seleccione...</option>
                     ${optionPlantilla}
                 </select>
@@ -2835,6 +2856,21 @@ tipo_contacto.addEventListener('change', (e) => {
         dataPlantilla.innerHTML = data_platilla;
     })
 });
+
+function check_plantilla(e) {
+    const plantillaNuevo = document.getElementById('plantillaNuevo');
+    if(e.target.checked) {
+        plantillaNuevo.setAttribute('onchange', 'plantillaSelect(event)');
+    } else {
+        plantillaNuevo.removeAttribute('onchange');
+
+        const contentPlantilla = document.getElementById('contentPlantilla');
+
+        contentPlantilla.innerHTML = "";
+
+        plantillaNuevo.value = "";
+    }
+}
 
 
 function checkAsignar(e) {
@@ -2895,13 +2931,15 @@ function selectHtmlAgente(data) {
 function plantillaSelect(e) {
     const id = e.target.value;
 
+    const contentPlantilla = document.getElementById('contentPlantilla');
+
+    contentPlantilla.innerHTML = "";
+
     fetch('/getPlantilla/'+id)
     .then(res => res.json())
     .then(data => {
 
         const variables = data.variables;
-
-        const contentPlantilla = document.getElementById('contentPlantilla');
 
         let existeVariables = "";
 
@@ -4364,4 +4402,27 @@ pdfenviar.addEventListener('click', (e) => {
         }
     })
 
+})
+
+const embudoCliente = document.getElementById('embudoCliente');
+
+embudoCliente.addEventListener('change', (e) => {
+    const valor = e.target.value;
+
+    fetch('/getEtiquetaEmbudo/'+valor)
+    .then(res => res.json())
+    .then(data => {
+        const eti = data.etiquetas;
+        let html = `<option value="">Seleccionar...</option>`;
+
+        const etiquetaCliente = document.getElementById('etiquetaCliente');
+
+        eti.forEach(etiqueta => {
+            html += `<option value="${etiqueta.id}">${etiqueta.descripcion}</option>`;
+        });
+
+        etiquetaCliente.innerHTML = html;
+
+        
+    })
 })

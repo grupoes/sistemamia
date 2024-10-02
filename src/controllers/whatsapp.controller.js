@@ -56,7 +56,7 @@ export const addWhatsapp = async (req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera, checkPlantilla, etiquetaCliente } = req.body;
 
     try {
         const id = req.usuarioToken._id;
@@ -120,7 +120,7 @@ export const addContact = async (req, res) => {
 
         const potEtiqueta = await EtiquetaCliente.create({
             cliente_id: newPotencial.id,
-            etiqueta_id: 1,
+            etiqueta_id: etiquetaCliente,
             estado: 1
         });
 
@@ -138,133 +138,137 @@ export const addContact = async (req, res) => {
             }
         });
 
-        //enviar la plantilla al numero
-        let contenJson = "";
-        let contenido = "";
+        if(checkPlantilla == 1) {
+            //enviar la plantilla al numero
+            let contenJson = "";
+            let contenido = "";
 
-        const plantilla = await Plantilla.findOne({
-            where: {
-                id: idPlantilla
-            }
-        });
-
-        let tipoMensaje = "";
-
-        if(plantilla.tipoCabecera === 'no') {
-            tipoMensaje = "text";
-        } else if(plantilla.tipoCabecera === 'image') {
-            tipoMensaje = "image";
-        } else if(plantilla.tipoCabecera === 'video') {
-            tipoMensaje = "video";
-        } else {
-            tipoMensaje = "document";
-        }
-
-        let parametros_body = [];
-
-        if (idPlantilla == 3) {
-
-            let dataNombre = {
-                type: "text",
-                text: dataAsistente.nombres
-            };
-
-            let dataApellidos = {
-                type: "text",
-                text: dataAsistente.apellidos
-            }
-
-            parametros_body.push(dataNombre);
-            parametros_body.push(dataApellidos);
-        } else {
-
-            if(variables.length > 0) {
-                for (let i = 0; i < variables.length; i++) {
-                    let parametro = {
-                        type: "text",
-                        text: variables[i],
-                    };
-    
-                    parametros_body.push(parametro);
-    
+            const plantilla = await Plantilla.findOne({
+                where: {
+                    id: idPlantilla
                 }
+            });
+
+            let tipoMensaje = "";
+
+            if(plantilla.tipoCabecera === 'no') {
+                tipoMensaje = "text";
+            } else if(plantilla.tipoCabecera === 'image') {
+                tipoMensaje = "image";
+            } else if(plantilla.tipoCabecera === 'video') {
+                tipoMensaje = "video";
+            } else {
+                tipoMensaje = "document";
             }
 
-        }
+            let parametros_body = [];
 
-        const messageSend = plantilla.contenido;
+            if (idPlantilla == 3) {
 
-        contenido = reemplazarMarcadoresConArray(messageSend, variables);
+                let dataNombre = {
+                    type: "text",
+                    text: dataAsistente.nombres
+                };
 
-        let descripcionChat = "";
-        let contenidoChat = contenido;
+                let dataApellidos = {
+                    type: "text",
+                    text: dataAsistente.apellidos
+                }
 
-        if (plantilla.cabecera === 'si') {
-            descripcionChat = contenido;
-            contenidoChat = "";
-        }
+                parametros_body.push(dataNombre);
+                parametros_body.push(dataApellidos);
+            } else {
 
-        const jsonData = jsonTemplate(plantilla.tipoCabecera, numero, plantilla.nombre, plantilla.url_cabecera, parametros_body);
+                if(variables.length > 0) {
+                    for (let i = 0; i < variables.length; i++) {
+                        let parametro = {
+                            type: "text",
+                            text: variables[i],
+                        };
+        
+                        parametros_body.push(parametro);
+        
+                    }
+                }
 
-        const newMessage = await Chat.create({
-            codigo: "",
-            from: process.env.NUMERO_WHATSAPP,
-            message: contenidoChat,
-            nameContact: "Grupo Es Consultores",
-            receipt: numero,
-            timestamp: Math.floor(Date.now() / 1000),
-            typeMessage: tipoMensaje,
-            estadoMessage: "sent",
-            description: descripcionChat,
-            documentId: "",
-            id_document: "",
-            filename: "",
-            fromRes: "",
-            idRes: "",
-            dataJson: jsonData
-        });
+            }
 
-        try {
+            const messageSend = plantilla.contenido;
 
-            //return res.json({ data: jsonData });
+            contenido = reemplazarMarcadoresConArray(messageSend, variables);
 
-            let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: process.env.URL_MESSAGES,
-                headers: {
-                    'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
-                },
-                data: jsonData
-            };
+            let descripcionChat = "";
+            let contenidoChat = contenido;
 
-            const response = await axios(config);
+            if (plantilla.cabecera === 'si') {
+                descripcionChat = contenido;
+                contenidoChat = "";
+            }
 
-            const data = response.data;
+            const jsonData = jsonTemplate(plantilla.tipoCabecera, numero, plantilla.nombre, plantilla.url_cabecera, parametros_body);
 
-            //return res.json(data);
+            const newMessage = await Chat.create({
+                codigo: "",
+                from: process.env.NUMERO_WHATSAPP,
+                message: contenidoChat,
+                nameContact: "Grupo Es Consultores",
+                receipt: numero,
+                timestamp: Math.floor(Date.now() / 1000),
+                typeMessage: tipoMensaje,
+                estadoMessage: "sent",
+                description: descripcionChat,
+                documentId: "",
+                id_document: "",
+                filename: "",
+                fromRes: "",
+                idRes: "",
+                dataJson: jsonData
+            });
 
-            //const messageStatus = data.messages[0].message_status;
+            try {
 
-            if (data.messages[0]) {
+                //return res.json({ data: jsonData });
 
-                const updateChat = await Chat.update({ codigo: data.messages[0].id }, {
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: process.env.URL_MESSAGES,
+                    headers: {
+                        'Authorization': 'Bearer ' + process.env.TOKEN_WHATSAPP
+                    },
+                    data: jsonData
+                };
+
+                const response = await axios(config);
+
+                const data = response.data;
+
+                //return res.json(data);
+
+                //const messageStatus = data.messages[0].message_status;
+
+                if (data.messages[0]) {
+
+                    const updateChat = await Chat.update({ codigo: data.messages[0].id }, {
+                        where: { id: newMessage.id }
+                    });
+
+                    return res.json({ message: 'ok', data: newMessage });
+
+                } else {
+                    return res.json({ message: "No fue enviado la plantilla" });
+                }
+
+
+            } catch (error) {
+                const updateChat = await Chat.update({ estadoMessage: "tmpNo" }, {
                     where: { id: newMessage.id }
                 });
 
-                return res.json({ message: 'ok', data: newMessage });
-
-            } else {
-                return res.json({ message: "No fue enviado la plantilla" });
+                return res.status(400).json({ message: error.message });
             }
-
-
-        } catch (error) {
-            const updateChat = await Chat.update({ estadoMessage: "tmpNo" }, {
-                where: { id: newMessage.id }
-            });
-
-            return res.status(400).json({ message: error.message });
+        } else {
+            return res.json({ message: 'ok', data: "" });
         }
 
     } catch (error) {
