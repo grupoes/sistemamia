@@ -1090,6 +1090,11 @@ export const uploadAudio = async (req, res) => {
 
     console.log(req.file);
 
+    const mimetype = req.file.mimetype;
+    let parts = mimetype.split('/');
+
+    let subType = parts[1];
+    
     const timestamp = Date.now();
 
     const inputPath = path.join(
@@ -1098,8 +1103,9 @@ export const uploadAudio = async (req, res) => {
       "public",
       "audios",
       "archivos",
-      timestamp + ".wav"
+      timestamp + "." + subType
     );
+    
     fs.writeFileSync(inputPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
     // Definir la ruta de salida

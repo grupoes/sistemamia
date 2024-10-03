@@ -847,6 +847,9 @@ function chatDetail(numero) {
                                         <a href="javascript:void(0);" class="dropdown-item" onclick="fileWhatsapp()">
                                             <i class="uil-image-upload me-2"></i>fotos y videos
                                         </a>
+                                        <a href="javascript:void(0);" class="dropdown-item" onclick="fileAudio()">
+                                            <i class="uil-headphones-alt me-2"></i>Audio
+                                        </a>
                                         <!-- item-->
                                         <a href="javascript:void(0);" class="dropdown-item" onclick="documentoFile()">
                                             <i class="uil-file-upload-alt me-2"></i>Documento
@@ -4426,3 +4429,63 @@ embudoCliente.addEventListener('change', (e) => {
         
     })
 })
+
+function fileAudio() {
+    document.getElementById("fileInput").setAttribute("accept", "audio/*");
+    document.getElementById("fileInput").click();
+    const numeroW = document.getElementById('whatsappNumber');
+    //972651604
+
+    const $offcanvas = $('#myOffcanvas').offcanvas({
+        backdrop: true
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtiene el archivo seleccionado
+
+        const audioElement = document.getElementById('audio');
+        const sendButton = document.getElementById('sendAudio');
+        
+        
+        if (file) {
+            audioElement.style.display = "inline";
+            sendButton.style.display = "inline";
+            // Crear una URL de objeto desde el archivo (blob)
+            const audioURL = URL.createObjectURL(file);
+            
+            // Asignar el URL blob al atributo src del elemento audio
+            const audioPlayer = document.getElementById('audio');
+            audioPlayer.src = audioURL;
+            audioPlayer.load(); // Carga el archivo en el reproductor
+        }
+
+        sendButton.addEventListener('click', (e) => {
+            
+            // Enviar al servidor
+            const formData = new FormData();
+            formData.append('audio', file);
+            formData.append('numero', numeroW.value);
+    
+            //console.log(audioBlob);
+    
+            e.target.disabled = true;
+    
+            fetch('/uploadAudio', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                e.target.disabled = false;
+                audioElement.style.display = "none";
+                sendButton.style.display = "none";
+    
+                const conversation = document.getElementById('conversation-'+numeroW.value);
+                conversation.scrollTop = conversation.scrollHeight;
+    
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+}
