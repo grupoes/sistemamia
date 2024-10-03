@@ -56,12 +56,12 @@ export const addWhatsapp = async (req, res) => {
 }
 
 export const addContact = async (req, res) => {
-    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera, checkPlantilla, etiquetaCliente } = req.body;
+    const { numero, name, plataforma_contacto, tipo_contacto, clickAsignar, asignado, idPlantilla, variables, numerosWht, tipoW, tipoPublicidad, publicidad, carrera, plantillaCheck, etiquetaCliente } = req.body;
 
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
-
+        
         const whatsapp = await NumeroWhatsapp.findOne({
             where: {
                 from: numero
