@@ -61,7 +61,7 @@ export const addContact = async (req, res) => {
     try {
         const id = req.usuarioToken._id;
         const rol = req.usuarioToken._role;
-        
+
         const whatsapp = await NumeroWhatsapp.findOne({
             where: {
                 from: numero
@@ -138,7 +138,7 @@ export const addContact = async (req, res) => {
             }
         });
 
-        if(checkPlantilla == 1) {
+        if(plantillaCheck == 1) {
             //enviar la plantilla al numero
             let contenJson = "";
             let contenido = "";
