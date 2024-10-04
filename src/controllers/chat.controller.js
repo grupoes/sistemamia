@@ -1105,7 +1105,7 @@ export const uploadAudio = async (req, res) => {
       "archivos",
       timestamp + "." + subType
     );
-    
+
     fs.writeFileSync(inputPath, Buffer.from(new Uint8Array(req.file.buffer)));
 
     // Definir la ruta de salida
@@ -1241,7 +1241,11 @@ export const getEmbudoEtiqueta = async (req, res) => {
       },
     });
 
-    const embudo = await Embudo.findAll();
+    const embudo = await Embudo.findAll({
+      order: [
+        ['id', 'ASC'] // O 'DESC' para orden descendente
+      ]
+    });
 
     return res.json({
       mensaje: "ok",
