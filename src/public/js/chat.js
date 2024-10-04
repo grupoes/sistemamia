@@ -4443,11 +4443,15 @@ function fileAudio() {
         backdrop: true
     });
 
-    document.getElementById('fileInput').addEventListener('change', function(event) {
+    const audioElement = document.getElementById('audio');
+    const sendButton = document.getElementById('sendAudio');
+    const fileInputAudio = document.getElementById('fileInput');
+
+    fileInputAudio.addEventListener('change', function(event) {
         const file = event.target.files[0]; // Obtiene el archivo seleccionado
 
-        const audioElement = document.getElementById('audio');
-        const sendButton = document.getElementById('sendAudio');
+        //const audioElement = document.getElementById('audio');
+        //const sendButton = document.getElementById('sendAudio');
         
         
         if (file) {
@@ -4462,7 +4466,47 @@ function fileAudio() {
             audioPlayer.load(); // Carga el archivo en el reproductor
         }
 
-        sendButton.addEventListener('click', (e) => {
+         // Eliminar event listener anterior antes de añadir uno nuevo para evitar duplicación
+        sendButton.removeEventListener('click', sendAudioHandler);
+
+        function sendAudioHandler(e) {
+            e.target.disabled = true; // Deshabilitar el botón mientras se envía el archivo
+
+            // Crear FormData para enviar el archivo al servidor
+            const formData = new FormData();
+            formData.append('audio', file);
+            formData.append('numero', numeroW.value);
+
+            // Enviar el archivo al servidor
+            fetch('/uploadAudio', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                e.target.disabled = false; // Rehabilitar el botón después de enviar
+                audioElement.style.display = "none"; // Ocultar el reproductor de audio
+                audioElement.removeAttribute('src'); // Limpiar el src del reproductor
+                sendButton.style.display = "none"; // Ocultar el botón de enviar
+
+                // Resetear el input de archivo
+                fileInputAudio.value = ""; // Esto asegura que se pueda volver a seleccionar el mismo archivo si es necesario
+                fileInputAudio.removeAttribute('accept'); // Limpiar el atributo accept
+
+                // Desplazar la conversación hacia abajo (si esto aplica en tu lógica)
+                const conversation = document.getElementById('conversation-' + numeroW.value);
+                conversation.scrollTop = conversation.scrollHeight;
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                e.target.disabled = false; // Rehabilitar el botón en caso de error
+            });
+        }
+
+        sendButton.addEventListener('click', sendAudioHandler);
+
+        /*sendButton.addEventListener('click', (e) => {
             
             // Enviar al servidor
             const formData = new FormData();
@@ -4492,6 +4536,6 @@ function fileAudio() {
     
             })
             .catch(error => console.error('Error:', error));
-        });
+        });*/
     });
 }
