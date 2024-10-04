@@ -1934,6 +1934,7 @@ function grabarAudio() {
             //console.log(data);
             e.target.disabled = false;
             audioElement.style.display = "none";
+            audioElement.removeAttribute('src');
             sendButton.style.display = "none";
 
             const conversation = document.getElementById('conversation-'+numeroW.value);
@@ -4479,6 +4480,7 @@ function fileAudio() {
                 //console.log(data);
                 e.target.disabled = false;
                 audioElement.style.display = "none";
+                audioElement.removeAttribute('src');
                 sendButton.style.display = "none";
     
                 const conversation = document.getElementById('conversation-'+numeroW.value);
