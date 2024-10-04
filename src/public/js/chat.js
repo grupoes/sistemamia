@@ -1937,6 +1937,8 @@ function grabarAudio() {
             audioElement.removeAttribute('src');
             sendButton.style.display = "none";
 
+            document.getElementById('fileInput').removeAttribute('accept');
+
             const conversation = document.getElementById('conversation-'+numeroW.value);
             conversation.scrollTop = conversation.scrollHeight;
 
@@ -4482,6 +4484,8 @@ function fileAudio() {
                 audioElement.style.display = "none";
                 audioElement.removeAttribute('src');
                 sendButton.style.display = "none";
+
+                document.getElementById('fileInput').removeAttribute('accept');
     
                 const conversation = document.getElementById('conversation-'+numeroW.value);
                 conversation.scrollTop = conversation.scrollHeight;
