@@ -4506,36 +4506,121 @@ function fileAudio() {
 
         sendButton.addEventListener('click', sendAudioHandler);
 
-        /*sendButton.addEventListener('click', (e) => {
-            
-            // Enviar al servidor
-            const formData = new FormData();
-            formData.append('audio', file);
-            formData.append('numero', numeroW.value);
-    
-            //console.log(audioBlob);
-    
-            e.target.disabled = true;
-    
-            fetch('/uploadAudio', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                //console.log(data);
-                e.target.disabled = false;
-                audioElement.style.display = "none";
-                audioElement.removeAttribute('src');
-                sendButton.style.display = "none";
-
-                document.getElementById('fileInput').removeAttribute('accept');
-    
-                const conversation = document.getElementById('conversation-'+numeroW.value);
-                conversation.scrollTop = conversation.scrollHeight;
-    
-            })
-            .catch(error => console.error('Error:', error));
-        });*/
     });
 }
+
+const contacto_etiqueta = document.getElementById('contacto_etiqueta');
+
+const embudo_filter = document.getElementById('embudo_filter');
+const etiqueta_filter = document.getElementById('etiqueta_filter');
+
+contacto_etiqueta.addEventListener('click', (e) => {
+    $("#modalEtiquetaContacto").modal('show');
+
+    renderListaContactosEtiqueta(embudo_filter.value, etiqueta_filter.value);
+});
+
+function renderListaContactosEtiqueta(embudo, etiqueta) {
+    fetch('/getListaContactoEtiqueta/'+embudo+"/"+etiqueta, {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        viewListaContactoEtiqueta(data);
+        
+    })
+}
+
+function viewListaContactoEtiqueta(data) {
+    let html = "";
+
+    data.forEach((contacto, index) => {
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>
+                    ${contacto.numero}</br>
+                    <a href="#" class="historial_etiquetas" data-id="${contacto.cliente}">${contacto.contacto}</a>
+                </td>
+                <td>${contacto.embudo}</td>
+                <td>${contacto.etiqueta}</td>
+                <td>${contacto.registro}</td>
+                <td>${contacto.registro_actualizado}</td>
+            </tr>
+        `;
+    });
+
+    $("#contacto_etiqueta_table").DataTable().destroy();
+
+    document.getElementById('listaContactoEtiqueta').innerHTML = html;
+
+    $("#contacto_etiqueta_table").DataTable({
+        "ordering": false,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: '<i class="bi bi-file-earmark-excel-fill"></i> Exportar a Excel',
+                className: 'btn btn-success',
+                filename: 'contactos_etiqueta'
+            }
+        ]
+    });
+}
+
+embudo_filter.addEventListener('change', (e) => {
+    const valor = e.target.value;
+
+    fetch('/getEtiquetaEmbudo/'+valor)
+    .then(res => res.json())
+    .then(data => {
+        const eti = data.etiquetas;
+        let html = `<option value="0">TODOS</option>`;
+
+        eti.forEach(etiqueta => {
+            html += `<option value="${etiqueta.id}">${etiqueta.descripcion}</option>`;
+        });
+
+        etiqueta_filter.innerHTML = html;
+
+    })
+
+    renderListaContactosEtiqueta(embudo_filter.value, etiqueta_filter.value);
+
+});
+
+etiqueta_filter.addEventListener('change', (e) => {
+    renderListaContactosEtiqueta(embudo_filter.value, etiqueta_filter.value);
+})
+
+const listaContactoEtiqueta = document.getElementById('listaContactoEtiqueta');
+
+listaContactoEtiqueta.addEventListener('click', (e) => {
+    if(e.target.classList.contains('historial_etiquetas')) {
+        $("#modalActivities").modal('show');
+
+        const valor = e.target.getAttribute('data-id');
+        
+        fetch('/getActivityEtiqueta/'+valor)
+        .then(res => res.json())
+        .then(data => {
+            
+            let html = "";
+
+            data.forEach((act, index) => {
+                html += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${act.descripcion}</td>
+                    <td>${act.registro}</td>
+                </tr>
+                `;
+            });
+
+            document.getElementById('listaHistory').innerHTML = html;
+        })
+    }
+})

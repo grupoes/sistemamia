@@ -2567,3 +2567,78 @@ const envioTempPdf = (numero, link, variable) => {
 
   return mensajeJSON;
 }
+
+export const listaContactoEtiqueta = async (req, res) => {
+  const embudo = req.params.embudo;
+  const etiqueta = req.params.etiqueta;
+
+  try {
+
+    const rol = req.usuarioToken._role;
+    const id = req.usuarioToken._id;
+
+    let $sql = "";
+    let $filtros = "";
+
+    if(embudo != 0 && etiqueta != 0) {
+      $filtros = " AND ec.etiqueta_id = "+ etiqueta;
+    }
+
+    if(embudo != 0 && etiqueta == 0) {
+      $filtros = " AND em.id = "+ embudo;
+    }
+
+    if(rol == 1 || rol == 3) {
+      $sql = "where ec.estado = 1"+$filtros
+    } else {
+      $sql = "where nw.asistente = "+rol+" and ec.estado = 1"+$filtros;
+    }
+
+    const query = `
+      select nw.id, nw."from" as numero, nw."nameContact" as contacto, em.descripcion as embudo, e.descripcion as etiqueta,
+      TO_CHAR(nw."createdAt", 'DD-MM-YYYY HH24:MI:SS') as registro, TO_CHAR(ec."updatedAt", 'DD-MM-YYYY HH24:MI:SS') as registro_actualizado,
+      concat(t.nombres, ' ', t.apellidos) as asistente, ec.etiqueta_id, pc.id as cliente
+      from numeros_whatsapp nw 
+      inner join potencial_cliente pc on pc.numero_whatsapp = nw."from"
+      inner join trabajadores t on t.id = nw.asistente 
+      inner join "etiquetaCliente" ec on ec.cliente_id = pc.id
+      inner join etiquetas e on e.id = ec.etiqueta_id
+      inner join embudo em on em.id = e.embudo_id 
+      ${$sql}
+      order by nw.id desc
+    `;
+
+    const results = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
+
+    return res.json(results);
+
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+export const getActivityEtiqueta = async(req, res) => {
+  const id = req.params.id;
+  try {
+    const query = `
+    select e.descripcion, TO_CHAR(ec."createdAt", 'DD-MM-YYYY HH24:MI:SS') as registro from "etiquetaCliente" ec
+    inner join etiquetas e on ec.etiqueta_id = e.id
+    where ec.cliente_id = ${id}
+    order by ec.id desc
+    `;
+
+    const results = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
+
+    return res.json(results);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+}

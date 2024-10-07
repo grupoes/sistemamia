@@ -1,769 +1,1210 @@
 <style>
-    /* Estilo general del scrollbar */
-    ::-webkit-scrollbar {
-        width: 3px;
-    }
-
-    /* Estilo del botón (flechas arriba y abajo) del scrollbar */
-    ::-webkit-scrollbar-button {
-        display: none;
-    }
-
-    /* Estilo de la 'track' (trayectoria) del scrollbar */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    /* Estilo de la 'handle' (barra móvil) del scrollbar */
-    ::-webkit-scrollbar-thumb {
-        background: #b6b4b4;
-        border-radius: 4px;
-    }
-
-    /* Estilo de la 'handle' al pasar el ratón */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #818181;
-    }
-
-
-    .quoted-message {
-        border-left: 4px solid #00bfa5;
-        /* Línea vertical para la cita */
-        position: relative;
-    }
-
-    .quoted-message .audio-icon {
-        width: 20px;
-        /* Ajusta según tus necesidades */
-    }
-
-    .main-message.bg-success {
-        background-color: #34b7f1 !important;
-        /* Cambia el color de fondo predeterminado de Bootstrap */
-    }
-
-    #buscarContact::placeholder {
-        padding: 5px;
-        /* Ajusta el valor de acuerdo a tus necesidades */
-    }
-
-    #buscarContact {
-        padding: 10px;
-        /* Ajusta el valor de acuerdo a tus necesidades */
-    }
-
-    .hora-estilo {
-        background-color: #007BFF;
-        /* Fondo azul */
-        color: #FFFFFF;
-        /* Texto blanco */
-        padding: 6px;
-        /* Espaciado interno */
-        border-radius: 5px;
-        /* Bordes redondeados */
-        text-align: center;
-        /* Texto centrado */
-        font-size: 14px;
-        /* Tamaño de fuente */
-    }
-
-
-    .relative-position {
-        position: relative;
-    }
-
-    .play-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 60px;
-        color: #fff;
-    }
+  /* Estilo general del scrollbar */ ::-webkit-scrollbar { width: 3px; } /*
+  Estilo del botón (flechas arriba y abajo) del scrollbar */
+  ::-webkit-scrollbar-button { display: none; } /* Estilo de la 'track'
+  (trayectoria) del scrollbar */ ::-webkit-scrollbar-track { background:
+  #f1f1f1; } /* Estilo de la 'handle' (barra móvil) del scrollbar */
+  ::-webkit-scrollbar-thumb { background: #b6b4b4; border-radius: 4px; } /*
+  Estilo de la 'handle' al pasar el ratón */ ::-webkit-scrollbar-thumb:hover {
+  background: #818181; } .quoted-message { border-left: 4px solid #00bfa5; /*
+  Línea vertical para la cita */ position: relative; } .quoted-message
+  .audio-icon { width: 20px; /* Ajusta según tus necesidades */ }
+  .main-message.bg-success { background-color: #34b7f1 !important; /* Cambia el
+  color de fondo predeterminado de Bootstrap */ } #buscarContact::placeholder {
+  padding: 5px; /* Ajusta el valor de acuerdo a tus necesidades */ }
+  #buscarContact { padding: 10px; /* Ajusta el valor de acuerdo a tus
+  necesidades */ } .hora-estilo { background-color: #007BFF; /* Fondo azul */
+  color: #FFFFFF; /* Texto blanco */ padding: 6px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */ text-align: center; /* Texto
+  centrado */ font-size: 14px; /* Tamaño de fuente */ } .relative-position {
+  position: relative; } .play-icon { position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); font-size: 60px; color: #fff; }
 </style>
 
 <!-- start page title -->
 <div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <h4 class="page-title">Chat</h4>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
-                    <li class="breadcrumb-item active">Chat</li>
-                </ol>
-            </div>
-        </div>
+  <div class="col-12">
+    <div class="page-title-box">
+      <h4 class="page-title">Chat</h4>
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es
+              Consultores</a></li>
+          <li class="breadcrumb-item active">Chat</li>
+        </ol>
+      </div>
     </div>
+  </div>
 </div>
 <!-- end page title -->
 
-<input type="hidden" value="{{ urlchat }}" id="chaturl">
+<input type="hidden" value="{{urlchat}}" id="chaturl" />
 <div class="row">
-    <div class="col-xl-3 col-lg-5 p-0">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex pb-2 border-bottom align-items-center">
-                    <img src="img/logos/icon.png" class="me-2 rounded-circle" height="48" alt="Brandon Smith" />
-                    <div>
-                        <h5 class="my-0 fs-14" id="nameUser">MI CHAT</h5>
-                    </div>
-                    <div class="flex-grow-1">
-                        <ul class="list-inline text-end mb-0">
-                            <li class="list-inline-item fs-18 dropdown">
-                                <a href="javascript: void(0);" class="dropdown-toggle text-dark"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-journal-text"></i>
-                                </a>
+  <div class="col-xl-3 col-lg-5 p-0">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex pb-2 border-bottom align-items-center">
+          <img
+            src="img/logos/icon.png"
+            class="me-2 rounded-circle"
+            height="48"
+            alt="Brandon Smith"
+          />
+          <div>
+            <h5 class="my-0 fs-14" id="nameUser">MI CHAT</h5>
+          </div>
+          <div class="flex-grow-1">
+            <ul class="list-inline text-end mb-0">
+              <li class="list-inline-item fs-18 dropdown">
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-toggle text-dark"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-journal-text"></i>
+                </a>
 
-                                <div class="dropdown-menu dropdown-menu-end">
+                <div class="dropdown-menu dropdown-menu-end">
 
-                                    <div class="row" style="padding: 8px;">
-                                        <div class="mb-2">
-                                            <label for="plataforma_id">Plataforma</label>
-                                            <select name="plataforma_id" id="plataforma_id" class="form-select">
-                                                <option value="0">TODOS</option>
-                                                {{#each plataforma}}
-                                                <option value="{{ this.id }}">{{this.nombre}}</option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li class="list-inline-item fs-18 dropdown">
-                                <a href="javascript: void(0);" class="dropdown-toggle text-dark"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-filter"></i>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end">
-
-                                    <div class="row" style="padding: 8px;">
-                                        <div class="mb-2">
-                                            <label for="">Embudo</label>
-                                            <select name="filtroEmbudo" id="filtroEmbudo" class="form-select">
-                                                <option value="0">TODOS</option>
-                                                {{#each embudo}}
-                                                <option value="{{ this.id }}">{{this.descripcion}}</option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-1">
-                                            <label for="">Etiqueta</label>
-                                            <select name="filtroEtiqueta" id="filtroEtiqueta" class="form-select">
-                                                <option value="0">Todos</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li class="list-inline-item fs-18 dropdown">
-                                <a href="javascript: void(0);" class="dropdown-toggle text-dark"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-
-                                    <a class="dropdown-item" href="javascript: void(0);" id="newContact"><i
-                                            class="bi bi-person-plus fs-18 me-2"></i>Nuevo Contacto</a>
-                                    <a class="dropdown-item" href="javascript: void(0);" id="misContactos"><i
-                                            class="bi bi-person-lines-fill fs-18 me-2"></i>Contactos</a>
-                                    <a class="dropdown-item" href="javascript: void(0);" id="filterContacto"><i
-                                            class="bi bi-person-check-fill fs-18 me-2"></i>Filtro</a>
-                                    
-                                    <a class="dropdown-item" href="javascript: void(0);" id="reporteSeguimiento"><i
-                                            class="bi bi-person-check-fill fs-18 me-2"></i>Reporte seguimiento</a>
-
-                                    <a class="dropdown-item" href="javascript: void(0);" id="interaccionesContact"><i
-                                            class="bi bi-person-check-fill fs-18 me-2"></i>Interacciones</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- start searchbar -->
-                <div>
-
-                    <form class="chat-search">
-                        <div class="chat-search-box">
-                            <div class="input-group">
-                                <button class="btn input-group-text" type="submit">
-                                    <i class="uil uil-search"></i>
-                                </button>
-                                <input type="text" class="form-control" placeholder="Buscar..." id="search-chat-list">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!-- End searchbar -->
-
-                <!-- start contact list -->
-                <div class="pe-2" style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
-                    id="contactos-whatsapp">
-
-                </div>
-
-                <div class="pe-2" style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
-                    id="search-contactos-whatsapp" hidden>
-                    <div class="modal-header" style="padding: 0">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 8px;" id="closeSearch"></button>
+                  <div class="row" style="padding: 8px;">
+                    <div class="mb-2">
+                      <label for="plataforma_id">Plataforma</label>
+                      <select
+                        name="plataforma_id"
+                        id="plataforma_id"
+                        class="form-select"
+                      >
+                        <option value="0">TODOS</option>
+                        {{#each plataforma}}
+                          <option value="{{this.id}}">{{this.nombre}}</option>
+                        {{/each}}
+                      </select>
                     </div>
 
-                    <div id="listSearch">
-
-                    </div>
+                  </div>
 
                 </div>
-                <!-- End contact list -->
-            </div> <!-- End card-body -->
-        </div> <!-- End card -->
-    </div> <!-- End col -->
-    <div class="col-xl-9 col-lg-7" id="contentChatWhatsapp">
-        <div class="card">
-            <div class="card-body" id="cardBody">
+              </li>
 
-            </div>
+              <li class="list-inline-item fs-18 dropdown">
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-toggle text-dark"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-filter"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end">
+
+                  <div class="row" style="padding: 8px;">
+                    <div class="mb-2">
+                      <label for="">Embudo</label>
+                      <select
+                        name="filtroEmbudo"
+                        id="filtroEmbudo"
+                        class="form-select"
+                      >
+                        <option value="0">TODOS</option>
+                        {{#each embudo}}
+                          <option
+                            value="{{this.id}}"
+                          >{{this.descripcion}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+
+                    <div class="mb-1">
+                      <label for="">Etiqueta</label>
+                      <select
+                        name="filtroEtiqueta"
+                        id="filtroEtiqueta"
+                        class="form-select"
+                      >
+                        <option value="0">Todos</option>
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+              </li>
+
+              <li class="list-inline-item fs-18 dropdown">
+                <a
+                  href="javascript: void(0);"
+                  class="dropdown-toggle text-dark"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-three-dots-vertical"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="newContact"
+                  ><i class="bi bi-person-plus fs-18 me-2"></i>Nuevo Contacto</a>
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="misContactos"
+                  ><i
+                      class="bi bi-person-lines-fill fs-18 me-2"
+                    ></i>Contactos</a>
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="filterContacto"
+                  ><i class="bi bi-person-check-fill fs-18 me-2"></i>Filtro</a>
+
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="reporteSeguimiento"
+                  ><i class="bi bi-person-bounding-box fs-18 me-2"></i>Reporte
+                    seguimiento</a>
+
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="interaccionesContact"
+                  ><i
+                      class="bi bi-person-check fs-18 me-2"
+                    ></i>Interacciones</a>
+                  <a
+                    class="dropdown-item"
+                    href="javascript: void(0);"
+                    id="contacto_etiqueta"
+                  ><i class="bi bi-person-badge fs-18 me-2"></i>Contacto por
+                    Etiqueta</a>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
 
-    </div> <!-- End col -->
+        <!-- start searchbar -->
+        <div>
 
-    <div class="col-xl-4 p-0" style="display: none;" id="contentFiltros">
-        <div class="card" style="height: 620px; overflow: hidden;">
-            <div class="card-body">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
-                    onclick="cerrar_ventana_chat()"></button>
-
-                <div id="contentFilterContact">
-
-
-                </div>
-
+          <form class="chat-search">
+            <div class="chat-search-box">
+              <div class="input-group">
+                <button class="btn input-group-text" type="submit">
+                  <i class="uil uil-search"></i>
+                </button>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Buscar..."
+                  id="search-chat-list"
+                />
+              </div>
             </div>
+          </form>
         </div>
+        <!-- End searchbar -->
+
+        <!-- start contact list -->
+        <div
+          class="pe-2"
+          style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
+          id="contactos-whatsapp"
+        >
+
+        </div>
+
+        <div
+          class="pe-2"
+          style="max-height: 450px; min-height: 450px; overflow-y: scroll;"
+          id="search-contactos-whatsapp"
+          hidden
+        >
+          <div class="modal-header" style="padding: 0">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              style="font-size: 8px;"
+              id="closeSearch"
+            ></button>
+          </div>
+
+          <div id="listSearch">
+
+          </div>
+
+        </div>
+        <!-- End contact list -->
+      </div>
+      <!-- End card-body -->
     </div>
+    <!-- End card -->
+  </div>
+  <!-- End col -->
+  <div class="col-xl-9 col-lg-7" id="contentChatWhatsapp">
+    <div class="card">
+      <div class="card-body" id="cardBody">
+
+      </div>
+    </div>
+
+  </div>
+  <!-- End col -->
+
+  <div class="col-xl-4 p-0" style="display: none;" id="contentFiltros">
+    <div class="card" style="height: 620px; overflow: hidden;">
+      <div class="card-body">
+        <button
+          type="button"
+          class="btn-close position-absolute top-0 end-0 m-2"
+          onclick="cerrar_ventana_chat()"
+        ></button>
+
+        <div id="contentFilterContact">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 </div>
 
-
-
-
 <div class="modal fade" id="viewProfile" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class=" m-2">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="text-center mb-3">
-                    <img src="assets/images/users/avatar-5.jpg" class="rounded-circle avatar-lg" height="48"
-                        alt="Rhonda D" />
-                </div>
-                <div class="text-center mb-3">
-                    <h5 class="mt-0 mb-0 fs-18">Rhonda D</h5>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="accordion custom-accordionwitharrow" id="accordionExample">
-                    <div class="card mb-1 shadow-none border-0">
-                        <a href="#" class="text-dark" data-bs-toggle="collapse" data-bs-target="#about"
-                            aria-expanded="true" aria-controls="collapseOne">
-                            <div class="card-header border-0" id="headingOne">
-                                <h5 class="m-0 fs-16">About
-                                    <i class="uil uil-angle-down float-end accordion-arrow"></i>
-                                </h5>
-                            </div>
-                        </a>
-                        <div id="about" class="collapse show" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="card-body pt-0 text-muted">
-                                <div class="row align-items-center ms-1">
-                                    <div class="col-4 p-2"><i class="bi bi-telephone fs-18 me-2"></i>Numero</div>
-                                    <div class="col-8 p-2 border-bottom">51922502947</div>
-                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Email</div>
-                                    <div class="col-8 p-2 border-bottom">elvisbravo262@gmail.com</div>
-                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Universidad</div>
-                                    <div class="col-8 p-2 border-bottom">San Martin</div>
-                                    <div class="col-4 p-2"><i class="bi bi-envelope fs-18 me-2"></i>Ciudad</div>
-                                    <div class="col-8 p-2 border-bottom">tarapoto</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#" class="text-dark" data-bs-toggle="collapse" data-bs-target="#files"
-                            aria-expanded="true" aria-controls="collapseOne">
-                            <div class="card-header border-0" id="headingOne">
-                                <h5 class="m-0 fs-16">Media, Links and Docs
-                                    <i class="uil uil-angle-down float-end accordion-arrow"></i>
-                                </h5>
-                            </div>
-                        </a>
-                        <div id="files" class="collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="card-body pt-0 text-muted">
-                                <div class="d-inline-block me-2">
-                                    <i class="bi bi-file-earmark-pdf h2"></i>
-                                </div>
-                                <div class="d-inline-block me-2">
-                                    <i class="bi bi-file-earmark-word h2"></i>
-                                </div>
-                                <div class="d-inline-block me-2">
-                                    <i class="bi bi-images h2"></i>
-                                </div>
-                                <div class="d-inline-block me-2">
-                                    <i class="bi bi-file-earmark-ppt h2"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="m-2">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
+        <div class="text-center mb-3">
+          <img
+            src="assets/images/users/avatar-5.jpg"
+            class="rounded-circle avatar-lg"
+            height="48"
+            alt="Rhonda D"
+          />
+        </div>
+        <div class="text-center mb-3">
+          <h5 class="mt-0 mb-0 fs-18">Rhonda D</h5>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="accordion custom-accordionwitharrow" id="accordionExample">
+          <div class="card mb-1 shadow-none border-0">
+            <a
+              href="#"
+              class="text-dark"
+              data-bs-toggle="collapse"
+              data-bs-target="#about"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              <div class="card-header border-0" id="headingOne">
+                <h5 class="m-0 fs-16">About
+                  <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                </h5>
+              </div>
+            </a>
+            <div
+              id="about"
+              class="collapse show"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="card-body pt-0 text-muted">
+                <div class="row align-items-center ms-1">
+                  <div class="col-4 p-2"><i
+                      class="bi bi-telephone fs-18 me-2"
+                    ></i>Numero</div>
+                  <div class="col-8 p-2 border-bottom">51922502947</div>
+                  <div class="col-4 p-2"><i
+                      class="bi bi-envelope fs-18 me-2"
+                    ></i>Email</div>
+                  <div
+                    class="col-8 p-2 border-bottom"
+                  >elvisbravo262@gmail.com</div>
+                  <div class="col-4 p-2"><i
+                      class="bi bi-envelope fs-18 me-2"
+                    ></i>Universidad</div>
+                  <div class="col-8 p-2 border-bottom">San Martin</div>
+                  <div class="col-4 p-2"><i
+                      class="bi bi-envelope fs-18 me-2"
+                    ></i>Ciudad</div>
+                  <div class="col-8 p-2 border-bottom">tarapoto</div>
+                </div>
+              </div>
+            </div>
+            <a
+              href="#"
+              class="text-dark"
+              data-bs-toggle="collapse"
+              data-bs-target="#files"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              <div class="card-header border-0" id="headingOne">
+                <h5 class="m-0 fs-16">Media, Links and Docs
+                  <i class="uil uil-angle-down float-end accordion-arrow"></i>
+                </h5>
+              </div>
+            </a>
+            <div
+              id="files"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="card-body pt-0 text-muted">
+                <div class="d-inline-block me-2">
+                  <i class="bi bi-file-earmark-pdf h2"></i>
+                </div>
+                <div class="d-inline-block me-2">
+                  <i class="bi bi-file-earmark-word h2"></i>
+                </div>
+                <div class="d-inline-block me-2">
+                  <i class="bi bi-images h2"></i>
+                </div>
+                <div class="d-inline-block me-2">
+                  <i class="bi bi-file-earmark-ppt h2"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Contenido del Offcanvas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="myOffcanvas" aria-labelledby="myOffcanvasLabel" id="myOffcanvas">
-    <div class="offcanvas-header">
-        <h5 id="myOffcanvasLabel">Enviar Imagen</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body" id="offcanvas-body">
+<div
+  class="offcanvas offcanvas-end"
+  tabindex="-1"
+  id="myOffcanvas"
+  aria-labelledby="myOffcanvasLabel"
+  id="myOffcanvas"
+>
+  <div class="offcanvas-header">
+    <h5 id="myOffcanvasLabel">Enviar Imagen</h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body" id="offcanvas-body">
 
-    </div>
+  </div>
 
-    <button class="btn btn-primary" id="enviarImagen">Enviar</button>
+  <button class="btn btn-primary" id="enviarImagen">Enviar</button>
 </div>
 
-
 <audio id="audioPlayer" style="display: none;">
-    <source src="/audios/whatsapp/whatsapp-campana.mp3" type="audio/mpeg">
-    Tu navegador no soporta la reproducción de audio.
+  <source src="/audios/whatsapp/whatsapp-campana.mp3" type="audio/mpeg" />
+  Tu navegador no soporta la reproducción de audio.
 </audio>
 
 <!-- Modal -->
-<div class="modal fade" id="modalEtiqueta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Editar Etiqueta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="numContEti">
-                <input type="hidden" id="idpot" value="">
-                <div class="mb-3">
-                    <label for="embudo" class="col-form-label">Embudo:</label>
-                    <select name="embudo" id="embudo" class="form-select"></select>
-                </div>
-                <div class="mb-3">
-                    <label for="etiqueta" class="col-form-label">Etiqueta:</label>
-                    <select name="etiqueta" id="etiqueta" class="form-select"></select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="editar_etiqueta">Editar</button>
-            </div>
+<div
+  class="modal fade"
+  id="modalEtiqueta"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEtiqueta">Editar Etiqueta</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="numContEti" />
+        <input type="hidden" id="idpot" value="" />
+        <div class="mb-3">
+          <label for="embudo" class="col-form-label">Embudo:</label>
+          <select name="embudo" id="embudo" class="form-select"></select>
         </div>
+        <div class="mb-3">
+          <label for="etiqueta" class="col-form-label">Etiqueta:</label>
+          <select name="etiqueta" id="etiqueta" class="form-select"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="editar_etiqueta"
+        >Editar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalAsignar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Asignar</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="idcp" value="">
-                <div class="mb-3">
-                    <label for="trabajador" class="col-form-label">Asignar a:</label>
-                    <select name="trabajador" id="trabajador" class="form-select"></select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnAsignarEmpleado">Asignar</button>
-            </div>
+<div
+  class="modal fade"
+  id="modalAsignar"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEtiqueta">Asignar</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="idcp" value="" />
+        <div class="mb-3">
+          <label for="trabajador" class="col-form-label">Asignar a:</label>
+          <select
+            name="trabajador"
+            id="trabajador"
+            class="form-select"
+          ></select>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btnAsignarEmpleado"
+        >Asignar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalNuevoContacto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Nuevo Contacto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div
+  class="modal fade"
+  id="modalNuevoContacto"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEtiqueta">Nuevo Contacto</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="nombreContacto" class="col-form-label">Nombre
+                Contacto:</label>
+              <input type="text" class="form-control" id="nombreContacto" />
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="nombreContacto" class="col-form-label">Nombre Contacto:</label>
-                            <input type="text" class="form-control" id="nombreContacto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="nombreContacto" class="col-form-label">Carrera:</label>
-                            <input type="text" class="form-control" id="carreraContacto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="codigopais" class="col-form-label">Código:</label>
-                            <select name="codigopais" id="codigopais" class="form-select">
-                                <option value="51">+51</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="nWhatsapp" class="col-form-label">Numero de Whatsapp:</label>
-                            <input type="number" class="form-control" id="nWhatsapp">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="embudoCliente" class="col-form-label">Embudo:</label>
-                            <select name="embudoCliente" id="embudoCliente" class="form-select">
-                                <option value="">Seleccionar</option>
-                                {{#each embudo}}
-                                    <option value="{{ this.id }}">{{this.descripcion}}</option>
-                                {{/each}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="etiquetaCliente" class="col-form-label">Etiqueta:</label>
-                            <select name="etiquetaCliente" id="etiquetaCliente" class="form-select">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="plataforma_contacto" class="col-form-label">Plataforma:</label>
-                            <select name="plataforma_contacto" id="plataforma_contacto" class="form-select">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="tipo_contacto" class="col-form-label">Tipo Contacto:</label>
-                            <select name="tipo_contacto" id="tipo_contacto" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="1">Potencial</option>
-                                <option value="2">Cliente</option>
-                                <option value="3">Proveedor</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" id="view_plataforma">
-
-                </div>
-
-                <div class="row" id="contentContactNew">
-
-                </div>
-
-                <div class="row" id="check_automatico">
-
-
-                </div>
-
-                <div class="row" id="dataPlantilla">
-
-                </div>
-
-                <div class="row" id="contentPlantilla">
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnNuevoContacto">Agregar</button>
-            </div>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label
+                for="nombreContacto"
+                class="col-form-label"
+              >Carrera:</label>
+              <input type="text" class="form-control" id="carreraContacto" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="codigopais" class="col-form-label">Código:</label>
+              <select name="codigopais" id="codigopais" class="form-select">
+                <option value="51">+51</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="mb-3">
+              <label for="nWhatsapp" class="col-form-label">Numero de Whatsapp:</label>
+              <input type="number" class="form-control" id="nWhatsapp" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="embudoCliente" class="col-form-label">Embudo:</label>
+              <select
+                name="embudoCliente"
+                id="embudoCliente"
+                class="form-select"
+              >
+                <option value="">Seleccionar</option>
+                {{#each embudo}}
+                  <option value="{{this.id}}">{{this.descripcion}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label
+                for="etiquetaCliente"
+                class="col-form-label"
+              >Etiqueta:</label>
+              <select
+                name="etiquetaCliente"
+                id="etiquetaCliente"
+                class="form-select"
+              >
+                <option value=""></option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label
+                for="plataforma_contacto"
+                class="col-form-label"
+              >Plataforma:</label>
+              <select
+                name="plataforma_contacto"
+                id="plataforma_contacto"
+                class="form-select"
+              >
+
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="tipo_contacto" class="col-form-label">Tipo Contacto:</label>
+              <select
+                name="tipo_contacto"
+                id="tipo_contacto"
+                class="form-select"
+              >
+                <option value="">Seleccione...</option>
+                <option value="1">Potencial</option>
+                <option value="2">Cliente</option>
+                <option value="3">Proveedor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id="view_plataforma">
+
+        </div>
+
+        <div class="row" id="contentContactNew">
+
+        </div>
+
+        <div class="row" id="check_automatico">
+
+        </div>
+
+        <div class="row" id="dataPlantilla">
+
+        </div>
+
+        <div class="row" id="contentPlantilla">
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btnNuevoContacto"
+        >Agregar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Long Content Scroll Modal -->
-<div class="modal fade" id="modalContacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">CONTACTOS</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+<div
+  class="modal fade"
+  id="modalContacts"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">CONTACTOS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
 
-            <div style="padding: 0 1rem;">
-                <div class="chat-search" style="height: 40px">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar..." id="buscarContact" value="">
-                        <button class="btn input-group-text" type="submit">
-                            <i class="uil uil-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-body" id="listaCont">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-            </div>
+      <div style="padding: 0 1rem;">
+        <div class="chat-search" style="height: 40px">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar..."
+              id="buscarContact"
+              value=""
+            />
+            <button class="btn input-group-text" type="submit">
+              <i class="uil uil-search"></i>
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div class="modal-body" id="listaCont">
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalPlantilla" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Enviar Plantilla</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div
+  class="modal fade"
+  id="modalPlantilla"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEtiqueta">Enviar Plantilla</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="escogePlantilla" class="col-form-label">Escoge una
+                plantilla:</label>
+              <select
+                name="escogePlantilla"
+                id="escogePlantilla"
+                class="form-select"
+              >
+                <option value=""></option>
+                <option value="">speack_potencial</option>
+              </select>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="escogePlantilla" class="col-form-label">Escoge una plantilla:</label>
-                            <select name="escogePlantilla" id="escogePlantilla" class="form-select">
-                                <option value=""></option>
-                                <option value="">speack_potencial</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" id="contenidoPlantilla">
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnEnviarPlatilla">Enviar</button>
-            </div>
+          </div>
         </div>
+
+        <div class="row" id="contenidoPlantilla">
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btnEnviarPlatilla"
+        >Enviar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal Editar Contacto-->
-<div class="modal fade" id="modalEditarContacto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Editar Contacto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div
+  class="modal fade"
+  id="modalEditarContacto"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEtiqueta">Editar Contacto</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="what" class="col-form-label">Numero de Whatsapp:</label>
+              <input type="number" class="form-control" id="what" readonly="" />
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="what" class="col-form-label">Numero de Whatsapp:</label>
-                            <input type="number" class="form-control" id="what" readonly="">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="nContacto" class="col-form-label">Nombre Contacto:</label>
-                            <input type="text" class="form-control" id="nContacto">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnEditarContacto">Editar</button>
-            </div>
+          </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="nContacto" class="col-form-label">Nombre Contacto:</label>
+              <input type="text" class="form-control" id="nContacto" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btnEditarContacto"
+        >Editar</button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasReenvio" aria-labelledby="offcanvasTopLabel">
-    <div class="offcanvas-header">
-        <h5 id="offcanvasRightLabel">Reenviar Mensaje</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body" id="contentOffcanvas">
+<div
+  class="offcanvas offcanvas-end"
+  tabindex="-1"
+  id="offcanvasReenvio"
+  aria-labelledby="offcanvasTopLabel"
+>
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Reenviar Mensaje</h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body" id="contentOffcanvas">
 
-    </div>
+  </div>
 </div>
 
 <!-- aca mostramos el contaco a enviar -->
 <!-- Long Content Scroll Modal -->
-<div class="modal fade" id="modalReenvio" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje a</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="search" id="buscarContacto" placeholder="Buscar contacto" class="form-control mb-2"
-                    onkeyup="searchContacto(event)">
-                <input type="hidden" id="codigoMensaje" value="">
-                <input type="hidden" id="sendType" value="">
+<div
+  class="modal fade"
+  id="modalReenvio"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje
+          a</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input
+          type="search"
+          id="buscarContacto"
+          placeholder="Buscar contacto"
+          class="form-control mb-2"
+          onkeyup="searchContacto(event)"
+        />
+        <input type="hidden" id="codigoMensaje" value="" />
+        <input type="hidden" id="sendType" value="" />
 
-                <div id="contentModalReenvio"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="reenviar_mensaje_contacto">Enviar</button>
-            </div>
-        </div>
+        <div id="contentModalReenvio"></div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="reenviar_mensaje_contacto"
+        >Enviar</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal Seguimiento-->
-<div class="modal fade" id="modalSeguimiento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleSeguimiento"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+<div
+  class="modal fade"
+  id="modalSeguimiento"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleSeguimiento"></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
 
-                <ul class="nav nav-pills navtab-bg nav-justified p-1">
-                    <li class="nav-item">
-                        <a href="#home1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-                            <span class="d-block d-sm-none"><i class="uil-home-alt"></i></span>
-                            <span class="d-none d-sm-block">Agregar Seguimiento</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#profile1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-                            <span class="d-block d-sm-none"><i class="uil-user"></i></span>
-                            <span class="d-none d-sm-block">Lista de los seguimientos</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="tab-content text-muted">
-                    <div class="tab-pane show active" id="home1">
-                        <form id="formSeguimiento">
-                            <input type="hidden" name="numeroContacto" id="wcontacto" value="">
-                            <div class="row" >
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label for="descripcion_seguimiento" class="col-form-label">Descripción:</label>
-                                        <textarea class="form-control" name="descripcion_seguimiento"
-                                            id="descripcion_seguimiento" cols="30" rows="5"></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-switch mb-2">
-                                        <input type="checkbox" class="form-check-input" id="notificarSeguimiento" name="notificarSeguimiento" onchange="fechaNotificar(event)">
-                                        <label class="form-check-label" for="notificarSeguimiento">Notificar</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4" id="viewfechaNotificar">
-                                    
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary">Agregar</button>
-                                </div>
-                                
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane" id="profile1">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Descripción</th>
-                                        <th>Fecha</th>
-                                        <th>Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodySeguimientos">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <ul class="nav nav-pills navtab-bg nav-justified p-1">
+          <li class="nav-item">
+            <a
+              href="#home1"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link active"
+            >
+              <span class="d-block d-sm-none"><i
+                  class="uil-home-alt"
+                ></i></span>
+              <span class="d-none d-sm-block">Agregar Seguimiento</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#profile1"
+              data-bs-toggle="tab"
+              aria-expanded="true"
+              class="nav-link"
+            >
+              <span class="d-block d-sm-none"><i class="uil-user"></i></span>
+              <span class="d-none d-sm-block">Lista de los seguimientos</span>
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content text-muted">
+          <div class="tab-pane show active" id="home1">
+            <form id="formSeguimiento">
+              <input
+                type="hidden"
+                name="numeroContacto"
+                id="wcontacto"
+                value=""
+              />
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label
+                      for="descripcion_seguimiento"
+                      class="col-form-label"
+                    >Descripción:</label>
+                    <textarea
+                      class="form-control"
+                      name="descripcion_seguimiento"
+                      id="descripcion_seguimiento"
+                      cols="30"
+                      rows="5"
+                    ></textarea>
+                  </div>
                 </div>
 
+                <div class="col-md-12">
+                  <div class="form-switch mb-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="notificarSeguimiento"
+                      name="notificarSeguimiento"
+                      onchange="fechaNotificar(event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="notificarSeguimiento"
+                    >Notificar</label>
+                  </div>
+                </div>
+
+                <div class="col-md-4" id="viewfechaNotificar">
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+          <div class="tab-pane" id="profile1">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody id="bodySeguimientos">
+
+                </tbody>
+              </table>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
+          </div>
         </div>
+
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="modal fade" id="modalEnvioPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje con un archivo pdf</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="numWhat">
-                <div class="mb-3 row">
-                    <label class="col-lg-3 col-form-label" for="archivo_pdf">Archivo Pdf</label>
-                    <div class="col-lg-9">
-                        <input type="file" class="form-control" id="archivo_pdf" accept="application/pdf">
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                    <label class="col-lg-3 col-form-label" for="variabletext">Hola, buen día</label>
-                    <div class="col-lg-9">
-                        <textarea class="form-control" rows="5" id="variabletext"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="enviar_template_pdf">Enviar</button>
-            </div>
+<div
+  class="modal fade"
+  id="modalEnvioPdf"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Enviar mensaje
+          con un archivo pdf</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="numWhat" />
+        <div class="mb-3 row">
+          <label class="col-lg-3 col-form-label" for="archivo_pdf">Archivo Pdf</label>
+          <div class="col-lg-9">
+            <input
+              type="file"
+              class="form-control"
+              id="archivo_pdf"
+              accept="application/pdf"
+            />
+          </div>
         </div>
+
+        <div class="mb-3 row">
+          <label class="col-lg-3 col-form-label" for="variabletext">Hola, buen
+            día</label>
+          <div class="col-lg-9">
+            <textarea
+              class="form-control"
+              rows="5"
+              id="variabletext"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="enviar_template_pdf"
+        >Enviar</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalEtiquetaContacto"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Lista de
+          Contactos por Etiqueta</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label" for="embudo_filter">Embudo</label>
+              <select
+                class="form-select"
+                name="embudo_filter"
+                id="embudo_filter"
+              >
+                <option value="0">TODOS</option>
+                {{#each embudo}}
+                  <option value="{{this.id}}">{{this.descripcion}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label" for="etiqueta_filter">Etiqueta</label>
+              <select
+                class="form-select"
+                name="etiqueta_filter"
+                id="etiqueta_filter"
+              >
+                <option value="0">TODOS</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" id="contacto_etiqueta_table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Contacto</th>
+                <th>Embudo</th>
+                <th>Etiqueta</th>
+                <th>Registro</th>
+                <th>Registro Act.</th>
+              </tr>
+            </thead>
+
+            <tbody id="listaContactoEtiqueta"></tbody>
+
+          </table>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+        >Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalActivities" tabindex="-1" role="dialog" aria-labelledby="myCenterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: #c6dee5">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myCenterModalLabel">Center modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Etiqueta</th>
+                    <th>Registro</th>
+                </tr>
+            </thead>
+            <tbody id="listaHistory">
+
+            </tbody>
+        </table>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </div>
