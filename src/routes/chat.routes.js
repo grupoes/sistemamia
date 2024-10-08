@@ -30,7 +30,9 @@ import {
   chatContactDetail,
   searchChatList,
   enviopdf,
-  multerSinglePdf
+  multerSinglePdf,
+  listaContactoEtiqueta,
+  getActivityEtiqueta
 } from "../controllers/chat.controller.js";
 
 import {
@@ -83,5 +85,8 @@ router.get('/getContactoData/:id', checkAuth, chatContactDetail);
 router.get('/searchMessage/:search', checkAuth, searchChatList);
 
 router.post('/enviopdf/', multerSinglePdf, enviopdf);
+router.get('/getListaContactoEtiqueta/:embudo/:etiqueta', checkAuth, listaContactoEtiqueta);
+
+router.get('/getActivityEtiqueta/:id', getActivityEtiqueta);
 
 export default router;
