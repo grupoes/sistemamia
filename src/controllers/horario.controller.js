@@ -83,3 +83,35 @@ export const horarioAuxiliar = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 }
+
+
+//horario ejemplo
+export const viewHorarioEjemplo = (req, res) => {
+    const timestamp = Date.now();
+
+    const css = [
+        'assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css',
+        'assets/libs/%40fullcalendar/core/main.min.css',
+        'assets/libs/%40fullcalendar/daygrid/main.min.css',
+        'assets/libs/%40fullcalendar/bootstrap/main.min.css',
+        'assets/libs/%40fullcalendar/timegrid/main.min.css',
+        'assets/libs/%40fullcalendar/list/main.min.css'
+    ];
+
+    const js = [
+        'assets/libs/datatables.net/js/jquery.dataTables.min.js',
+        'assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js',
+        'assets/libs/moment/min/moment.min.js',
+        'assets/libs/%40fullcalendar/core/main.min.js',
+        'assets/libs/%40fullcalendar/bootstrap/main.min.js',
+        'assets/libs/%40fullcalendar/daygrid/main.min.js',
+        'assets/libs/%40fullcalendar/timegrid/main.min.js',
+        'assets/libs/%40fullcalendar/list/main.min.js',
+        'assets/libs/%40fullcalendar/interaction/main.min.js',
+        '/js/horario_ejemplo.js'+ '?t=' + timestamp
+    ];
+
+    res.render('horarios/ejemplo', { layout: 'partials/main', css, js });
+}

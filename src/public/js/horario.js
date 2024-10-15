@@ -112,6 +112,9 @@ File: Calendar init js
 
         // cal - init
         $this.$calendarObj = new FullCalendar.Calendar($this.$calendar[0], {
+            allDaySlot: false,
+            height: 'auto',
+            aspectRatio: 1.8,
             plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
             slotDuration: '00:15:00', /* If we want to split day time each 15minutes */
             minTime: '08:00:00',
@@ -138,14 +141,14 @@ File: Calendar init js
             },
             defaultView: 'timeGridWeek',  
             handleWindowResize: true,   
-            height: $(window).height() - 200,   
+            //height: $(window).height() - 200,   
             header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
             },
             events: defaultEvents,
-            editable: true,
+            editable: false,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             eventLimit: true, // allow "more" link when too many events
             selectable: true,

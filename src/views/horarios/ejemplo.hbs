@@ -53,23 +53,9 @@
 
         <div class="row">
           <div class="col-4 mx-auto">
-            <div class="mb-3">
-              <label class="form-label">Auxiliares</label>
-              <select
-                class="form-select"
-                name="category"
-                id="event-select-auxiliar"
-                required
-              >
-                <option value="bg-danger" selected>Auxiliar 01</option>
-                <option value="bg-success">Auxiliar 02</option>
-                <option value="bg-primary">Auxiliar 03</option>
-                <option value="bg-info">Auxiliar 04</option>
-                <option value="bg-dark">Auxiliar 05</option>
-                <option value="bg-warning">Auxiliar 06</option>
-              </select>
-              <div class="invalid-feedback">Please select a valid event category</div>
-            </div>
+            <input type="text" id="activity-name" placeholder="Nombre de la actividad">
+            <input type="number" id="activity-duration" placeholder="Duración en horas">
+            <button type="button" id="btn-add-activity">Agregar Actividad</button>
           </div>
         </div>
 
