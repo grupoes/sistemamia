@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">Perfiles</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es
+                            Consultores</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
+                    <li class="breadcrumb-item active">Perfiles</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mt-0 mb-1">Lista de perfiles</h4>
+
+                <button type="button" class="btn btn-primary mt-2 mb-2" id="addProfile">Crear Perfil</button>
+
+                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="renderTableProfiles">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- end card body-->
+        </div>
+        <!-- end card -->
+    </div><!-- end col-->
+</div>
+
+<div class="modal fade" id="modalAddProfile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content position-relative">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-1">
+                    <h5 class="modal-title" id="myExtraLargeModalLabel">Agregar Perfil</h5>
+                    <i class="uil uil-question-circle fs-3 cursor-pointer" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Los campos con (*) son obligatorios."></i>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column">
+                    <input type="hidden" name="idProfile" id="idProfile" value="0">
+                    <div class="mb-3">
+                        <label class="form-label" for="nameProfile">Nombre *</label>
+                        <input type="text" class="form-control" name="nameProfile" id="nameProfile"
+                            placeholder="Nombre del perfil" autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Descripción</label>
+                        <input type="text" class="form-control" name="description" id="description"
+                            placeholder="Descripción del perfil">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="saveProfile" disabled>Guardar</button>
+            </div>
+            <div class="position-absolute top-0 start-0 w-100 h-100"
+                style="background: rgba(255, 255, 255, 0.3); z-index: 1040; display: none;" id="loaderContainer">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

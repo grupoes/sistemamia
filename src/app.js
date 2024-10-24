@@ -28,6 +28,7 @@ import etiqueta from './routes/etiqueta.routes.js';
 import proyecto from "./routes/proyectos.routes.js";
 import horario from "./routes/horario.routes.js";
 import actividades from './routes/actividades.routes.js';
+import perfiles from './routes/perfiles.routes.js';
 
 const app = express();
 
@@ -77,5 +78,6 @@ app.use(etiqueta);
 app.use(proyecto);
 app.use(horario);
 app.use(actividades);
+app.use(perfiles);
 
 export default app;
