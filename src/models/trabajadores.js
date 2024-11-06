@@ -10,7 +10,8 @@ export const Trabajadores = sequelize.define('trabajadores', {
         autoIncrement: true
     },
     numero_documento: {
-        type: DataTypes.INTEGER
+        type: DataTypes.STRING,
+        unique: true 
     },
     nombres: {
         type: DataTypes.STRING
@@ -19,7 +20,7 @@ export const Trabajadores = sequelize.define('trabajadores', {
         type: DataTypes.STRING
     },
     fecha_nacimiento: {
-        type: DataTypes.DATE
+        type: DataTypes.STRING(50)
     },
     telefono: {
         type: DataTypes.INTEGER
@@ -43,6 +44,19 @@ export const Trabajadores = sequelize.define('trabajadores', {
         type: DataTypes.INTEGER
     },
     ubigeoId: {
+        type: DataTypes.INTEGER
+    },
+    carreraId: {
+        type: DataTypes.INTEGER
+    },
+    fecha_contrato : {
+        type: DataTypes.STRING
+    },
+    whatsapp: {
+        type: DataTypes.STRING(50),
+        unique: true 
+    },
+    especialidadId: {
         type: DataTypes.INTEGER
     }
 }, {

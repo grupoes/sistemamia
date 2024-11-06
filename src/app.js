@@ -4,6 +4,7 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import bodyParser from "body-parser";
 import cors from 'cors';
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 import login from './routes/login.routes.js';
 import dashboard from './routes/dashboard.routes.js';
@@ -79,5 +80,5 @@ app.use(proyecto);
 app.use(horario);
 app.use(actividades);
 app.use(perfiles);
-
+app.use(errorHandler);
 export default app;

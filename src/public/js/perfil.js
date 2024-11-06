@@ -50,7 +50,7 @@ function renderDataTable() {
                             ? `<div class="dropdown">
                                     <a href="javascript:void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="uil uil-ellipsis-h"></i></a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="editProfile(${perfil.id}, ${perfil.estado})"><i class="uil uil-pen me-2 text-muted vertical-middle"></i>Editar</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="editProfile(${perfil.id})"><i class="uil uil-pen me-2 text-muted vertical-middle"></i>Editar</a>
                                         <a class="dropdown-item" href="javascript:void(0);" onclick="deleteOrRestore(${perfil.id}, ${perfil.estado})"><i class="uil uil-trash-alt me-2 text-muted vertical-middle"></i>Eliminar</a>
                                     </div>
                                 </div>`

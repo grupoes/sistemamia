@@ -7,8 +7,9 @@ export const Usuario = sequelize.define('usuario', {
         primaryKey: true,
         autoIncrement: true
     },
-    email: {
-        type: DataTypes.STRING
+    correo: {
+        type: DataTypes.STRING,
+        unique: true 
     },
     password: {
         type: DataTypes.STRING

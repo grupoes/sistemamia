@@ -12,7 +12,7 @@ export const sigin = async (req, res) => {
     try {
         const user = await Usuario.findOne({
             where: {
-                email: email,
+                correo: email,
                 password: password
             },
             include: Trabajadores
