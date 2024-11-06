@@ -170,13 +170,14 @@ searchDni.addEventListener("click", (event) => {
                     if (data.status === "ok") {
                         removeInputLoading();
                         const datos = data.data;
-
-                        nameUsuario.value = datos.nombres;
-                        lastName.value = datos.ap_paterno + " " + datos.ap_materno;
-
-                        const partes = datos.fecha_nacimiento.split("/");
-                        const fechaFormateada =
-                            partes[2] + "-" + partes[1] + "-" + partes[0];
+                        nameUsuario.value = datos.nombres || "";
+                        lastName.value = [datos.ap_paterno, datos.ap_materno].filter(Boolean).join(" ");
+                        const fechaNacimientoStr = datos.fecha_nacimiento || "";
+                        let fechaFormateada = "";    
+                        if (fechaNacimientoStr) {
+                            const partes = fechaNacimientoStr.split("/");
+                            fechaFormateada = `${partes[2]}-${partes[1]}-${partes[0]}`;
+                        }     
                         fechaNacimiento.value = fechaFormateada;
                         validationOfRequeridFields();
                     } else {

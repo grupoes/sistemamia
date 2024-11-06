@@ -225,10 +225,6 @@ export const deleteOrRestore = async(req, res) => {
                 { where: { id: user.trabajador_id }, transaction }
             );
         }
-        await UsuarioPerfil.update(
-            { estado: newState },
-            { where: { usuario_id: id }, transaction }
-        );
         await transaction.commit();
         return res.status(200).json({
             success: true,
