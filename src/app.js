@@ -30,6 +30,7 @@ import proyecto from "./routes/proyectos.routes.js";
 import horario from "./routes/horario.routes.js";
 import actividades from './routes/actividades.routes.js';
 import perfiles from './routes/perfiles.routes.js';
+import trab from './routes/trabajosEjemplos.routes.js';
 
 const app = express();
 
@@ -81,4 +82,6 @@ app.use(horario);
 app.use(actividades);
 app.use(perfiles);
 app.use(errorHandler);
+app.use(trab);
+
 export default app;
