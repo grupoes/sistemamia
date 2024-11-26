@@ -1,9 +1,9 @@
 const rol = document.getElementById('rol_user');
 const iduser = document.getElementById('user_id');
 const nameLogin = document.getElementById('nameLogin');
-
 const token_ = localStorage.getItem('token');
-
+let currentPath;
+let menu;
 window.addEventListener('load', (e) => {
 
     getDataToken(token_);
@@ -12,19 +12,14 @@ window.addEventListener('load', (e) => {
     
 });
 
-
 function getDataToken(token_) {
-    fetch('/getData', {
-        headers: {
-            'Authorization': 'Bearer ' + token_,
-        }
-    })
+    fetch('/getData')
     .then(res => res.json())
     .then(data => {
         rol.value = data.rol;
         iduser.value = data.id;
-
         nameLogin.textContent = data.name;
+        obtenerMenu(iduser.value);
     })
 }
 
@@ -74,12 +69,23 @@ function getNotificationNotContest(token) {
 
 const salir = document.getElementById('cerrarSesion');
 
-salir.addEventListener('click', (e) => {
+salir.addEventListener('click', async (e) => {
     e.preventDefault();
-
-    localStorage.removeItem('token');
-
-    window.location='/';
+    try {
+        const response = await fetch('/logout', {
+            method: 'GET',
+            credentials: 'include', 
+        });
+        if (response.ok) {
+            window.location = '/';
+        } else {
+            console.error('Error al cerrar sesión:', response.statusText);
+            alert('No se pudo cerrar la sesión. Inténtalo de nuevo.');
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert('Ocurrió un error al cerrar la sesión.');
+    }
 });
 
 
@@ -131,8 +137,6 @@ function notificacionesContacto(token) {
 
 const cantidadNoti = document.getElementById('cantidadNoti');
 
-console.log(cantidadNoti);
-
 function iniciarParpadeo() {
   cantidadNoti.classList.add('parpadeo');
 }
@@ -143,6 +147,79 @@ function detenerParpadeo() {
 
 // Ejemplo: si el valor es mayor a 0, inicia el parpadeo
 if (parseInt(cantidadNoti.innerText) > 0) {
-    console.log(cantidadNoti.innerText)
-  iniciarParpadeo();
+    iniciarParpadeo();
 }
+
+function obtenerMenu(idusuario) {
+    fetch(`/accesos/listar-modulos-por-perfiles/${idusuario}`)
+        .then((res) => {
+            if (!res.ok) {
+                return res.json().then((data) => Promise.reject(data));
+            }
+            return res.json();
+        })
+        .then((data) => {
+            menu = data.data;
+            construirMenuDinamico();
+            document.dispatchEvent(new Event("mainJsReady"));
+        })
+        .catch((error) => {
+           console.log(error)
+        });
+}
+
+function construirMenuDinamico() {
+    const sideMenu = document.getElementById('side-menu');
+    const modulosPadresOrdenados = [...menu].sort((a, b) => a.orden - b.orden);
+    modulosPadresOrdenados.forEach(moduloPadre => {
+        moduloPadre.modulos.sort((a, b) => a.orden - b.orden);
+        const modulosHijos = moduloPadre.modulos.filter(modulo =>
+            modulo.funciones.some(funcion => funcion.prefijo.includes('listar'))
+        );
+        if (modulosHijos.length === 0) {
+            return;
+        }
+        const liPadre = document.createElement('li');
+        liPadre.innerHTML = `
+            <a href="#${moduloPadre.enlace}" data-bs-toggle="collapse">
+                <i class="${moduloPadre.icono}"></i>
+                <span> ${moduloPadre.nombre} </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <div class="collapse" id="${moduloPadre.enlace}">
+                <ul class="nav-second-level"></ul>
+            </div>
+        `;
+        const ulHijos = liPadre.querySelector('.nav-second-level');
+        modulosHijos.forEach(modulo => {
+            const liHijo = document.createElement('li');
+            liHijo.innerHTML = `<a href="/${modulo.url}" class="protected-link">${modulo.nombre}</a>`;
+            ulHijos.appendChild(liHijo);
+        });
+        sideMenu.appendChild(liPadre);
+    });
+    establecerClasesActivas();
+}
+
+function establecerClasesActivas() {
+    currentPath = window.location.pathname;
+    const sideMenu = document.getElementById('side-menu');
+    const menuItems = sideMenu.querySelectorAll('li');
+    menuItems.forEach(li => {
+        const link = li.querySelector('a[href]'); 
+        if (link && link.getAttribute('href') === currentPath) {
+            li.classList.add('menuitem-active');
+            link.classList.add('active');
+            let parent = li.closest('.collapse');
+            while (parent) {
+                parent.classList.add('show');
+                const parentLi = parent.closest('li');
+                if (parentLi) {
+                    parentLi.classList.add('menuitem-active');
+                }
+                parent = parentLi ? parentLi.closest('.collapse') : null;
+            }
+        }
+    });
+}
+

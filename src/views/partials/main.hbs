@@ -87,6 +87,7 @@
 
         <!-- Right bar overlay-->
         <div class="rightbar-overlay"></div>
+        <div class="overlay-loader"></div>
 
         <div class="alert alert-dismissible fade show alert-custom d-none" role="alert" id="alertWarning">
             <strong id="alertStrongText"></strong><span id="alertMessageText"></span>
@@ -98,7 +99,7 @@
         <script src="js/main.js"></script>
 
         {{#each js}}
-        <script src="{{this}}"></script>
+            <script src="{{this}}"></script>
         {{/each}}
 
         <!-- App js -->

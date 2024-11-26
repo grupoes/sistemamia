@@ -1,35 +1,20 @@
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <h4 class="page-title">Perfiles</h4>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es
-                            Consultores</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
-                    <li class="breadcrumb-item active">Perfiles</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
+<div class="row" style="margin-top: 1rem;">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mt-0 mb-1">Lista de perfiles</h4>
-
-                <button type="button" class="btn btn-primary mt-2 mb-2" id="addProfile">Crear Perfil</button>
-
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="header-title mt-0 mb-1">PERFILES / LISTADO</h4>
+                    <div class="d-flex" style="column-gap: 10px;" id="botonesNoRegistro">
+                    </div>
+                </div>
+                <div class="w-100" style="border-bottom: 1px solid #d6d6d6; margin-bottom: 30px"></div>
                 <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                            <th>Acción</th>
+                            <th class="cabecera" style="max-width: 100px;">Acción</th>
+                            <th class="cabecera">Nombre</th>
+                            <th class="cabecera">Descripción</th>
+                            <th class="cabecera">Estado</th>
                         </tr>
                     </thead>
                     <tbody id="renderTableProfiles">

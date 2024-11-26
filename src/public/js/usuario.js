@@ -1,3 +1,12 @@
+let permisosRegisto = [];
+let permisosNoRegistro = [];
+
+document.addEventListener("mainJsReady", () => {
+    const path = currentPath.split('/').filter(Boolean)[0];
+    construirPermisos(path);
+    renderUsers();
+});
+
 $(document).ready(function () {
     $('.chosen-select').chosen({
         no_results_text: "No se encontraron resultados de :",
@@ -14,7 +23,6 @@ $(document).ready(function () {
 
 });
 
-const addUser = document.getElementById("addUser");
 const tipoDocumento = document.getElementById("tipoDocumento");
 const inputNumeroDocumento = document.getElementById("numeroDocumento");
 const searchDni = document.getElementById("searchDni");
@@ -26,19 +34,16 @@ const loaderContainer = document.getElementById('loaderContainer');
 let selectedIdsProfiles = [];
 let validatedForm = false;
 let dataSourceTable;
-addUser.addEventListener("click", () => {
+
+function crear() {
     clearInputs();
     $("#modalAddUser").modal("show");
-});
-
-//$('[data-plugin="customselect"]').select2();
+}
 
 const ubigeo_user = document.getElementById("ubigeo_user");
 const perfil_user = document.getElementById("perfil_user");
 
-renderUsers();
 renderUbigeo();
-//renderPerfil();
 
 function renderUbigeo() {
     fetch("/ubigeos")
@@ -93,46 +98,60 @@ function renderUsers() {
                 const datos = data.data;
                 dataSourceTable = data.data;
                 let html = ``;
-
-                datos.forEach((user, index) => {
+                datos.forEach((user) => {
                     const fecha = new Date(user.trabajadore.fecha_nacimiento).toISOString().split('T')[0];
+                    let contenidoPermisos = '';
+                    if (permisosRegisto.length > 0) {
+                        permisosRegisto.forEach((permiso) => {
+                            contenidoPermisos += `
+                                <button type="button" class="btn btn-${permiso.clase || 'secondary'}" 
+                                        style="padding: .13rem .3rem;" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="right" 
+                                        title="${permiso.nombre}" 
+                                        onclick="${permiso.funcion}(${user.id}, ${user.estado})">
+                                    <i class="${permiso.icono || 'uil uil-cog'}"></i>
+                                </button>
+                            `;
+                        });
+                    } else {
+                        contenidoPermisos = '<span class="text-muted">Sin permisos</span>';
+                    }
                     html += `
-                <tr>
-                    <td class="small-medium filas">${index + 1}</td>
-                    <td class="small-medium filas">${user.trabajadore.nombres} ${user.trabajadore.apellidos
-                        }</td>
-                    <td class="small-medium filas">${fecha}</td>
-                    <td class="small-medium filas"> ${user.trabajadore.area.nombre}</td>
-                    <td class="small-medium filas">${user.trabajadore.carrera.nombre}</td>
-                    <td class="small-medium filas">${user.correo}</td>
-                    
-                    <td class="small-medium filas"> ${user.trabajadore.telefono == null ? '' : user.trabajadore.telefono}</td>
-                    <td class="small-medium filas"> ${user.trabajadore.whatsapp == null ? '' : user.trabajadore.whatsapp}</td>
-                    <td class="small-medium filas">${user.trabajadore.tipo_trabajo.nombre}</td>
-                    <td class="small-medium filas">
-                        ${user.estado === 1
-                            ? `<div class="bg-success text-center rounded text-white" style="width: 80px">ACTIVO</div>`
-                            : `<div class="bg-danger text-center rounded text-white" style="width: 80px">INACTIVO</div>`
-                        }
-                    </td>
-                    <td class="small-medium filas">
-                         ${user.estado === 1
-                            ? `<div class="dropdown">
-                                    <a href="javascript:void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="uil uil-ellipsis-h"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="editUser(${user.id})"><i class="uil uil-pen me-2 text-muted vertical-middle"></i>Editar</a>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="deleteOrRestore(${user.id}, ${user.estado})"><i class="uil uil-trash-alt me-2 text-muted vertical-middle"></i>Eliminar</a>
-                                    </div>
-                                </div>`
-                            : `<div class="dropdown">
-                                    <a href="javascript:void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="uil uil-ellipsis-h"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="deleteOrRestore(${user.id}, ${user.estado})"><i class="uil uil-sync me-2 text-muted vertical-middle"></i>Activar</a>
-                                    </div>
-                                </div>`
-                        }
-                    </td>
-                </tr>
+                    <tr>
+                        <td style="max-width: 100px;">
+                            <div class="d-flex" style="column-gap: 5px">
+                                ${permisosRegisto.length > 0
+                                    ? user.estado === 1 
+                                        ? contenidoPermisos
+                                        : `<button type="button" class="btn btn-warning" style="padding: .13rem .3rem;" 
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-placement="right" 
+                                                title="Restaurar" 
+                                                onclick="eliminar_restaurar(${user.id}, ${user.estado})">
+                                                <i class="uil uil-sync"></i>
+                                            </button>`
+                                    : contenidoPermisos
+                                }
+                            </div>
+                        </td>
+                        <td class="small-medium filas" style="max-width: 170px; min-width: 170px; white-space: break-spaces;">${user.trabajadore.nombres} ${user.trabajadore.apellidos
+                            }</td>
+                        <td class="small-medium filas">${fecha}</td>
+                        <td class="small-medium filas" style="max-width: 150px; min-width: 150px; white-space: break-spaces;"> ${user.trabajadore.area.nombre}</td>
+                        <td class="small-medium filas" style="max-width: 200px; min-width: 200px; white-space: break-spaces;">${user.trabajadore.carrera.nombre}</td>
+                        <td class="small-medium filas">${user.correo}</td>
+                        
+                        <td class="small-medium filas"> ${user.trabajadore.telefono == null ? '' : user.trabajadore.telefono}</td>
+                        <td class="small-medium filas"> ${user.trabajadore.whatsapp == null ? '' : user.trabajadore.whatsapp}</td>
+                        <td class="small-medium filas">${user.trabajadore.tipo_trabajo.nombre}</td>
+                        <td class="small-medium filas">
+                            ${user.estado === 1
+                                ? `<div class="bg-success text-center rounded text-white" style="width: 80px">ACTIVO</div>`
+                                : `<div class="bg-danger text-center rounded text-white" style="width: 80px">INACTIVO</div>`
+                            }
+                        </td>
+                    </tr>
                 `;
                 });
 
@@ -173,11 +192,11 @@ searchDni.addEventListener("click", (event) => {
                         nameUsuario.value = datos.nombres || "";
                         lastName.value = [datos.ap_paterno, datos.ap_materno].filter(Boolean).join(" ");
                         const fechaNacimientoStr = datos.fecha_nacimiento || "";
-                        let fechaFormateada = "";    
+                        let fechaFormateada = "";
                         if (fechaNacimientoStr) {
                             const partes = fechaNacimientoStr.split("/");
                             fechaFormateada = `${partes[2]}-${partes[1]}-${partes[0]}`;
-                        }     
+                        }
                         fechaNacimiento.value = fechaFormateada;
                         validationOfRequeridFields();
                     } else {
@@ -288,6 +307,8 @@ inputNumeroDocumento.addEventListener("blur", function (event) {
 });
 
 function clearInputs() {
+    const idUsuario = document.getElementById('id_usuario');
+    if(idUsuario.value) idUsuario.value = 0;
     const elements = document.querySelectorAll('.form-input');
     elements.forEach(element => {
         if (element.tagName === 'SELECT') {
@@ -421,7 +442,7 @@ function manejarVisibilidadDeContraseña() {
     }
 }
 
-function editUser(id) {
+function editar(id) {
     let dataFiltered;
     for (let index = 0; index < dataSourceTable.length; index++) {
         if (dataSourceTable[index].id === id) {
@@ -465,33 +486,33 @@ function setEditValues(data) {
     validationOfRequeridFields();
 }
 
-function deleteOrRestore(id, state) {
+function eliminar_restaurar(id, state) {
     Swal.fire({
-        title: `¿Está seguro de ${state === 0 ? 'activar' : 'eliminar'} el registro seleccionado?`,
+        title: `¿Está seguro de ${state === 0 ? 'restaurar' : 'eliminar'} el registro seleccionado?`,
         text: "¡No podrás revertir esto!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: `Sí,  ${state === 0 ? 'activar' : 'eliminar'}!`
+        confirmButtonText: `Sí,  ${state === 0 ? 'restaurar' : 'eliminar'}!`
     }).then((result) => {
         if (result.isConfirmed) {
             fetch(`/deleteOrRestoreUser/?id=${id}&estado=${state}`, {
                 method: 'DELETE'
             })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    mostrarAlerta('alert-success', 'Éxito : ', data.message);
-                    renderUsers();
-                } else {
-                    alert(data.response);
-                }
-            }).catch(error => {
-                if (error.statusCode === 400) {
-                    mostrarAlerta('alert-warning', 'Advertencia : ', error.message);
-                }
-            });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarAlerta('alert-success', 'Éxito : ', data.message);
+                        renderUsers();
+                    } else {
+                        alert(data.response);
+                    }
+                }).catch(error => {
+                    if (error.statusCode === 400) {
+                        mostrarAlerta('alert-warning', 'Advertencia : ', error.message);
+                    }
+                });
         }
     });
 }
@@ -506,9 +527,9 @@ function listarEspecialidadesPorCarrera(carreraId, valorEstablecido) {
     contenedorEspecialidades.classList.add('active');
     const url = `/especialidades/carrera/${carreraId}`;
     fetch(url)
-        .then((res) => res.json()) 
+        .then((res) => res.json())
         .then((data) => {
-            if(data.success) {
+            if (data.success) {
                 const selectElement = $('#id_specialties');
                 selectElement.empty();
                 if (data.data && data.data.length > 0) {
@@ -518,15 +539,62 @@ function listarEspecialidadesPorCarrera(carreraId, valorEstablecido) {
                 }
                 data.data.forEach(especialidad => {
                     const option = `<option value="${especialidad.id}">${especialidad.nombre}</option>`;
-                    selectElement.append(option); 
+                    selectElement.append(option);
                 });
-                if(valorEstablecido !== '') document.getElementById('id_specialties').value = valorEstablecido === null ? '' : valorEstablecido;
+                if (valorEstablecido !== '') document.getElementById('id_specialties').value = valorEstablecido === null ? '' : valorEstablecido;
                 selectElement.trigger('chosen:updated');
             }
             contenedorEspecialidades.classList.remove('active');
         })
         .catch((error) => {
             contenedorEspecialidades.classList.remove('active');
-            console.error("Error al obtener las especialidades:", error); 
+            console.error("Error al obtener las especialidades:", error);
         });
+}
+
+function construirPermisos(path) {
+    for (let index = 0; index < menu.length; index++) {
+        for (let indexModulo = 0; indexModulo < menu[index].modulos.length; indexModulo++) {
+            const modulo = menu[index].modulos[indexModulo];
+            if (modulo.url === path) {
+                modulo.funciones.forEach((funcion) => {
+                    if (funcion.de_registro === 1) {
+                        permisosRegisto.push(funcion);
+                    } else if (funcion.de_registro === 0 && funcion.funcion !== "listar") {
+                        permisosNoRegistro.push(funcion);
+                    }
+                });
+            }
+        }
+    }
+    permisosRegisto.sort((a, b) => {
+        if (a.orden === null || a.orden === undefined) return 1; 
+        if (b.orden === null || b.orden === undefined) return -1;
+        return a.orden - b.orden;
+    });
+    permisosNoRegistro.sort((a, b) => {
+        if (a.orden === null || a.orden === undefined) return 1;
+        if (b.orden === null || b.orden === undefined) return -1;
+        return a.orden - b.orden;
+    });
+    renderizarPermisosNoRegistros();
+}
+
+function renderizarPermisosNoRegistros() {
+    const contenedor = document.getElementById('botonesNoRegistro');
+    contenedor.innerHTML = ''; 
+    permisosNoRegistro.forEach((permiso) => {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        if (permiso.clase) {
+            const clases = permiso.clase.split(' ');
+            boton.classList.add(...clases); 
+        }
+        boton.classList.add('mt-2', 'mb-2');
+        boton.setAttribute('onclick', `${permiso.funcion}()`);
+        boton.innerHTML = `
+            <i class="${permiso.icono || 'uil uil-cog'}"></i>
+        `;
+        contenedor.appendChild(boton);
+    });
 }

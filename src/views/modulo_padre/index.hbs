@@ -1,0 +1,85 @@
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="header-title mt-0 mb-1">MÓDULO PADRE / LISTADO</h4>
+                    <div class="d-flex" style="column-gap: 10px;" id="botonesNoRegistro">
+                    </div>
+                </div>
+                 <div class="w-100" style="border-bottom: 1px solid #d6d6d6; margin-bottom: 30px"></div>
+                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th class="cabecera" style="max-width: 100px;">Acción</th>
+                            <th class="cabecera">Nombre</th>
+                            <th class="cabecera">Enlace</th>
+                            <th class="cabecera">Ícono</th>
+                            <th class="cabecera">Orden</th>
+                            <th class="cabecera">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaModuloPadre">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalModuloPadre" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content position-relative">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModal"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="idModuloPadre" value="">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="tipoDocumento">Nombre *</label>
+                            <input type="text" class="form-input form-control requerido" name="nombre"
+                                id="nombre" placeholder="Nombre del módulo padre" oninput="validarEntradasObligatorias()" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="tipoDocumento">Enlace *</label>
+                            <input type="text" class="form-input form-control requerido" name="enlace"
+                                id="enlace" placeholder="Enlace del módulo padre" oninput="validarEntradasObligatorias()" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="tipoDocumento">Ícono *</label>
+                            <input type="text" class="form-input form-control requerido" name="icono"
+                                id="icono" placeholder="Ícono del módulo padre" oninput="validarEntradasObligatorias()" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="tipoDocumento">Órden *</label>
+                            <input type="number" min="0" class="form-input form-control requerido" name="orden"
+                                id="orden" placeholder="Órden del módulo padre" oninput="validarEntradasObligatorias()" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardar" disabled>Guardar</button>
+            </div>
+
+            <div class="position-absolute top-0 start-0 w-100 h-100"
+                style="background: rgba(255, 255, 255, 0.3); z-index: 1040; display: none;" id="loaderContainer">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
