@@ -906,8 +906,6 @@ socket.on("messageChat", data => {
 
     const datos = data.data_chat;
     const message = data.new_message;
-
-    console.log(rol.value);
     
     socket.emit('getToken', { token: token, from: datos.from, rol: rol.value, iduser: iduser.value, sonido: true, etiqueta: filterEtiqueta.value, plataforma_id: plataforma_id.value, new_message: message });
 
