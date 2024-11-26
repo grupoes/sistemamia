@@ -62,6 +62,8 @@ io.on('connection', (socket) => {
 
         try {
 
+            console.log(data);
+            
             const token = data.token;
             const etiqueta = data.etiqueta;
             const plataforma_id = data.plataforma_id;
@@ -84,9 +86,6 @@ io.on('connection', (socket) => {
     
             const datos = response.data;
 
-            console.log(datos);
-            
-    
             io.emit('messageContacts', datos);
 
             /*if(data.sonido === true) {
