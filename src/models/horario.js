@@ -2,9 +2,9 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
 import { Usuario } from "../models/usuario.js";
-import { Proyecto } from "../models/proyecto.js";
+import { Trabajos } from "../models/trabajos.js";
 
-export const Horario = sequelize.define('horario', {
+export const Horario = sequelize.define('horarios', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,39 +16,21 @@ export const Horario = sequelize.define('horario', {
     fecha_fin: {
         type: DataTypes.DATE
     },
-    estado: {
-        type: DataTypes.STRING
-    },
-    proyectoId: {
+    trabajo_id: {
         type: DataTypes.INTEGER,
-        references: {
-          model: Proyecto,
-          key: 'id'
-        }
+        allowNull: false
     },
-    usuarioId: {
+    usuario_id: {
         type: DataTypes.INTEGER,
-        references: {
-          model: Usuario,
-          key: 'id'
-        }
+        allowNull: false
     }
-
 }, {
     freezeTableName: true,
-    timestamps: true,
-    uniqueKeys: {
-        keys: {
-          uniqueKey: {
-            fields: ['proyectoId', 'usuarioId', 'fecha_inicio']
-          }
-        }
-    }
+    timestamps: false
 });
 
-Horario.belongsTo(Proyecto, { foreignKey: 'proyectoId' });
-Horario.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Usuario.hasMany(Horario, { foreignKey: 'usuario_id' });
+Horario.belongsTo(Usuario, { foreignKey: 'usuario_id' });
 
-Proyecto.belongsToMany(Usuario, { through: Horario });
-Usuario.belongsToMany(Proyecto, { through: Horario });
-
+Trabajos.hasMany(Horario, { foreignKey: 'trabajo_id' });
+Horario.belongsTo(Trabajos, { foreignKey: 'trabajo_id' });

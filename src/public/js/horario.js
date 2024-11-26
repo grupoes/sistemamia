@@ -59,6 +59,31 @@ File: Calendar init js
 
         this.$calendarObj.unselect();
     },
+
+    CalendarApp.prototype.actualizarEventosCalendario = async function (id) {
+        try {
+            const respuesta = await fetch('/horario-auxiliar-calendar/' + id);
+            const datos = await respuesta.json();
+            const resp = datos.data;
+    
+            const inicio_primera_vez = document.getElementById('inicio_primera_vez');
+            const init_date = document.getElementById('init_date');
+    
+            if (resp.length === 0) {
+                inicio_primera_vez.removeAttribute('hidden');
+                init_date.value = 1;
+            } else {
+                inicio_primera_vez.setAttribute('hidden', true);
+                init_date.value = 0;
+            }
+    
+            this.$calendarObj.removeAllEvents();
+            this.$calendarObj.addEventSource(resp);
+            this.$calendarObj.rerenderEvents();
+        } catch (error) {
+            console.error('Error al actualizar eventos del calendario:', error);
+        }
+    };
     
     /* Initializing */
     CalendarApp.prototype.init = function() {
@@ -66,23 +91,25 @@ File: Calendar init js
         /*  Initialize the calendar  */
         var today = new Date($.now());
 
-        var defaultEvents =  [
-            /*{
-                title: 'Meeting con Mr. Shreyu',
-                start: '2024-03-22 08:00:00',
-                end: '2024-03-22 13:00:00',
+        var defaultEvents = []
+
+        /*var defaultEvents =  [
+            {
+                title: 'Proyecto',
+                start: '2024-11-22 08:00:00',
+                end: '2024-11-22 13:00:00',
                 className: 'bg-warning'
             },
             {
-                title: 'Vista intermedia - Backend Engineer',
+                title: 'tesis',
                 start: today,
                 end: today,
                 className: 'bg-success'
             },
             {
-                title: 'enfoque - Frontend Engineer',
-                start: '2024-03-26 13:00:00',
-                end: '2024-03-26 14:00:00',
+                title: 'enfoque',
+                start: '2024-11-26 13:00:00',
+                end: '2024-11-26 14:00:00',
                 className: 'bg-info'
             },
             {
@@ -94,8 +121,8 @@ File: Calendar init js
             {
                 id: 1,
                 title: "variable 1 + variable 2",
-                start: "2024-03-25T13:00:00.000Z",
-                end: "2024-03-25T17:00:00.000Z",
+                start: "2024-11-25T13:00:00.000Z",
+                end: "2024-11-25T17:00:00.000Z",
                 className: "bg-primary"
             },
             {
@@ -104,9 +131,9 @@ File: Calendar init js
                 start: "2024-03-25T17:00:00.000Z",
                 end: "2024-03-26T14:00:00.000Z",
                 className: "bg-secondary"
-            }*/
+            }
 
-        ];
+        ];*/
 
         var $this = this;
 
@@ -158,6 +185,39 @@ File: Calendar init js
 
         $this.$calendarObj.render();
 
+        // Formulario para guardar datos
+        const formDatos = document.getElementById('formDatos');
+        formDatos.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(formDatos);
+            const formDataObj = {};
+            formData.forEach((value, key) => {
+                formDataObj[key] = value;
+            });
+
+            try {
+                const respuesta = await fetch('/guardarTrabajo', {
+                    method: 'POST',
+                    body: JSON.stringify(formDataObj),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (respuesta.ok) {
+                    // Actualizar el calendario con los eventos correspondientes
+                    const id = $this.$selectAuxiliar.val();
+                    await $this.actualizarEventosCalendario(id);
+                } else {
+                    console.error('Error al enviar el formulario');
+                }
+
+            } catch (error) {
+                console.error('Error al procesar el formulario:', error);
+            }
+        });
+
         // on new event button click
         $this.$btnNewEvent.on('click', function(e) {
             $this.onSelect({date: new Date(), allDay: true});
@@ -193,13 +253,15 @@ File: Calendar init js
         this.$selectAuxiliar.on('change', async function(e) {
             const id = e.target.value;
 
+            const nombre_trabajador = e.target.options[e.target.selectedIndex].text;
+        
+            const title_trabajador = document.getElementById('title_trabajador');
+
+            title_trabajador.textContent = nombre_trabajador;
+
             $this.$calendarObj.removeAllEvents();
 
-            const respuesta = await fetch('/horario-auxiliar-calendar/'+id);
-            const datos = await respuesta.json();
-
-            $this.$calendarObj.addEventSource(datos.data);
-            $this.$calendarObj.rerenderEvents();
+            await $this.actualizarEventosCalendario(id);
         });
 
         // delete event
@@ -225,25 +287,45 @@ function($) {
 
 
 const auxiliares = document.getElementById('event-select-auxiliar');
+const btn_disponibilidad = document.getElementById('btn_disponibilidad');
 
-renderAuxiliares();
+const hora_duracion = document.getElementById('hora_duracion');
+const minuto_duracion = document.getElementById('minuto_duracion');
+const fecha_entrega = document.getElementById('fecha_entrega');
 
-function renderAuxiliares() {
-    fetch('/users')
+btn_disponibilidad.addEventListener('click', (e) => {
+    let horas_necesarias = hora_duracion.value + ":" + minuto_duracion.value;
+
+    let datos = {
+        horasNecesarias: horas_necesarias,
+        fechaLimite: fecha_entrega.value
+    }
+
+    btn_disponibilidad.disabled = true;
+    btn_disponibilidad.textContent = "Consultando..."
+    renderAuxiliares(datos);
+})
+
+function renderAuxiliares(datos) {
+    fetch('/disponibilidad', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
     .then(res => res.json())
     .then(data => {
-        if(data.status === 'ok') {
-            const datos = data.data;
-            let html = "<option value=''>Seleccione...</option>";
-            datos.forEach(auxiliar => {
-                html += `<option value="${auxiliar.id}">${auxiliar.trabajadore.nombres} ${auxiliar.trabajadore.apellidos}</option>`;
-            });
 
-            auxiliares.innerHTML = html;
+        btn_disponibilidad.disabled = false;
+        btn_disponibilidad.textContent = "Consultar Disponibilidad"
 
-        } else {
-            console.log(data);
-        }
+        let html = "<option value=''>Seleccione...</option>";
+        data.forEach(auxiliar => {
+            html += `<option value="${auxiliar.id}">${auxiliar.trabajadore.nombres} ${auxiliar.trabajadore.apellidos}</option>`;
+        });
+
+        auxiliares.innerHTML = html;
     })
 }
 

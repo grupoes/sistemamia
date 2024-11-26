@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+import { Actividades } from "../models/actividades.js"
+
 export const Trabajos = sequelize.define('trabajos', {
     id: {
         type: DataTypes.INTEGER,
@@ -9,9 +11,6 @@ export const Trabajos = sequelize.define('trabajos', {
     },
     actividad_id: {
         type: DataTypes.INTEGER
-    },
-    nombre: {
-        type: DataTypes.STRING
     },
     descripcion: {
         type: DataTypes.TEXT
@@ -32,13 +31,23 @@ export const Trabajos = sequelize.define('trabajos', {
         type: DataTypes.DATE
     },
     padre_trabajo_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     },
     estado: {
         type: DataTypes.INTEGER,
         defaultValue: 1
+    },
+    entidad: {
+        type: DataTypes.STRING
+    },
+    color: {
+        type: DataTypes.STRING
     }
 }, {
     freezeTableName: true,
-    timestamps: true
+    timestamps: false
 });
+
+Actividades.hasMany(Trabajos, { foreignKey: 'actividad_id' });
+Trabajos.belongsTo(Actividades, { foreignKey: 'actividad_id' });
