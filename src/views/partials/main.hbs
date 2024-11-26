@@ -29,7 +29,8 @@
 
     </head>
 
-    <body class="loading position-relative" id="body" data-layout='{"mode": "light", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "light", "size": "default", "showuser": false}, "topbar": {"color": "light"}, "showRightSidebarOnPageLoad": true}'>
+    <body class="loading position-relative" id="body" data-layout='{"mode": "light", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "light", "size": "default", "showuser": false}, "topbar": {"color": "light"}, "showRightSidebarOnPageLoad": true}'
+    style="overflow: hidden;">
 
         <!-- Begin page -->
         <div id="wrapper">
@@ -87,7 +88,9 @@
 
         <!-- Right bar overlay-->
         <div class="rightbar-overlay"></div>
-        <div class="overlay-loader"></div>
+        <div class="overlay-loader show">
+            <div class="loading-text">CARGANDO...</div>
+        </div>
 
         <div class="alert alert-dismissible fade show alert-custom d-none" role="alert" id="alertWarning">
             <strong id="alertStrongText"></strong><span id="alertMessageText"></span>

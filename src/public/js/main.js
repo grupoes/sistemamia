@@ -2,6 +2,8 @@ const rol = document.getElementById('rol_user');
 const iduser = document.getElementById('user_id');
 const nameLogin = document.getElementById('nameLogin');
 const token_ = localStorage.getItem('token');
+const overlayLoader = document.querySelector('.overlay-loader');
+console.log(overlayLoader)
 let currentPath;
 let menu;
 window.addEventListener('load', (e) => {
@@ -198,6 +200,8 @@ function construirMenuDinamico() {
         });
         sideMenu.appendChild(liPadre);
     });
+    overlayLoader.classList.remove('show');
+    document.getElementsByTagName('body')[0].style.overflow = '';
     establecerClasesActivas();
 }
 

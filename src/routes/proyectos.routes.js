@@ -5,6 +5,6 @@ import { viewPrincipal } from "../controllers/proyecto.controller.js"
 
 const router = Router();
 
-router.get('/proyectos', checkAuthorization, verificarPermisos('proyectos:listar'), viewPrincipal);
+router.get('/proyectos', checkAuthorization, verificarPermisos(['proyectos:listar']), viewPrincipal);
 
 export default router;
