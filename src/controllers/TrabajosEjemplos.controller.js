@@ -3,7 +3,7 @@ import { Trabajos } from "../models/TrabajosEjemplos.js";
 import { DateTime } from 'luxon';
 
 async function agregarTrabajoHoras(fechaInicio, horaInicio, horasTotales) {
-    let horasRestantes = horasTotales * 60; // Convertimos a minutos
+    let minutosRestantes = horasTotales * 60; // Convertimos a minutos
 
     // Convertimos la fecha de inicio a un objeto Date en UTC
     const [year, month, day] = fechaInicio.split('-');
@@ -24,9 +24,9 @@ async function agregarTrabajoHoras(fechaInicio, horaInicio, horasTotales) {
         ]
     };
 
-    let datos = [];
+    const datos = [];
 
-    while (horasRestantes > 0) {
+    while (minutosRestantes > 0) {
         const diaSemana = fechaActual.getUTCDay();
 
         const bloquesDia = (diaSemana >= 1 && diaSemana <= 5)
@@ -36,12 +36,15 @@ async function agregarTrabajoHoras(fechaInicio, horaInicio, horasTotales) {
                 : [];
 
         for (let bloque of bloquesDia) {
-            if (horasRestantes <= 0) break;
+            if (minutosRestantes <= 0) break;
 
             const horaActualMinutos = fechaActual.getUTCHours() * 60 + fechaActual.getUTCMinutes();
             const horaInicioBloque = Math.max(horaActualMinutos, bloque.inicio);
-            const minutosBloque = bloque.fin - horaInicioBloque;
-            const minutosAsignados = Math.min(minutosBloque, horasRestantes);
+
+            if (horaInicioBloque >= bloque.fin) continue; // Si ya pasó el bloque, salta al siguiente
+
+            const minutosDisponiblesEnBloque = bloque.fin - horaInicioBloque;
+            const minutosAsignados = Math.min(minutosDisponiblesEnBloque, minutosRestantes);
 
             const horaInicioFormato = `${String(Math.floor(horaInicioBloque / 60)).padStart(2, '0')}:${String(horaInicioBloque % 60).padStart(2, '0')}:00`;
             const horaFinBloque = horaInicioBloque + minutosAsignados;
@@ -49,16 +52,20 @@ async function agregarTrabajoHoras(fechaInicio, horaInicio, horasTotales) {
 
             // Almacenamos los datos de la tarea
             datos.push({
-                fecha: fechaActual.toISOString().split('T')[0],  // Fecha en UTC
-                horainicio: horaInicioFormato,  // Hora de inicio en formato HH:mm:ss
-                horafin: horaFinFormato,       // Hora de fin en formato HH:mm:ss
+                fecha: fechaActual.toISOString().split('T')[0],
+                horainicio: horaInicioFormato,
+                horafin: horaFinFormato,
                 estado: 'Pendiente'
             });
 
-            horasRestantes -= minutosAsignados;
+            minutosRestantes -= minutosAsignados;
+
+            // Si ya asignamos todo el tiempo, salimos del bucle
+            if (minutosRestantes <= 0) break;
         }
 
-        fechaActual.setUTCDate(fechaActual.getUTCDate() + 1);  // Pasamos al siguiente día
+        // Avanzamos al siguiente día
+        fechaActual.setUTCDate(fechaActual.getUTCDate() + 1);
 
         // Si es domingo, avanzamos al lunes
         if (fechaActual.getUTCDay() === 0) {
@@ -69,23 +76,21 @@ async function agregarTrabajoHoras(fechaInicio, horaInicio, horasTotales) {
         fechaActual.setUTCHours(8, 0, 0);
     }
 
-    console.log(datos);  // Verifica el contenido de 'datos'
+    console.log(datos);
 
-    // Guardamos los datos en la base de datos, asegurándonos de que están en UTC
+    // Guardamos los datos en la base de datos
     for (let trabajo of datos) {
-        const fecha = DateTime.fromISO(`${trabajo.fecha}T${horaInicio}:00`, { zone: 'America/Lima' });
-        
         await Trabajos.create({
-            fecha: trabajo.fecha,        // Fecha en UTC
-            horainicio: trabajo.horainicio,  // Hora de inicio en UTC
-            horafin: trabajo.horafin,       // Hora de fin en UTC
+            fecha: trabajo.fecha,
+            horainicio: trabajo.horainicio,
+            horafin: trabajo.horafin,
             estado: trabajo.estado
         });
-
     }
 
     return datos;
 }
+
 
 export const viewHorarioGeneral = async (req, res) => {
     const { fechaInicio, horaInicio, horasTotales } = req.body;
