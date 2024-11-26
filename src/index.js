@@ -24,14 +24,19 @@ import './models/carrera.js';
 import './models/ubigeo.js';
 import './models/chat.js';
 import './models/estadosConversacion.js';
-import './models/numerosWhatsapp.js';*/
-/* import './models/modules.js';
+import './models/numerosWhatsapp.js';
+import './models/modules.js';
 import './models/actions.js';
 import './models/permissions.js';
 import './models/associate.js';
-import './models/publicidad.js';*/
+import './models/publicidad.js';
 
-//import './models/proyecto.js';
+import './models/proyecto.js';
+
+import './models/horario.js';
+import './models/trabajos.js';
+
+import './models/TrabajosEjemplos.js';*/
 
 
 dotenv.config();

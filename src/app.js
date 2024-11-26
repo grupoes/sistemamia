@@ -31,6 +31,7 @@ import proyecto from "./routes/proyectos.routes.js";
 import horario from "./routes/horario.routes.js";
 import actividades from './routes/actividades.routes.js';
 import perfiles from './routes/perfiles.routes.js';
+import trab from './routes/trabajosEjemplos.routes.js';
 import modulo_padre from './routes/modulo_padre.routes.js';
 import funcion from './routes/funcion.routes.js';
 import accesos from './routes/accesos.routes.js';
@@ -93,4 +94,6 @@ app.use((req, res, next) => {
     });
 });
 app.use(errorHandler);
+app.use(trab);
+
 export default app;

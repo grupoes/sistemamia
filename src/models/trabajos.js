@@ -1,35 +1,42 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-export const Proyecto = sequelize.define('proyecto', {
+export const Trabajos = sequelize.define('trabajos', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
+    actividad_id: {
+        type: DataTypes.INTEGER
+    },
+    nombre: {
+        type: DataTypes.STRING
+    },
     descripcion: {
+        type: DataTypes.TEXT
+    },
+    duracion: {
         type: DataTypes.STRING
     },
-    titulo: {
+    nivel_academico: {
         type: DataTypes.STRING
     },
-    alumno: {
+    prioridad: {
         type: DataTypes.STRING
     },
     fecha_limite: {
         type: DataTypes.DATE
     },
-    duracion: {
-        type: DataTypes.INTEGER
-    },
-    fecha_registro: {
+    fecha_entrega: {
         type: DataTypes.DATE
     },
-    es_cliente: {
+    padre_trabajo_id: {
         type: DataTypes.INTEGER
     },
-    color: {
-        type: DataTypes.STRING
+    estado: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1
     }
 }, {
     freezeTableName: true,

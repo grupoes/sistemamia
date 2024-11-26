@@ -246,3 +246,25 @@ function renderAuxiliares() {
         }
     })
 }
+
+renderTipoActividaddes();
+
+const actividad = document.getElementById('actividad');
+
+function renderTipoActividaddes() {
+    fetch('/activities')
+    .then(res => res.json())
+    .then(data => {
+        let datos = data.data;
+
+        let html = `<option value="">Seleccione...</option>`;
+
+        datos.forEach(act => {
+            html += `
+                <option value="${act.id}">${act.name}</option>
+            `;
+        });
+        
+        actividad.innerHTML = html;
+    })
+}
