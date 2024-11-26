@@ -42,7 +42,7 @@ import {
 
 import corsMiddleware from "../middlewares/cors.js";
 
-import { checkAuth } from "../middlewares/auth.js";
+import { checkAuthorization } from "../middlewares/authorization.js";
 
 const router = Router();
 
@@ -51,7 +51,7 @@ router.use(corsMiddleware);
 router.get("/chat", chatView);
 router.get("/messageNumber/:id", mensajes_numero);
 router.post("/messageFirestore", addMessageFirestore);
-router.post("/numeroWhatsapp", checkAuth, numerosWhatsapp);
+router.post("/numeroWhatsapp", checkAuthorization, numerosWhatsapp);
 router.post("/subir_imagen", uploadImage);
 router.post("/subir_imagen_paste", uploadImagePaste);
 router.post("/actualizarEtiqueta", actualizarEtiqueta);
@@ -68,24 +68,24 @@ router.get("/chatOne/:id", chatOne);
 router.get("/getChatCodigo/:id", getChatCodigo);
 router.get("/getAsignationName", asignarAsistenteDataJson);
 
-router.get("/getAgentes", checkAuth, getAgenteId);
-router.get("/contactosNoContestados", checkAuth, contactosNoContestados);
+router.get("/getAgentes", checkAuthorization, getAgenteId);
+router.get("/contactosNoContestados", checkAuthorization, contactosNoContestados);
 router.post("/postPanel", envio_formulario_panel);
-router.get("/deleteContact/:id", checkAuth, delete_contacto);
+router.get("/deleteContact/:id", checkAuthorization, delete_contacto);
 
-router.post("/actualizarContactList", checkAuth, updateLoadContact);
+router.post("/actualizarContactList", checkAuthorization, updateLoadContact);
 
 router.get("/chatId/:id", findIdChat);
 router.get("/statusMessageCodigo/:id", statusMensajeCodigo);
 
 router.post("/interacciones", interaccionesContacto);
 
-router.get("/lista-chat/:idEtiqueta/:idPlataforma", checkAuth, listChat);
-router.get('/getContactoData/:id', checkAuth, chatContactDetail);
-router.get('/searchMessage/:search', checkAuth, searchChatList);
+router.get("/lista-chat/:idEtiqueta/:idPlataforma", checkAuthorization, listChat);
+router.get('/getContactoData/:id', checkAuthorization, chatContactDetail);
+router.get('/searchMessage/:search', checkAuthorization, searchChatList);
 
 router.post('/enviopdf/', multerSinglePdf, enviopdf);
-router.get('/getListaContactoEtiqueta/:embudo/:etiqueta', checkAuth, listaContactoEtiqueta);
+router.get('/getListaContactoEtiqueta/:embudo/:etiqueta', checkAuthorization, listaContactoEtiqueta);
 
 router.get('/getActivityEtiqueta/:id', getActivityEtiqueta);
 
