@@ -61,9 +61,6 @@ io.on('connection', (socket) => {
     socket.on('getToken', async data => {
 
         try {
-
-            console.log(data);
-            
             const token = data.token;
             const etiqueta = data.etiqueta;
             const plataforma_id = data.plataforma_id;
