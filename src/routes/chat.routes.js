@@ -41,14 +41,14 @@ import {
 } from "../controllers/base.controller.js";
 
 import corsMiddleware from "../middlewares/cors.js";
-
+import { verificarPermisos } from "../middlewares/permisos.js";
 import { checkAuthorization } from "../middlewares/authorization.js";
 
 const router = Router();
 
 router.use(corsMiddleware);
 
-router.get("/chat", chatView);
+router.get("/chat",  checkAuthorization, verificarPermisos(['chat:listar'],  { render: true }), chatView);
 router.get("/messageNumber/:id", mensajes_numero);
 router.post("/messageFirestore", addMessageFirestore);
 router.post("/numeroWhatsapp", checkAuthorization, numerosWhatsapp);

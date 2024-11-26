@@ -13,10 +13,6 @@ export const verificarPermisos = (permisosRequeridos,  options = { render: true 
                     attributes: ['id'],
                 },
             });
-
-            if (!usuario) {
-                return res.status(403).json({ msg: 'Usuario no encontrado' });
-            }
             const perfilIds = usuario.perfiles.map(perfil => perfil.id);
             const permisos = await PerfilesPermisos.findAll({
                 where: { idperfil: perfilIds },
