@@ -12,9 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^7.12.1",
-    "axios": "^1.4.0",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

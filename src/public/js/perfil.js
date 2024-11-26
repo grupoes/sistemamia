@@ -1,3 +1,12 @@
+let permisosRegisto = [];
+let permisosNoRegistro = [];
+
+document.addEventListener("mainJsReady", () => {
+    const path = currentPath.split('/').filter(Boolean)[0];
+    construirPermisos(path);
+    renderDataTable();
+});
+
 const addProfile = document.getElementById('addProfile');
 const id = document.getElementById('idProfile');
 const nameProfile = document.getElementById('nameProfile');
@@ -8,13 +17,12 @@ const loaderContainer = document.getElementById('loaderContainer');
 let dataSourceTable;
 
 $("#basic-datatable").DataTable();
-renderDataTable();
 
-addProfile.addEventListener('click', () => {
+function crear() {
     resetValuesForm();
     $("#modalAddProfile").modal('show');
     validateForm();
-});
+}
 
 nameProfile.addEventListener('input', function () {
     this.value = this.value.toUpperCase();
@@ -33,38 +41,52 @@ function renderDataTable() {
                 const datos = data.data;
                 dataSourceTable = datos;
                 let html = ``;
-                datos.forEach((perfil, index) => {
+                datos.forEach((perfil) => {
+                    let contenidoPermisos = '';
+                    if (permisosRegisto.length > 0) {
+                        permisosRegisto.forEach((permiso) => {
+                            contenidoPermisos += `
+                                <button type="button" class="btn btn-${permiso.clase || 'secondary'}" 
+                                        style="padding: .13rem .3rem;" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="right" 
+                                        title="${permiso.nombre}" 
+                                        onclick="${permiso.funcion}(${perfil.id}, ${perfil.estado})">
+                                    <i class="${permiso.icono || 'uil uil-cog'}"></i>
+                                </button>
+                            `;
+                        });
+                    } else {
+                        contenidoPermisos = '<span class="text-muted">Sin permisos</span>';
+                    }
                     html += `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td>${perfil.nombre}</td>
-                    <td>${perfil.descripcion}</td>
-                    <td>
-                        ${perfil.estado === 1
-                            ? `<div class="bg-success text-center rounded text-white" style="width: 80px">ACTIVO</div>`
-                            : `<div class="bg-danger text-center rounded text-white" style="width: 80px">INACTIVO</div>`
-                        }
-                    </td>
-                    <td>
-                        ${perfil.estado === 1
-                            ? `<div class="dropdown">
-                                    <a href="javascript:void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="uil uil-ellipsis-h"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="editProfile(${perfil.id})"><i class="uil uil-pen me-2 text-muted vertical-middle"></i>Editar</a>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="deleteOrRestore(${perfil.id}, ${perfil.estado})"><i class="uil uil-trash-alt me-2 text-muted vertical-middle"></i>Eliminar</a>
-                                    </div>
-                                </div>`
-                            : `<div class="dropdown">
-                                    <a href="javascript:void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="uil uil-ellipsis-h"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="deleteOrRestore(${perfil.id}, ${perfil.estado})"><i class="uil uil-sync me-2 text-muted vertical-middle"></i>Activar</a>
-                                    </div>
-                                </div>`
-                        }
-                        
-                    </td>
-                </tr>
-                `;
+                        <tr>
+                            <td class="small-medium filas" style="max-width: 100px;">
+                                <div class="d-flex" style="column-gap: 5px">
+                                    ${permisosRegisto.length > 0
+                                        ? perfil.estado === 1 
+                                            ? contenidoPermisos
+                                            : `<button type="button" class="btn btn-warning" style="padding: .13rem .3rem;" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="right" 
+                                                    title="Restaurar" 
+                                                    onclick="eliminar_restaurar(${perfil.id}, ${perfil.estado})">
+                                                    <i class="uil uil-sync"></i>
+                                                </button>`
+                                        : contenidoPermisos
+                                    }
+                                </div>
+                            </td>
+                            <td class="small-medium filas">${perfil.nombre}</td>
+                            <td class="small-medium filas">${perfil.descripcion === null ? '' : perfil.descripcion}</td>
+                            <td class="small-medium filas">
+                                ${perfil.estado === 1
+                                    ? `<div class="bg-success text-center rounded text-white" style="width: 80px">ACTIVO</div>`
+                                    : `<div class="bg-danger text-center rounded text-white" style="width: 80px">INACTIVO</div>`
+                                }
+                            </td>
+                        </tr>
+                        `;
                 });
                 $("#basic-datatable").DataTable().destroy();
                 renderTableProfiles.innerHTML = html;
@@ -124,7 +146,7 @@ function activateLoad() {
     loaderContainer.style.justifyContent = 'center';
 }
 
-function editProfile(id) {
+function editar(id, estado) {
     let dataFiltered;
     for (let index = 0; index < dataSourceTable.length; index++) {
         if (dataSourceTable[index].id === id) {
@@ -159,7 +181,7 @@ function buildPayload() {
     return payload;
 }
 
-function deleteOrRestore(id, state) {
+function eliminar_restaurar(id, state) {
     Swal.fire({
         title: `¿Está seguro de ${state === 0 ? 'activar' : 'eliminar'} el registro seleccionado?`,
         text: "¡No podrás revertir esto!",
@@ -187,5 +209,52 @@ function deleteOrRestore(id, state) {
                 }
             });
         }
+    });
+}
+
+function construirPermisos(path) {
+    for (let index = 0; index < menu.length; index++) {
+        for (let indexModulo = 0; indexModulo < menu[index].modulos.length; indexModulo++) {
+            const modulo = menu[index].modulos[indexModulo];
+            if (modulo.url === path) {
+                modulo.funciones.forEach((funcion) => {
+                    if (funcion.de_registro === 1) {
+                        permisosRegisto.push(funcion);
+                    } else if (funcion.de_registro === 0 && funcion.funcion !== "listar") {
+                        permisosNoRegistro.push(funcion);
+                    }
+                });
+            }
+        }
+    }
+    permisosRegisto.sort((a, b) => {
+        if (a.orden === null || a.orden === undefined) return 1; 
+        if (b.orden === null || b.orden === undefined) return -1;
+        return a.orden - b.orden;
+    });
+    permisosNoRegistro.sort((a, b) => {
+        if (a.orden === null || a.orden === undefined) return 1;
+        if (b.orden === null || b.orden === undefined) return -1;
+        return a.orden - b.orden;
+    });
+    renderizarPermisosNoRegistros();
+}
+
+function renderizarPermisosNoRegistros() {
+    const contenedor = document.getElementById('botonesNoRegistro');
+    contenedor.innerHTML = ''; 
+    permisosNoRegistro.forEach((permiso) => {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        if (permiso.clase) {
+            const clases = permiso.clase.split(' ');
+            boton.classList.add(...clases); 
+        }
+        boton.classList.add('mt-2', 'mb-2');
+        boton.setAttribute('onclick', `${permiso.funcion}()`);
+        boton.innerHTML = `
+            <i class="${permiso.icono || 'uil uil-cog'}"></i>
+        `;
+        contenedor.appendChild(boton);
     });
 }

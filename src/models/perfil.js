@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
+import { PerfilesPermisos } from "./perfiles_permisos.js";
 
 export const Perfil = sequelize.define('perfiles', {
     id: {
@@ -33,3 +34,6 @@ export const Perfil = sequelize.define('perfiles', {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 });
+
+PerfilesPermisos.belongsTo(Perfil, { foreignKey: 'idperfil' });
+Perfil.hasOne(PerfilesPermisos, { foreignKey: 'idperfil' });

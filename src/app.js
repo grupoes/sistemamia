@@ -4,6 +4,7 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import bodyParser from "body-parser";
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 import login from './routes/login.routes.js';
@@ -30,6 +31,9 @@ import proyecto from "./routes/proyectos.routes.js";
 import horario from "./routes/horario.routes.js";
 import actividades from './routes/actividades.routes.js';
 import perfiles from './routes/perfiles.routes.js';
+import modulo_padre from './routes/modulo_padre.routes.js';
+import funcion from './routes/funcion.routes.js';
+import accesos from './routes/accesos.routes.js';
 
 const app = express();
 
@@ -41,10 +45,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.json({ limit: '10mb' }));
+app.use(cookieParser());
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -80,5 +83,14 @@ app.use(proyecto);
 app.use(horario);
 app.use(actividades);
 app.use(perfiles);
+app.use(modulo_padre);
+app.use(funcion);
+app.use(accesos);
+app.use((req, res, next) => {
+    res.status(404).render('not-found/index', {
+        title: 'Página no encontrada',
+        message: 'Lo sentimos, la página que buscas no existe.',
+    });
+});
 app.use(errorHandler);
 export default app;

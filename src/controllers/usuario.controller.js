@@ -74,6 +74,7 @@ export const allUsers = async (req, res) => {
                     through: { attributes: [] }
                 }
             ],
+            order : [['id','asc']]
         });
 
         res.status(200).json({ status: "ok", data: users });
@@ -205,7 +206,7 @@ export const guardarUsuario = async (req, res, next) => {
     }
 };
 
-export const deleteOrRestore = async(req, res) => {
+export const deleteOrRestore = async(req, res, next) => {
     const transaction = await sequelize.transaction();
     try {
         const { id, estado } = req.query;
@@ -237,7 +238,7 @@ export const deleteOrRestore = async(req, res) => {
     }
 }
 
-export const listarEspecialidadesPorIdCarrera = async(req, res) => {
+export const listarEspecialidadesPorIdCarrera = async(req, res, next) => {
     const { idCarrera } = req.params;
     try {
         const especialidades = await Especialidad.findAll({

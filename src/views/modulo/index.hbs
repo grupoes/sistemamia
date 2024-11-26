@@ -1,111 +1,133 @@
-<!-- start page title -->
-<div class="row">
+<div class="row" style="margin-top: 1rem;">
     <div class="col-12">
-        <div class="page-title-box">
-            <h4 class="page-title">Módulos</h4>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Grupo Es Consultores</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabla</a></li>
-                    <li class="breadcrumb-item active">Módulos</li>
-                </ol>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="header-title mt-0 mb-1">MÓDULO / LISTADO</h4>
+                    <div class="d-flex" style="column-gap: 10px;" id="botonesNoRegistro">
+                    </div>
+                </div>
+                <div class="w-100" style="border-bottom: 1px solid #d6d6d6; margin-bottom: 30px"></div>
+                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th class="cabecera" style="max-width: 100px;">Acción</th>
+                            <th class="cabecera">Módulo</th>
+                            <th class="cabecera">Módulo padre</th>
+                            <th class="cabecera">Url</th>
+                            <th class="cabecera">Órden</th>
+                            <th class="cabecera">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaModulos">
+                    </tbody>
+                </table>
+
             </div>
         </div>
     </div>
 </div>
-<!-- end page title -->
-
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="header-title mt-0 mb-1">Lista de Módulos</h4>
-
-                <button type="button" class="btn btn-primary mt-2 mb-2" id="addModulo">Crear Módulo</button>
-
-                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Módulo</th>
-                            <th>Módulo padre</th>
-                            <th>Url</th>
-                            <th>Icono</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listModulos">
-                        
-                    </tbody>
-                </table>
-
-            </div> <!-- end card body-->
-        </div> <!-- end card -->
-    </div><!-- end col-->
-</div>
-<!-- end row-->
 
 <!-- Modal Editar Modulo-->
-<div class="modal fade" id="modalModulo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div class="modal fade" id="modalModulo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content position-relative">
             <div class="modal-header">
-                <h5 class="modal-title" id="titleModalEtiqueta">Agregar Módulo</h5>
+                <h5 class="modal-title" id="tituloModal"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="formModulo">
+            <form id="formulario">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="nameModule" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control" id="nameModule" name="nameModule" required="">
+                    <div class="d-flex w-100" style="column-gap: 16px;">
+                        <div class="w-100 flex-grow-2">
+                            <div class="row">
+                                <input type="hidden" id="idModulo" value="">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="nombre">Nombre *</label>
+                                        <input type="text" class="form-input form-control requerido" name="nombre"
+                                            id="nombre" placeholder="Nombre del módulo"
+                                            oninput="validarEntradasObligatorias()" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="modulo_padre">Módulo padre *</label>
+                                        <select class="chosen-select form-select form-input form-control requerido"
+                                            id="modulo_padre" onchange="validarEntradasObligatorias()">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            {{#each modulo_padre}}
+                                            <option value="{{this.id}}">{{this.nombre}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="url">Url *</label>
+                                        <input type="text" class="form-input form-control requerido" name="url" id="url"
+                                            placeholder="Url del módulo" oninput="validarEntradasObligatorias()"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="orden">Órden *</label>
+                                        <input type="number" min="1" class="form-input form-control requerido"
+                                            name="orden" id="orden" placeholder="Órden del módulo"
+                                            oninput="validarEntradasObligatorias()" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100 flex-grow-1" id="viewActions">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <label class="form-label" for="permisos">Seleccionar permiso :</label>
+                                        <select class="chosen-select form-select form-input form-control"
+                                            id="permisos" onchange="manejarSeleccionPermiso(event)">
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            {{#each permisos}}
+                                                <option value="{{this.id}}" data-nombre="{{this.nombre}}">{{this.nombre}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <table class="w-100">
+                                    <thead>
+                                        <tr>
+                                            <th class="cabecera">#</th>
+                                            <th class="cabecera">Permiso</th>
+                                            <th class="cabecera" style="width: 100px;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody  id="permisosTablaCuerpo">
+                                        <tr class="w-full text-center" id="sinData">
+                                            <td colspan="3" class="border-bottom border-dark">
+                                                <div class="w-full text-center">Seleccionar e ingresar permisos.</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <input type="checkbox" class="form-check-input" id="espadre" name="espadre">
-                                <label for="espadre" class="form-check-label">Es módulo padre?</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="modulopadre" class="col-form-label">Módulo padre:</label>
-                                <select name="modulopadre" id="modulopadre" class="form-select">
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="urlModulo" class="col-form-label">Url:</label>
-                                <input type="text" class="form-control" id="urlModulo" name="urlModulo">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="iconoModulo" class="col-form-label">Icono:</label>
-                                <input type="text" class="form-control" id="iconoModulo" name="iconoModulo">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" id="viewActions">
-                        
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" id="btnaddModulo">Agregar</button>
+                    <button type="submit" class="btn btn-primary" id="guardar" disabled>Guardar</button>
                 </div>
             </form>
+            <div class="position-absolute top-0 start-0 w-100 h-100"
+                style="background: rgba(255, 255, 255, 0.3); z-index: 1040; display: none;" id="loaderContainer">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
