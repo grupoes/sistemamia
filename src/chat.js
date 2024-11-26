@@ -61,7 +61,6 @@ io.on('connection', (socket) => {
     socket.on('getToken', async data => {
 
         try {
-            console.log(`Datos recibidos del cliente ${socket.id}:`, data);
             const token = data.token;
             const etiqueta = data.etiqueta;
             const plataforma_id = data.plataforma_id;
@@ -79,6 +78,8 @@ io.on('connection', (socket) => {
                 },
                 data: post 
             };
+
+            console.log(requestConfig);
             
             const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/actualizarContactList", requestConfig);
     
