@@ -474,7 +474,8 @@ function setEditValues(data) {
     document.getElementById('urbanizacion').value = data.trabajadore.urbanizacion === null ? '' : data.trabajadore.urbanizacion;
     document.getElementById('email').value = data.correo;
     document.getElementById('password').value = data.password;
-    const selectedIdsProfiles = data.perfiles.map(perfil => String(perfil.id));
+    let selectedIdsProfilesEdit = data.perfiles.map(perfil => String(perfil.id));
+    selectedIdsProfiles = selectedIdsProfilesEdit;
     document.getElementById('ids_perfiles').value = selectedIdsProfiles;
     $('#ids_perfiles').val(selectedIdsProfiles).trigger('chosen:updated');
     const elements = document.querySelectorAll('.form-input');
