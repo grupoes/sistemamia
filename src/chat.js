@@ -78,14 +78,12 @@ io.on('connection', (socket) => {
                 },
                 data: post 
             };
-
-            console.log(requestConfig);
             
             const response = await axios(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/actualizarContactList", requestConfig);
     
             const datos = response.data;
 
-            io.emit('messageContacts', datos);
+            socket.emit('messageContacts', datos);
 
             /*if(data.sonido === true) {
                 if(data.from != process.env.NUMERO_WHATSAPP) {
