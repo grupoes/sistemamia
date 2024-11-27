@@ -74,7 +74,8 @@ io.on('connection', (socket) => {
             const requestConfig = {
                 method: 'POST',
                 headers: {
-                  'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
                 data: post 
             };
@@ -83,7 +84,7 @@ io.on('connection', (socket) => {
     
             const datos = response.data;
 
-            socket.emit('messageContacts', datos);
+            io.emit('messageContacts', datos);
 
             /*if(data.sonido === true) {
                 if(data.from != process.env.NUMERO_WHATSAPP) {
@@ -150,7 +151,7 @@ pubsub.addChannel('new_contact', async(data) => {
         const response = await axios.get(process.env.URL_APP + ":" + process.env.PUERTO_APP_RED + "/socketMensaje/"+data.id);
 
         const datos = response.data;
-
+        
         const enviar_data = {
             data_chat: datos,
             new_message: data

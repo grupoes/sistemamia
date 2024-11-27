@@ -43,6 +43,7 @@ import {
 import corsMiddleware from "../middlewares/cors.js";
 import { verificarPermisos } from "../middlewares/permisos.js";
 import { checkAuthorization } from "../middlewares/authorization.js";
+import { checkAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
@@ -73,7 +74,7 @@ router.get("/contactosNoContestados", checkAuthorization, contactosNoContestados
 router.post("/postPanel", envio_formulario_panel);
 router.get("/deleteContact/:id", checkAuthorization, delete_contacto);
 
-router.post("/actualizarContactList", checkAuthorization, updateLoadContact);
+router.post("/actualizarContactList", checkAuth, updateLoadContact);
 
 router.get("/chatId/:id", findIdChat);
 router.get("/statusMessageCodigo/:id", statusMensajeCodigo);
