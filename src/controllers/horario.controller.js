@@ -404,7 +404,7 @@ export const addTrabajoHorario = async (req, res) => {
 
         let config = {
             method: "post",
-            url: "http://localhost:4000/api/trabajo-horario",
+            url: process.env.URL_APP+"/api/trabajo-horario",
             data: datosParaEnviar,
         };
 
