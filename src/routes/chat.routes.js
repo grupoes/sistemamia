@@ -32,13 +32,16 @@ import {
   enviopdf,
   multerSinglePdf,
   listaContactoEtiqueta,
-  getActivityEtiqueta
+  getActivityEtiqueta,
 } from "../controllers/chat.controller.js";
 
 import {
   getAgenteId,
   asignarAsistenteDataJson,
+  envioArchivoGoogleCloudStorage,
 } from "../controllers/base.controller.js";
+
+import { sendFile } from "../controllers/googleCloud.controller.js";
 
 import corsMiddleware from "../middlewares/cors.js";
 import { verificarPermisos } from "../middlewares/permisos.js";
@@ -49,7 +52,12 @@ const router = Router();
 
 router.use(corsMiddleware);
 
-router.get("/chat",  checkAuthorization, verificarPermisos(['chat:listar'],  { render: true }), chatView);
+router.get(
+  "/chat",
+  checkAuthorization,
+  verificarPermisos(["chat:listar"], { render: true }),
+  chatView
+);
 router.get("/messageNumber/:id", mensajes_numero);
 router.post("/messageFirestore", addMessageFirestore);
 router.post("/numeroWhatsapp", checkAuthorization, numerosWhatsapp);
@@ -70,7 +78,11 @@ router.get("/getChatCodigo/:id", getChatCodigo);
 router.get("/getAsignationName", asignarAsistenteDataJson);
 
 router.get("/getAgentes", checkAuthorization, getAgenteId);
-router.get("/contactosNoContestados", checkAuthorization, contactosNoContestados);
+router.get(
+  "/contactosNoContestados",
+  checkAuthorization,
+  contactosNoContestados
+);
 router.post("/postPanel", envio_formulario_panel);
 router.get("/deleteContact/:id", checkAuthorization, delete_contacto);
 
@@ -81,13 +93,23 @@ router.get("/statusMessageCodigo/:id", statusMensajeCodigo);
 
 router.post("/interacciones", interaccionesContacto);
 
-router.get("/lista-chat/:idEtiqueta/:idPlataforma", checkAuthorization, listChat);
-router.get('/getContactoData/:id', checkAuthorization, chatContactDetail);
-router.get('/searchMessage/:search', checkAuthorization, searchChatList);
+router.get(
+  "/lista-chat/:idEtiqueta/:idPlataforma",
+  checkAuthorization,
+  listChat
+);
+router.get("/getContactoData/:id", checkAuthorization, chatContactDetail);
+router.get("/searchMessage/:search", checkAuthorization, searchChatList);
 
-router.post('/enviopdf/', multerSinglePdf, enviopdf);
-router.get('/getListaContactoEtiqueta/:embudo/:etiqueta', checkAuthorization, listaContactoEtiqueta);
+router.post("/enviopdf/", multerSinglePdf, enviopdf);
+router.get(
+  "/getListaContactoEtiqueta/:embudo/:etiqueta",
+  checkAuthorization,
+  listaContactoEtiqueta
+);
 
-router.get('/getActivityEtiqueta/:id', getActivityEtiqueta);
+router.get("/getActivityEtiqueta/:id", getActivityEtiqueta);
+
+router.post("/sendFilesGoogleCloudStorage", sendFile);
 
 export default router;

@@ -350,3 +350,39 @@ function renderTipoActividaddes() {
         actividad.innerHTML = html;
     })
 }
+
+const jefe_produccion = document.getElementById('jefe_produccion');
+const asistente_administrativa = document.getElementById('asistente_administrativa');
+
+renderAsistentes();
+renderJefes();
+
+function renderJefes() {
+    fetch('/render-jefes')
+    .then(res => res.json())
+    .then(data => {
+        let html = `<option value="">Seleccione</option>`;
+
+        data.forEach(jefes => {
+            html += `<option value="${jefes.id}">${jefes.nombres} ${jefes.apellidos}</option>`;
+        });
+
+        jefe_produccion.innerHTML = html;
+        
+    })
+}
+
+function renderAsistentes() {
+    fetch('/render-asistentes')
+    .then(res => res.json())
+    .then(data => {
+        let html = `<option value="">Seleccione</option>`;
+
+        data.forEach(asistente => {
+            html += `<option value="${asistente.id}">${asistente.nombres} ${asistente.apellidos}</option>`;
+        });
+
+        asistente_administrativa.innerHTML = html;
+        
+    })
+}

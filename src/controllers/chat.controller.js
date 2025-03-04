@@ -48,7 +48,7 @@ const multerPdf = multer({
 
 dotenv.config();
 
-export const multerSinglePdf = multerPdf.single('archivo');
+export const multerSinglePdf = multerPdf.single("archivo");
 
 export const chatView = async (req, res) => {
   const timestamp = Date.now();
@@ -81,8 +81,8 @@ export const chatView = async (req, res) => {
 
   const embudo = await Embudo.findAll({
     order: [
-      ['id', 'ASC'] // O 'DESC' para orden descendente
-    ]
+      ["id", "ASC"], // O 'DESC' para orden descendente
+    ],
   });
   const plataforma = await Plataforma.findAll();
 
@@ -1022,7 +1022,7 @@ export const asignarClienteAUnTrabajador = async (req, res) => {
         trabajadoreId: trabajador.id,
         potencialClienteId: idPt,
       });
-      
+
       /*const mensaje = `Buen día ☀️, le saluda ${trabajador.nombres} ${trabajador.apellidos}, Asistente administrativa 📋 de Grupo ES Consultores "Asesores de investigación" (Tesis) 📚. para poder darle un enfoque académico quisiera saber 
 
       🙋 ¿Cuál es su nombre?
@@ -1091,10 +1091,10 @@ export const uploadAudio = async (req, res) => {
     console.log(req.file);
 
     const mimetype = req.file.mimetype;
-    let parts = mimetype.split('/');
+    let parts = mimetype.split("/");
 
     let subType = parts[1];
-    
+
     const timestamp = Date.now();
 
     const inputPath = path.join(
@@ -1243,8 +1243,8 @@ export const getEmbudoEtiqueta = async (req, res) => {
 
     const embudo = await Embudo.findAll({
       order: [
-        ['id', 'ASC'] // O 'DESC' para orden descendente
-      ]
+        ["id", "ASC"], // O 'DESC' para orden descendente
+      ],
     });
 
     return res.json({
@@ -2148,7 +2148,6 @@ export const interaccionesContacto = async (req, res) => {
 
 export const listChat = async (req, res) => {
   try {
-
     const rol = req.usuarioToken._role;
     const id = req.usuarioToken._id;
 
@@ -2158,47 +2157,43 @@ export const listChat = async (req, res) => {
     let sql = "";
     let sqlEtiqueta = "";
 
-    if(rol == 2 || rol == 6) {
-        sql = `where nw.asistente = ${id} `;
+    if (rol == 2 || rol == 6) {
+      sql = `where nw.asistente = ${id} `;
     }
 
     let conector = "";
     let conecPl = "";
 
-    if(etiqueta > 0) {
-        if(sql !== "") {
-            conector = "AND";
+    if (etiqueta > 0) {
+      if (sql !== "") {
+        conector = "AND";
 
-            if(plataforma > 0) {
-                conecPl = `AND nw.plataforma_id = ${plataforma}`;
-            }
-
-        } else {
-            conector = "WHERE";
-
-            if(plataforma > 0) {
-                conecPl = `AND nw.plataforma_id = ${plataforma}`;
-            }
+        if (plataforma > 0) {
+          conecPl = `AND nw.plataforma_id = ${plataforma}`;
         }
+      } else {
+        conector = "WHERE";
 
-        sqlEtiqueta = `
+        if (plataforma > 0) {
+          conecPl = `AND nw.plataforma_id = ${plataforma}`;
+        }
+      }
+
+      sqlEtiqueta = `
         (select ec2.etiqueta_id from "etiquetaCliente" ec2 inner join potencial_cliente pc2 on pc2.id = ec2.cliente_id
      	inner join numeros_whatsapp nw2 on nw2."from" = pc2.numero_whatsapp  where pc2.numero_whatsapp = subconsulta.contacto
      	and ec2.estado = 1 limit 1) = ${etiqueta}
         `;
     } else {
-        if(sql !== "") {
-
-            if(plataforma > 0) {
-                conecPl = `AND nw.plataforma_id = ${plataforma}`;
-            }
-
-        } else {
-
-            if(plataforma > 0) {
-                conecPl = `WHERE nw.plataforma_id = ${plataforma}`;
-            }
+      if (sql !== "") {
+        if (plataforma > 0) {
+          conecPl = `AND nw.plataforma_id = ${plataforma}`;
         }
+      } else {
+        if (plataforma > 0) {
+          conecPl = `WHERE nw.plataforma_id = ${plataforma}`;
+        }
+      }
     }
 
     const query = `
@@ -2268,20 +2263,18 @@ export const listChat = async (req, res) => {
     });
 
     for (const contacto of results) {
+      const estadoMensaje = await Chat_estados.findOne({
+        where: {
+          codigo: contacto.codigo,
+        },
+        order: literal(
+          "CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC"
+        ),
+      });
 
-        const estadoMensaje = await Chat_estados.findOne({
-            where: {
-            codigo: contacto.codigo,
-            },
-            order: literal(
-            "CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC"
-            ),
-        });
-
-        if (estadoMensaje) {
-            contacto.estadoMensaje = estadoMensaje.status;
-        }
-
+      if (estadoMensaje) {
+        contacto.estadoMensaje = estadoMensaje.status;
+      }
     }
 
     return res.json({ message: "ok", data: results });
@@ -2290,15 +2283,14 @@ export const listChat = async (req, res) => {
   }
 };
 
-export const chatContactDetail = async(req, res) => {
-    const numero = req.params.id;
+export const chatContactDetail = async (req, res) => {
+  const numero = req.params.id;
 
-    try {
+  try {
+    const rol = req.usuarioToken._role;
+    const id = req.usuarioToken._id;
 
-        const rol = req.usuarioToken._role;
-        const id = req.usuarioToken._id;
-
-        const query = `
+    const query = `
         select nw."from", nw."nameContact", t.id, concat(t.nombres, ' ', t.apellidos) as asistente, e.descripcion, 
         pc.id as potencialCliente, e.id as etiqueta  
         from numeros_whatsapp nw inner join potencial_cliente pc on pc.numero_whatsapp = nw."from" 
@@ -2308,37 +2300,35 @@ export const chatContactDetail = async(req, res) => {
         where nw."from" = '${numero}' and ec.estado = 1
         `;
 
-        const results = await sequelize.query(query, {
-            type: sequelize.QueryTypes.SELECT,
-            raw: true,
-            nest: true,
-        });
+    const results = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
 
-        return res.json({ message: 'ok', data: results[0], rol: rol });
+    return res.json({ message: "ok", data: results[0], rol: rol });
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+};
 
-    } catch (error) {
-        return res.json({ message: error.message });
+export const searchChatList = async (req, res) => {
+  const search = req.params.search;
+  try {
+    const rol = req.usuarioToken._role;
+    const id = req.usuarioToken._id;
+
+    if (search.length < 3) {
+      return;
     }
-}
 
-export const searchChatList = async(req, res) => {
-    const search = req.params.search;
-    try {
+    let sql = "";
 
-        const rol = req.usuarioToken._role;
-        const id = req.usuarioToken._id;
+    if (rol == 2 || rol == 6) {
+      sql = `AND nw.asistente = ${id}`;
+    }
 
-        if(search.length < 3) {
-            return;
-        }
-
-        let sql = "";
-
-        if(rol == 2 || rol == 6) {
-            sql = `AND nw.asistente = ${id}`;
-        }
-
-        const queryContact = `
+    const queryContact = `
         SELECT 
             subconsulta.contacto,
             subconsulta.ultimo_timestamp,
@@ -2397,13 +2387,13 @@ export const searchChatList = async(req, res) => {
         ORDER BY subconsulta.ultimo_timestamp DESC;
         `;
 
-        const resultsContact = await sequelize.query(queryContact, {
-            type: sequelize.QueryTypes.SELECT,
-            raw: true,
-            nest: true,
-        });
+    const resultsContact = await sequelize.query(queryContact, {
+      type: sequelize.QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
 
-        const querySearchMessage = `
+    const querySearchMessage = `
         select (CASE
             WHEN c."from" = '51938669769' THEN (select nw2."from" from numeros_whatsapp nw2 where nw2."from" = c.receipt)
             ELSE nw."from"
@@ -2419,35 +2409,36 @@ export const searchChatList = async(req, res) => {
         order by c."timestamp" desc
         `;
 
-        const resultsMessage = await sequelize.query(querySearchMessage, {
-            type: sequelize.QueryTypes.SELECT,
-            raw: true,
-            nest: true,
-        });
+    const resultsMessage = await sequelize.query(querySearchMessage, {
+      type: sequelize.QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
 
-        for (const contacto of resultsMessage) {
+    for (const contacto of resultsMessage) {
+      const estadoMensaje = await Chat_estados.findOne({
+        where: {
+          codigo: contacto.codigo,
+        },
+        order: literal(
+          "CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC"
+        ),
+      });
 
-            const estadoMensaje = await Chat_estados.findOne({
-                where: {
-                codigo: contacto.codigo,
-                },
-                order: literal(
-                "CASE WHEN status = 'sent' THEN 1 WHEN status = 'delivered' THEN 2 WHEN status = 'read' THEN 3 END DESC"
-                ),
-            });
-    
-            if (estadoMensaje) {
-                contacto.estadoMensaje = estadoMensaje.status;
-            }
-    
-        }
-
-        return res.json({ message: 'ok', contactos: resultsContact, messages: resultsMessage });
-
-    } catch (error) {
-        return res.json({ message: error.message });
+      if (estadoMensaje) {
+        contacto.estadoMensaje = estadoMensaje.status;
+      }
     }
-}
+
+    return res.json({
+      message: "ok",
+      contactos: resultsContact,
+      messages: resultsMessage,
+    });
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+};
 
 let projectId = "whatsapp-webhook-394517"; // Get this from Google Cloud
 let keyFilename = "keys.json"; // Get this from Google Cloud -> Credentials -> Service Accounts
@@ -2459,20 +2450,19 @@ const storagePdf = new Storage({
 const bucket = storagePdf.bucket("appwhatsapp");
 
 export const enviopdf = (req, res) => {
-  const {numero, variable} = req.body;
+  const { numero, variable } = req.body;
   try {
     if (req.file) {
       console.log("File found, trying to upload...");
-      
+
       const blob = bucket.file(req.file.originalname);
       const blobStream = blob.createWriteStream();
 
       blobStream.on("finish", async () => {
-
         // Generar la URL pública de la imagen
         const publicUrl = await blob.getSignedUrl({
-          action: 'read',
-          expires: '03-09-2491'
+          action: "read",
+          expires: "03-09-2491",
         });
 
         // Establecer los permisos para que la imagen sea pública
@@ -2483,115 +2473,109 @@ export const enviopdf = (req, res) => {
         const jsonTemplate = envioTempPdf(numero, link, variable);
 
         let config = {
-          method: 'post',
+          method: "post",
           maxBodyLength: Infinity,
           url: process.env.URL_MESSAGES,
-          headers: { 
-            'Authorization': 'Bearer '+process.env.TOKEN_WHATSAPP
+          headers: {
+            Authorization: "Bearer " + process.env.TOKEN_WHATSAPP,
           },
-          data: jsonTemplate
+          data: jsonTemplate,
         };
 
         const response = await axios(config);
         const data = response.data;
 
-        if(data.messages[0]) {
-
+        if (data.messages[0]) {
           const newMessage = await Chat.create({
-              codigo: data.messages[0].id,
-              from: process.env.NUMERO_WHATSAPP,
-              message: variable,
-              nameContact: "Grupo Es Consultores",
-              receipt: numero,
-              timestamp: Math.floor(Date.now() / 1000),
-              typeMessage: 'document',
-              description: variable,
-              estadoMessage: "sent",
-              documentId: "",
-              id_document: "",
-              filename: "",
-              fromRes: "",
-              idRes: ""
+            codigo: data.messages[0].id,
+            from: process.env.NUMERO_WHATSAPP,
+            message: variable,
+            nameContact: "Grupo Es Consultores",
+            receipt: numero,
+            timestamp: Math.floor(Date.now() / 1000),
+            typeMessage: "document",
+            description: variable,
+            estadoMessage: "sent",
+            documentId: "",
+            id_document: "",
+            filename: "",
+            fromRes: "",
+            idRes: "",
           });
 
-          return res.json({ message: 'ok', data: newMessage });
-
+          return res.json({ message: "ok", data: newMessage });
         } else {
-          return res.json({message: "No fue enviado la plantilla"});
+          return res.json({ message: "No fue enviado la plantilla" });
         }
-
       });
 
       blobStream.end(req.file.buffer);
-      
     } else throw "error with img";
-    
   } catch (error) {
     res.status(500).send(error);
   }
-}
+};
 
 const envioTempPdf = (numero, link, variable) => {
   const mensajeJSON = {
-    "messaging_product": "whatsapp",
-    "recipient_type": "individual",
-    "to": numero,
-    "type": "template",
-    "template": {
-      "name": "envio_archivo_pdf",
-      "language": { "code": "es" },
-      "components": [
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: numero,
+    type: "template",
+    template: {
+      name: "envio_archivo_pdf",
+      language: { code: "es" },
+      components: [
         {
-            "type": "header",
-            "parameters": [
-                {
-                    "type": "document",
-                    "document": {
-                        "link": link
-                    }
-                }
-            ]
+          type: "header",
+          parameters: [
+            {
+              type: "document",
+              document: {
+                link: link,
+              },
+            },
+          ],
         },
         {
-          "type": "body",
-          "parameters": [
+          type: "body",
+          parameters: [
             {
-              "type": "text",
-              "text": variable
-            }
-          ]
-        }
-      ]
-    }
+              type: "text",
+              text: variable,
+            },
+          ],
+        },
+      ],
+    },
   };
 
   return mensajeJSON;
-}
+};
 
 export const listaContactoEtiqueta = async (req, res) => {
   const embudo = req.params.embudo;
   const etiqueta = req.params.etiqueta;
 
   try {
-
     const rol = req.usuarioToken._role;
     const id = req.usuarioToken._id;
 
     let $sql = "";
     let $filtros = "";
 
-    if(embudo != 0 && etiqueta != 0) {
-      $filtros = " AND ec.etiqueta_id = "+ etiqueta;
+    if (embudo != 0 && etiqueta != 0) {
+      $filtros = " AND ec.etiqueta_id = " + etiqueta;
     }
 
-    if(embudo != 0 && etiqueta == 0) {
-      $filtros = " AND em.id = "+ embudo;
+    if (embudo != 0 && etiqueta == 0) {
+      $filtros = " AND em.id = " + embudo;
     }
 
-    if(rol == 1 || rol == 3) {
-      $sql = "where ec.estado = 1"+$filtros
+    if (rol == 1 || rol == 3) {
+      $sql = "where ec.estado = 1" + $filtros;
     } else {
-      $sql = "where nw.asistente = "+rol+" and ec.estado = 1"+$filtros;
+      $sql = "where nw.asistente = " + rol + " and ec.estado = 1" + $filtros;
     }
 
     const query = `
@@ -2615,13 +2599,12 @@ export const listaContactoEtiqueta = async (req, res) => {
     });
 
     return res.json(results);
-
   } catch (error) {
     res.status(500).send(error);
   }
-}
+};
 
-export const getActivityEtiqueta = async(req, res) => {
+export const getActivityEtiqueta = async (req, res) => {
   const id = req.params.id;
   try {
     const query = `
@@ -2641,4 +2624,4 @@ export const getActivityEtiqueta = async(req, res) => {
   } catch (error) {
     return res.status(500).send(error);
   }
-}
+};
