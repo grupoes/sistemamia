@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Ejecutar cada día a las 8 AM
-cron.schedule("*/10 * * * * *", async () => {
+cron.schedule("45 13 * * *", async () => {
   try {
     let config = {
       method: "get",
