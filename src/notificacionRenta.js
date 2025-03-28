@@ -6,18 +6,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Ejecutar cada día a las 8 AM
-cron.schedule("45 13 * * *", async () => {
-  try {
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: process.env.URL_NOTIFICACION_RENTA,
-    };
+cron.schedule(
+  process.env.CRON_NOTIFICACION_RENTA,
+  async () => {
+    try {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: process.env.URL_NOTIFICACION_RENTA,
+      };
 
-    const response = await axios.request(config);
-    const datos = response.data;
+      const response = await axios.request(config);
+      const datos = response.data;
 
-    const mensaje = `📩 *Mensaje de Recordatorio de Pago:*
+      const mensaje = `📩 *Mensaje de Recordatorio de Pago:*
 
         📌 *Estimado/a Cliente,*
 
@@ -36,42 +38,46 @@ cron.schedule("45 13 * * *", async () => {
         Saludos cordiales,  
         *GRUPO ES CONSULTORES*`;
 
-    for (const dato of datos) {
-      if (dato.contactos.length > 0) {
-        for (const contacto of dato.contactos) {
-          try {
-            const config2 = {
-              method: "post",
-              maxBodyLength: Infinity,
-              url: "http://64.23.188.190:3002/send-message",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              data: {
-                number: contacto.numero_whatsapp,
-                message: mensaje,
-                mediaUrl: "",
-              },
-            };
+      for (const dato of datos) {
+        if (dato.contactos.length > 0) {
+          for (const contacto of dato.contactos) {
+            try {
+              const config2 = {
+                method: "post",
+                maxBodyLength: Infinity,
+                url: "http://64.23.188.190:3002/send-message",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                data: {
+                  number: contacto.numero_whatsapp,
+                  message: mensaje,
+                  mediaUrl: "",
+                },
+              };
 
-            const response2 = await axios.request(config2);
-            console.log(
-              `Mensaje enviado a ${contacto.numero_whatsapp}:`,
-              response2.data
-            );
-          } catch (error) {
-            console.error(
-              `Error al enviar mensaje a ${contacto.numero_whatsapp}:`,
-              error.response?.data || error.message
-            );
+              const response2 = await axios.request(config2);
+              console.log(
+                `Mensaje enviado a ${contacto.numero_whatsapp}:`,
+                response2.data
+              );
+            } catch (error) {
+              console.error(
+                `Error al enviar mensaje a ${contacto.numero_whatsapp}:`,
+                error.response?.data || error.message
+              );
+            }
           }
         }
       }
+    } catch (error) {
+      console.error(
+        "Error en la solicitud de empresas:",
+        error.response?.data || error.message
+      );
     }
-  } catch (error) {
-    console.error(
-      "Error en la solicitud de empresas:",
-      error.response?.data || error.message
-    );
+  },
+  {
+    timezone: "America/Lima",
   }
-});
+);
