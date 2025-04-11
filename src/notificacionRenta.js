@@ -19,24 +19,17 @@ cron.schedule(
       const response = await axios.request(config);
       const datos = response.data;
 
-      const mensaje = `📩 *Mensaje de Recordatorio de Pago:*
+      const mensaje = `📢 Estimado Contribuyente:
+      SQUARE C&C LIMA SAC
 
-        📌 *Estimado/a Cliente,*
+      Le informamos que el 🗓️ miércoles 19 de marzo de 2025, vence el plazo para el pago de sus obligaciones tributarias ante SUNAT correspondientes al periodo de FEBRERO 2025 📆.
 
-        Esperamos que se encuentre bien. Le recordamos que tiene un *pago pendiente* correspondiente a *su pago de renta* con vencimiento el *28-03-2025*.
+      ⚠️ Recomendamos realizar el pago oportuno para evitar intereses moratorios 💸 y procedimientos de cobranza coactiva ⚖️.
 
-        💰 *Monto pendiente:* S/. 150  
-        📅 *Fecha límite de pago:* 28-03-2025  
-        🏦 *Métodos de pago disponibles:* YAPE
+      ✅ Si ya efectuó el pago, por favor desestime este mensaje.
 
-        Le agradeceríamos mucho que realice su pago a la brevedad posible para evitar recargos o interrupciones en el servicio.
-
-        ⚠️ *Si ya realizó el pago, por favor ignore este mensaje.*
-
-        📞 Si tiene alguna consulta, no dude en contactarnos.
-
-        Saludos cordiales,  
-        *GRUPO ES CONSULTORES*`;
+      Atentamente,
+      ES CONSULTORES Y ASESORES S.A.C. 🤝`;
 
       for (const dato of datos) {
         if (dato.contactos.length > 0) {
