@@ -19,22 +19,21 @@ cron.schedule(
       const response = await axios.request(config);
       const datos = response.data;
 
-      const mensaje = `📢 Estimado Contribuyente:
-      SQUARE C&C LIMA SAC
-
-      Le informamos que el 🗓️ miércoles 19 de marzo de 2025, vence el plazo para el pago de sus obligaciones tributarias ante SUNAT correspondientes al periodo de FEBRERO 2025 📆.
-
-      ⚠️ Recomendamos realizar el pago oportuno para evitar intereses moratorios 💸 y procedimientos de cobranza coactiva ⚖️.
-
-      ✅ Si ya efectuó el pago, por favor desestime este mensaje.
-
-      Atentamente,
-      ES CONSULTORES Y ASESORES S.A.C. 🤝`;
-
       for (const dato of datos) {
         if (dato.contactos.length > 0) {
           for (const contacto of dato.contactos) {
             try {
+              const mensaje = `📢 Estimado Contribuyente: *${dato.razon_social}*
+
+          Le informamos que el 🗓️ *${dato.fechaExacta}*, vence el plazo para el pago de sus obligaciones tributarias ante SUNAT correspondientes al periodo de ${dato.periodo} 📆.
+
+          ⚠️ Recomendamos realizar el pago oportuno para evitar intereses moratorios 💸 y procedimientos de cobranza coactiva ⚖️.
+
+          ✅ Si ya efectuó el pago, por favor desestime este mensaje.
+
+          Atentamente,
+          *ES CONSULTORES Y ASESORES S.A.C.* 🤝`;
+
               const config2 = {
                 method: "post",
                 maxBodyLength: Infinity,
