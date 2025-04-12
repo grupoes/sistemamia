@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Ejecutar cada día a las 8 AM
+// Ejecutar cada día a las 9 AM
 cron.schedule(
   process.env.CRON_NOTIFICACION_RENTA,
   async () => {
