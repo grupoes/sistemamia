@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+<<<<<<<HEAD
 // Ejecutar cada día a las 8 AM
 <<<<<<< HEAD
 cron.schedule(process.env.CRON_NOTIFICACION_RENTA, async () => {
@@ -12,9 +13,11 @@ cron.schedule(process.env.CRON_NOTIFICACION_RENTA, async () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: process.env.URL_NOTIFICACION_RENTA,
-    };
+      url: process.env.URL_NOTIFICACION_    };
 =======
+=======
+// Ejecutar cada día a las 9 AM
+>>>>>>> 88bf586fce1c696ce280ad184230e3a6e03a65bc
 cron.schedule(
   process.env.CRON_NOTIFICACION_RENTA,
   async () => {
