@@ -57,10 +57,8 @@ cron.schedule(
         const dataMensaje = response2.data;
 
         if (dataMensaje.success === true) {
-          const timestamp = dataMensaje.response.messageTimestamp;
-
           // Convertimos a milisegundos
-          const date = new Date(timestamp * 1000);
+          const date = new Date();
 
           // Formateamos la fecha
           const options = {
@@ -102,6 +100,8 @@ cron.schedule(
 
           const response3 = await axios.request(config3);
           const updateMensaje = response3.data;
+
+          console.log("actualizado:" + updateMensaje);
         }
 
         console.log(`Mensaje enviado a ${dato.numero_whatsapp}`);
