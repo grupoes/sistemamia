@@ -56,6 +56,8 @@ cron.schedule(
         const response2 = await axios.request(config2);
         const dataMensaje = response2.data;
 
+        console.log(dataMensaje.success);
+
         if (dataMensaje.success === true) {
           // Convertimos a milisegundos
           const date = new Date();
