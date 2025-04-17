@@ -63,10 +63,29 @@ cron.schedule(
           const date = new Date(timestamp * 1000);
 
           // Formateamos la fecha
-          const formatted = date
-            .toISOString()
-            .replace("T", " ")
-            .substring(0, 19);
+          const options = {
+            timeZone: "America/Lima",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          };
+
+          const formatter = new Intl.DateTimeFormat("en-CA", options);
+          const parts = formatter.formatToParts(date);
+
+          // Convertimos a formato YYYY-MM-DD HH:MM:SS
+          const y = parts.find((p) => p.type === "year").value;
+          const m = parts.find((p) => p.type === "month").value;
+          const d = parts.find((p) => p.type === "day").value;
+          const h = parts.find((p) => p.type === "hour").value;
+          const min = parts.find((p) => p.type === "minute").value;
+          const s = parts.find((p) => p.type === "second").value;
+
+          const formatted = `${y}-${m}-${d} ${h}:${min}:${s}`;
 
           let config3 = {
             method: "post",
