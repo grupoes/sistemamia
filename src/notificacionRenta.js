@@ -53,6 +53,8 @@ cron.schedule(
                 `Mensaje enviado a ${contacto.numero_whatsapp}:`,
                 response2.data
               );
+
+              console.log(`Enviado desde ${dato.link}`);
             } catch (error) {
               console.error(
                 `Error al enviar mensaje a ${contacto.numero_whatsapp}:`,
