@@ -42,7 +42,7 @@ cron.schedule(
         const config2 = {
           method: "post",
           maxBodyLength: Infinity,
-          url: "http://64.23.188.190:3002/send-message",
+          url: `${dato.link}/send-message`,
           headers: {
             "Content-Type": "application/json",
           },
