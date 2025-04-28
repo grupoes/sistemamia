@@ -1,11 +1,22 @@
 import cron from "node-cron";
 import axios from "axios";
 
+import fs from "fs";
+
 import dotenv from "dotenv";
 
 dotenv.config();
 
 let isWaiting = false;
+
+// Configurar registro de logs
+const logMessage = (message) => {
+  const timestamp = new Date().toISOString();
+  const logEntry = `[${timestamp}] ${message}\n`;
+
+  fs.appendFileSync("bot-log-envio-masivo.txt", logEntry);
+  console.log(logEntry.trim());
+};
 
 // Función para generar un intervalo aleatorio entre 5 y 8 minutos
 function getRandomIntervalInMs(min = 5, max = 8) {
@@ -17,7 +28,7 @@ cron.schedule(
   "* * * * *",
   async () => {
     if (isWaiting) {
-      console.log("⏳ Aún en espera... Saltando este minuto.");
+      logMessage("⏳ Aún en espera... Saltando este minuto.");
       return;
     }
 
@@ -32,11 +43,11 @@ cron.schedule(
       const datos = response.data;
 
       if (datos.length === 0) {
-        console.log("✅ No hay mensajes por enviar.");
+        logMessage("✅ No hay mensajes por enviar.");
         return;
       }
 
-      console.log(`🚀 Procesando ${datos.length} mensajes...`);
+      logMessage(`🚀 Procesando ${datos.length} mensajes...`);
 
       for (const dato of datos) {
         const config2 = {
@@ -103,13 +114,13 @@ cron.schedule(
           const response3 = await axios.request(config3);
           const updateMensaje = response3.data;
 
-          console.log("actualizado:" + updateMensaje);
+          logMessage("actualizado:" + updateMensaje);
         }
 
-        console.log(`Mensaje enviado a ${dato.numero_whatsapp}`);
+        logMessage(`Mensaje enviado a ${dato.numero_whatsapp}`);
       }
     } catch (error) {
-      console.error(
+      logMessage(
         `Error al enviar mensaje a ${dato.numero_whatsapp}:`,
         error.response?.data || error.message
       );
@@ -121,15 +132,11 @@ cron.schedule(
 
     // Activamos la bandera de espera
     isWaiting = true;
-    console.log(
-      `⏱️ Esperando ${minutos} minutos antes del siguiente bloque...`
-    );
+    logMessage(`⏱️ Esperando ${minutos} minutos antes del siguiente bloque...`);
 
     setTimeout(() => {
       isWaiting = false;
-      console.log(
-        "🔁 Fin de la espera. Ya puede ejecutarse el próximo bloque."
-      );
+      logMessage("🔁 Fin de la espera. Ya puede ejecutarse el próximo bloque.");
     }, randomInterval);
   },
   {

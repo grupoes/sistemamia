@@ -1,9 +1,20 @@
 import cron from "node-cron";
 import axios from "axios";
 
+import fs from "fs";
+
 import dotenv from "dotenv";
 
 dotenv.config();
+
+// Configurar registro de logs
+const logMessage = (message) => {
+  const timestamp = new Date().toISOString();
+  const logEntry = `[${timestamp}] ${message}\n`;
+
+  fs.appendFileSync("bot-log-renta.txt", logEntry);
+  console.log(logEntry.trim());
+};
 
 // Ejecutar cada día a las 9 AM
 cron.schedule(
@@ -49,14 +60,14 @@ cron.schedule(
               };
 
               const response2 = await axios.request(config2);
-              console.log(
+              logMessage(
                 `Mensaje enviado a ${contacto.numero_whatsapp}:`,
                 response2.data
               );
 
-              console.log(`Enviado desde ${dato.link}`);
+              logMessage(`Enviado desde ${dato.link}`);
             } catch (error) {
-              console.error(
+              logMessage(
                 `Error al enviar mensaje a ${contacto.numero_whatsapp}:`,
                 error.response?.data || error.message
               );
@@ -65,7 +76,7 @@ cron.schedule(
         }
       }
     } catch (error) {
-      console.error(
+      logMessage(
         "Error en la solicitud de empresas:",
         error.response?.data || error.message
       );
