@@ -87,6 +87,7 @@ cron.schedule(process.env.CRON_GENERAR_FACTURAS, async () => {
               mes: hono.registro.mes,
               descripcion: hono.registro.descripcion,
               estado: "aceptado",
+              monto: dato.monto_mensual,
             },
           };
 
@@ -117,6 +118,7 @@ cron.schedule(process.env.CRON_GENERAR_FACTURAS, async () => {
               mes: hono.registro.mes,
               descripcion: hono.registro.descripcion,
               estado: "pendiente",
+              monto: dato.monto_mensual,
             },
           };
 
@@ -148,6 +150,7 @@ cron.schedule(process.env.CRON_GENERAR_FACTURAS, async () => {
             mes: hono.registro.mes,
             descripcion: hono.registro.descripcion,
             estado: "pendiente",
+            monto: dato.monto_mensual,
           },
         };
 
