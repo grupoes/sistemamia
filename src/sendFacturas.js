@@ -16,7 +16,7 @@ const logMessage = (message) => {
   console.log(logEntry.trim());
 };
 
-cron.schedule("03 15 26 * *", async () => {
+cron.schedule(process.env.CRON_GENERAR_FACTURAS, async () => {
   try {
     let conf = {
       method: "post",
