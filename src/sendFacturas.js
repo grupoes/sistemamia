@@ -68,7 +68,7 @@ cron.schedule(
           const response2 = await axios.request(config2);
           const dataEnvio = response2.data;
 
-          logMessage(`idHonorario: ${dataEnvio}`);
+          logMessage(`idHonorario: ${dataEnvio.respuesta}`);
 
           if (dataEnvio.respuesta === "ok") {
             let confInsert = {
