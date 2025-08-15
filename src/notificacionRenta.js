@@ -48,14 +48,13 @@ cron.schedule(
               const config2 = {
                 method: "post",
                 maxBodyLength: Infinity,
-                url: `${dato.link}/send-message`,
+                url: `${dato.link}/api/whatsapp/send`,
                 headers: {
                   "Content-Type": "application/json",
                 },
                 data: {
-                  number: contacto.numero_whatsapp,
-                  message: mensaje,
-                  mediaUrl: "",
+                  numeroDestino: contacto.numero_whatsapp,
+                  mensaje: mensaje,
                 },
               };
 

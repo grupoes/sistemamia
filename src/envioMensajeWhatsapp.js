@@ -138,14 +138,13 @@ cron.schedule(
           const config2 = {
             method: "post",
             maxBodyLength: Infinity,
-            url: `${dato.link}/send-message`,
+            url: `${dato.link}/api/whatsapp/send`,
             headers: {
               "Content-Type": "application/json",
             },
             data: {
-              number: dato.numero_whatsapp,
-              message: dato.message,
-              mediaUrl: "",
+              numeroDestino: dato.numero_whatsapp,
+              mensaje: dato.message,
             },
             timeout: 15000, // 15 segundos de timeout para el envío
           };
