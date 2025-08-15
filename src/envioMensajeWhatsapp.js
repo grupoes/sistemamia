@@ -152,7 +152,7 @@ cron.schedule(
           const response2 = await axios.request(config2);
           const dataMensaje = response2.data;
 
-          if (!dataMensaje || dataMensaje.success !== true) {
+          if (dataMensaje.message !== "Mensaje enviado") {
             throw new Error(
               "El envío no fue exitoso según la respuesta del servidor"
             );
