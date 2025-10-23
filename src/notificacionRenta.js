@@ -16,7 +16,14 @@ const logMessage = (message) => {
   console.log(logEntry.trim());
 };
 
-// Ejecutar cada día a las 9 AM
+// Función para generar un delay aleatorio entre 10 y 15 segundos
+const getRandomDelay = () => {
+  return Math.floor(Math.random() * 10000) + 20000; // 10000ms a 15000ms (10-15 segundos)
+};
+
+// Función para esperar un tiempo determinado
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 cron.schedule(
   process.env.CRON_NOTIFICACION_RENTA,
   async () => {
@@ -30,20 +37,34 @@ cron.schedule(
       const response = await axios.request(config);
       const datos = response.data;
 
+      // Contador para trackear el delay entre mensajes
+      let messageCount = 0;
+
       for (const dato of datos) {
         if (dato.contactos.length > 0) {
           for (const contacto of dato.contactos) {
             try {
+              // Agregar delay excepto para el primer mensaje
+              if (messageCount > 0) {
+                const waitTime = getRandomDelay();
+                logMessage(
+                  `Esperando ${
+                    waitTime / 1000
+                  } segundos antes del próximo mensaje...`
+                );
+                await delay(waitTime);
+              }
+
               const mensaje = `📢 Estimado Contribuyente: *${dato.razon_social}*
 
-          Le informamos que el 🗓️ *${dato.fechaExacta}*, vence el plazo para el pago de sus obligaciones tributarias ante SUNAT correspondientes al periodo de ${dato.periodo} 📆.
+              Le informamos que el 🗓️ *${dato.fechaExacta}*, vence el plazo para el pago de sus obligaciones tributarias ante SUNAT correspondientes al periodo de ${dato.periodo} 📆.
 
-          ⚠️ Recomendamos realizar el pago oportuno para evitar intereses moratorios 💸 y procedimientos de cobranza coactiva ⚖️.
+              ⚠️ Recomendamos realizar el pago oportuno para evitar intereses moratorios 💸 y procedimientos de cobranza coactiva ⚖️.
 
-          ✅ Si ya efectuó el pago, por favor desestime este mensaje.
+              ✅ Si ya efectuó el pago, por favor desestime este mensaje.
 
-          Atentamente,
-          *ES CONSULTORES Y ASESORES S.A.C.* 🤝`;
+              Atentamente,
+              *ES CONSULTORES Y ASESORES S.A.C.* 🤝`;
 
               const config2 = {
                 method: "post",
@@ -65,6 +86,8 @@ cron.schedule(
               );
 
               logMessage(`Enviado desde ${dato.link}`);
+
+              messageCount++;
             } catch (error) {
               logMessage(
                 `Error al enviar mensaje a ${contacto.numero_whatsapp}:`,
@@ -74,6 +97,10 @@ cron.schedule(
           }
         }
       }
+
+      logMessage(
+        `Proceso completado. Total de mensajes enviados: ${messageCount}`
+      );
     } catch (error) {
       logMessage(
         "Error en la solicitud de empresas:",
