@@ -23,7 +23,7 @@ cron.schedule(
       let conf = {
         method: "get",
         maxBodyLength: Infinity,
-        url: process.env.URL_GET_CONTRIBUYENTES_SERVIDOR_AHORA,
+        url: process.env.URL_GET_CONTRIBUYENTES_SERVIDOR,
       };
 
       const resp = await axios.request(conf);
