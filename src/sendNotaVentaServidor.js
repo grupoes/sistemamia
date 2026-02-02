@@ -23,11 +23,11 @@ cron.schedule(
       let conf = {
         method: "get",
         maxBodyLength: Infinity,
-        url: process.env.URL_GET_CONTRIBUYENTES_SERVIDOR,
+        url: process.env.URL_GET_CONTRIBUYENTES_SERVIDOR_AHORA,
       };
 
       const resp = await axios.request(conf);
-      const data_servidor = resp.data;
+      const data_servidor = resp.data.data;
 
       for (const dato of data_servidor) {
         if (dato.pagos === "ok") {
