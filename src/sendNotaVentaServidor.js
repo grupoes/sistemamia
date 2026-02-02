@@ -27,7 +27,7 @@ cron.schedule(
       };
 
       const resp = await axios.request(conf);
-      const data_servidor = resp.data.data;
+      const data_servidor = resp.data;
 
       for (const dato of data_servidor) {
         if (dato.pagos === "ok") {
@@ -84,5 +84,5 @@ cron.schedule(
   },
   {
     timezone: "America/Lima",
-  }
+  },
 );
